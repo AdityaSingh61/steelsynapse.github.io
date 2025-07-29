@@ -1,9 +1,40 @@
-
-
+a:link
+{
+    color:darkblue;
+}
+a:hover
+{
+    color:darkcyan;
+}
 
 
 p
 {
-    color:mediumorchid;
+    color:black;
+    background-color : rgb(221, 255, 110);
+    border: 10px;
+    width: 30px;
 }
 
+h1{
+
+    color:rgb(243, 243, 35);
+    font-size: 5em;
+    text-align: center;
+}
+li{
+    list-style-type:none;
+    font-size: larger;
+    font-weight: lighter;
+
+}
+h2{
+    
+    color:rgba(78, 187, 32, 0.786);
+    font-size: 1vb;
+    width: 2000000px;
+    height: 200000000px;
+}
+body {
+  background-image: url("https://i.pinimg.com/originals/0b/c0/b3/0bc0b32fb245c742a63344e7fa924b94.jpg");
+}
