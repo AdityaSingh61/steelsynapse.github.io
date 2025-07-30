@@ -5,17 +5,157 @@
     <meta charset ="utf-8"/>
     <title>FOOD</title>
     <link rel="stylesheet"href="styles.css"/>
-
+    <script src="adijava.js"defer></script>
 </head>
 
 <body>
-    <h1> 
+
+<head>
+<style>
+.button {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button:hover {
+  background-color: #247a5b; /* Green */
+  color: white;
+}
+
+
+
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+  border-radius: 50%;}
+
+</style>
+</head>
+<body>
+
+<button class="button button2"><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span></button>
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"><button class="button button2">click here for our youtube</button></a>
+
+</body>
+    <h2> 
         FOOD
-    </h1>
-    <p>
-        food
-    </p>
+    </h2>
+    <h1>About us</h1>
+    <P>
+
+## 🍴 Welcome to Your Culinary Haven
+
+If your heart skips a beat when a sizzling pan hits the stove… if you find joy in gathering ingredients like treasures… or if the smell of garlic in olive oil brings instant happiness—you’ve found your tribe.
+
+This website was made for the passionate home cook, the adventurous eater, and the lifelong recipe collector. Whether you're just starting out in the kitchen or you're the proud owner of a spice rack that rivals a small apothecary, here you'll find inspiration to turn every meal into a moment worth savoring.
+
+We believe food is more than sustenance—it's culture, creativity, comfort, and connection. Every recipe featured here has been carefully crafted or curated to spark joy, curiosity, and maybe even a little mischief in the kitchen.
+
+---
+
+## 🧑‍🍳 What You'll Find Here
+
+From cozy weeknight dinners to ambitious baking projects, this site is your trusted kitchen companion. Here's what awaits:
+
+- **A Library of Recipes**  
+  Explore dishes from around the globe, updated regularly to reflect seasonal favorites, trending ingredients, and community submissions.
+
+- **Tips & Techniques**  
+  Learn cooking fundamentals and advanced tricks—from how to master knife skills to turning leftovers into something magical.
+
+- **Ingredient Spotlights**  
+  Discover new flavors with deep dives into herbs, spices, and secret sauces that elevate even the simplest meals.
+
+- **Community Features**  
+  Share your own recipes, leave reviews, swap tips, or join themed challenges that celebrate cooking as a communal experience.
+
+- **Visual Guides**  
+  Our recipes often include step-by-step photos or video tutorials to make your kitchen journey smoother and more confidence-boosting.
+
+---
+
+So browse, experiment, taste, and repeat. You might just find your next favorite recipe—or fall in love with the art of cooking all over again. 🍳✨
+
+Let me know if you’d like help designing any specific sections, formatting for web, or adding additional pages like a “Chef’s Journal” or “My Pantry Picks.”</P>
 </body>
 
-<footer>that is it for now</footer>
-</html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #380000;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #000000;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">About us</a>
+  <a href="#">Home</a>
+  <a href="#">sweets</a>
+  <a href="#">savery</a>
+  <P>____________________________________</P>
+  <P>"More places to check</P>
+  <a href="#">youtube</a>
+</div>
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+   
+</body>
+</html> 
