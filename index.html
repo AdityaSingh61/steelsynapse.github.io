@@ -3,34 +3,159 @@
 
 <head>
     <meta charset ="utf-8"/>
-    <title>FOOD</title>
-    <link rel="stylesheet"href="styles.css"/>
-    <script src="adijava.js"defer></script>
+    <title>Steel Synapse</title>
+    <button class="button button2"><span style="font-size:16px;cursor:pointer" onclick="openNav()">&#9776; open</span></button>
+    
+    <img src="/Users/agurkar1/Desktop/Slides.svg" alt="Banner" height="100%"width="100%">
+    
+    <hr style="border-top: 2px solid #100f0a; width: 100%;">
+    <hr style="border-top: 2px solid #100f0a; width: 75%;">
 </head>
 
 <body>
 
+<style>
+
+    h3{
+      font-size: xx-large;
+        text-align: center;
+        font-weight: lighter;
+    }
+    a:link
+{
+    color:darkblue;
+}
+p{
+  font-size: 75%;
+  text-align: center;
+  font-weight: 100;
+  color:#ffffffb9;
+}
+a:hover
+{
+    color:darkcyan;
+}
+h1{
+
+    color:#100f0a;
+    font-size: 150%;
+    font-weight: lighter;
+    text-align: center;
+
+}
+h5{
+    list-style-type:none;
+    font-size: 1em;
+    font-weight: lighter;
+    text-align: center;
+    color: #fe0000;
+}
+body {
+  background-image: url(/Users/agurkar1/Desktop/curcuts.svg);
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+}
+
+.sidebar {
+    text-align:right;
+    fill:#100f0a;
+    color:rgb(4, 63, 63);
+
+}
+.box{
+    width: 200px;
+    height: 500px;
+    background-color: blueviolet;
+}
+h2{
+
+    color: #10021a;;
+    font-size: 2em;
+    text-align: center;
+    font-style: initial;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+}
+    .flip-card {
+      background-color: transparent;
+      width: 200px; 
+      height:200px;
+      perspective: 100%;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+
+    .flip-card-back {
+      background-color: #10021a;
+      color: #fe0000;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0px;
+      text-align: center;
+    }
+
+
+    
+</style>
+
+
 <head>
 <style>
 .button {
-  background-color: #04AA6D; /* Green */
+  background-color: #100f0a; /* Green */
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 8px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 12px;
   margin: 4px 2px;
   cursor: pointer;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
 .button:hover {
-  background-color: #247a5b; /* Green */
+  background-color: #545457; /* Green */
   color: white;
 }
-
+.banner{
+  align-self: start;
+}
 
 
 .button2:hover {
@@ -39,52 +164,137 @@
 
 </style>
 </head>
-<body>
 
-<button class="button button2"><span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span></button>
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"><button class="button button2">click here for our youtube</button></a>
 
-</body>
-    <h2> 
-        FOOD
+ 
+    <h2>
+       About Us
     </h2>
-    <h1>About us</h1>
-    <P>
 
-## 🍴 Welcome to Your Culinary Haven
+    <h1>
+      Steel Synapse is a group of enthusiastic students who love exploring science, technology, engineering and math (STEM) through the First Lego League (FLL) program (Team #53463).</h1>
+       <h1> Our team is made up of seven members, each with unique skills and ideas eager to collaborate, learn, and work towards improving ourselves. Motivated and guided by our coaches to think creatively, 
+       we enjoy problem solving, designing robots and working with each other.</h1><h1> We believe teamwork and having fun are the important foundations to achieving our goals.
+      Our mission is to grow as problem solvers, inventors and friends while making a positive impact through STEM.
+    </h1>
+        <hr style="border-top: 2px solid #100f0a; width: 100%;">
+        <hr style="border-top: 2px solid #100f0a; width: 75%;">
+        <h2>Vision</h2>
+        <h1>
+               <div class="container">
+  <div>    We strive to make  connection as strong as steel in our community.
+</div>
+  <div style="align-content: center;justify-content: center;"> 
+    
+      </div>
+To inspire other young innovators in hopes of building a bright future.
+</div>
+</h1>
 
-If your heart skips a beat when a sizzling pan hits the stove… if you find joy in gathering ingredients like treasures… or if the smell of garlic in olive oil brings instant happiness—you’ve found your tribe.
 
-This website was made for the passionate home cook, the adventurous eater, and the lifelong recipe collector. Whether you're just starting out in the kitchen or you're the proud owner of a spice rack that rivals a small apothecary, here you'll find inspiration to turn every meal into a moment worth savoring.
+</div>
+<style>body {
+  font-family: sans-serif;
+}
+.container > div {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: rgba(207, 232, 220, 0);
+  border: 2px solid rgba(79, 185, 227, 0);
+  
+}
+.container {
+  justify-content: center;
+  display: grid;
+  grid-template-columns: 75;
+}</style>
+      </h1>
+       <hr style="border-top: 2px solid #100f0a; width: 100%;">
+        <hr style="border-top: 2px solid #100f0a; width: 75%;">
+    <h2>Core Vales</h2>
+    <h1>
+      Our core values are as strong as steel!
+    </h1>
+    <h2>
+    <!-- Card 1 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/Users/agurkar1/Desktop/teamwork.png" alt="Image 1">
+      </div>
+      <div class="flip-card-back">
+        <p>We are as strong as steel when we work together.</p>
+      </div>
+    </div>
+  </div>
 
-We believe food is more than sustenance—it's culture, creativity, comfort, and connection. Every recipe featured here has been carefully crafted or curated to spark joy, curiosity, and maybe even a little mischief in the kitchen.
+  <!-- Card 2 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/Users/agurkar1/Desktop/learning.png" alt="Image 2">
+      </div>
+      <div class="flip-card-back">
+        <p>We have a burning desire to learn.</p>
+      </div>
+    </div>
+  </div>
 
----
+  <!-- Card 3 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/Users/agurkar1/Desktop/inpact.png" alt="Image 3">
+      </div>
+      <div class="flip-card-back">
+        <p>We ignite every synapse with purpose- applying what we learn to fortify the world.</p>
+      </div>
+    </div>
+  </div>
 
-## 🧑‍🍳 What You'll Find Here
+  <!-- Card 4 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/Users/agurkar1/Desktop/innovation.png" alt="Image 4">
+      </div>
+      <div class="flip-card-back">
+        <p>With creativity as our spark and persistence as our fuel, we solve problems.</p>
+      </div>
+    </div>
+  </div>
 
-From cozy weeknight dinners to ambitious baking projects, this site is your trusted kitchen companion. Here's what awaits:
+  <!-- Card 5 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/Users/agurkar1/Desktop/discovery.png" alt="Image 5">
+      </div>
+      <div class="flip-card-back">
+        <p>We explore with grit, forging skills and ideas into tools for change.</p>
+      </div>
+    </div>
+  </div>
 
-- **A Library of Recipes**  
-  Explore dishes from around the globe, updated regularly to reflect seasonal favorites, trending ingredients, and community submissions.
+  <!-- Card 6 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/Users/agurkar1/Desktop/fun.png" alt="Image 6">
+      </div>
+      <div class="flip-card-back">
+        <p>We forge with passion and celebrate the sparks we create.</p>
+      </div>
+    </div>
+  </div>
 
-- **Tips & Techniques**  
-  Learn cooking fundamentals and advanced tricks—from how to master knife skills to turning leftovers into something magical.
+    </h2>
+<h5>Disclaimer: Adapted core values from FLL </h5>
+    <hr style="border-top: 2px solid #100f0a; width: 100%;">
+    <hr style="border-top: 2px solid #100f0a; width: 75%;">
 
-- **Ingredient Spotlights**  
-  Discover new flavors with deep dives into herbs, spices, and secret sauces that elevate even the simplest meals.
-
-- **Community Features**  
-  Share your own recipes, leave reviews, swap tips, or join themed challenges that celebrate cooking as a communal experience.
-
-- **Visual Guides**  
-  Our recipes often include step-by-step photos or video tutorials to make your kitchen journey smoother and more confidence-boosting.
-
----
-
-So browse, experiment, taste, and repeat. You might just find your next favorite recipe—or fall in love with the art of cooking all over again. 🍳✨
-
-Let me know if you’d like help designing any specific sections, formatting for web, or adding additional pages like a “Chef’s Journal” or “My Pantry Picks.”</P>
+   
+    
 </body>
 
 
@@ -102,9 +312,9 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #00ff08;
+  background-color: #100f0a;
   overflow-x: hidden;
-  transition: 0.5s;
+  transition: 0.7s;
   padding-top: 60px;
 }
 
@@ -112,9 +322,9 @@ body {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #000000;
+  color: #ffd21f;
   display: block;
-  transition: 0.3s;
+  transition: 0.1s;
 }
 
 .sidenav a:hover {
@@ -139,21 +349,26 @@ body {
 
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="https://adityasingh61.github.io">About Us</a>
-  <a href="https://adityasingh61.github.io/Adi's%20first%20website.html">Home</a>
-  <a href="https://adityasingh61.github.io/sweets.html">Sweets</a>
-  <a href="https://adityasingh61.github.io/savory.html">Savory</a>
-  <h1>____________________________________</h1>
-  <h3>More places to check</h3>
-  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1">youtube</a>
+  <a href="file:///Volumes/NO%20NAME/AdityaSingh61.github.io/home.html">Home</a>
+  <hr style="border-top: 2px solid #ffd21F; width: 75%;">
+  <a href="file:///Volumes/NO%20NAME/AdityaSingh61.github.io/meet%20the%20team.html">Meet the team</a>
+  <a href="file:///Users/agurkar1/Downloads/AdityaSingh61.github.io/Mentors.html">Mentors</a>
+  <a href="file:///Users/agurkar1/Downloads/AdityaSingh61.github.io/history.html">History</a>
+  <a href="file:///Users/agurkar1/Downloads/AdityaSingh61.github.io/youtube.html">Educational Resources
+</a>
+  <a href="file:///Users/agurkar1/Downloads/AdityaSingh61.github.io/donate.html">Donate</a>
+
 </div>
 <script>
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
 }
+
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 </script>
+          <h2>Email:</h2>
+   <footer><h3>steelsynapse01@gmail.com</h3></footer>
 </body>
-</html>
+</html> 
