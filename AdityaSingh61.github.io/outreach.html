@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html  lang="en-US">
+
+<head>
+    <meta charset ="utf-8"/>
+    <title>Steel Synapse</title>
+     <img src="image/grounded/Screenshot 2025-08-19 at 5.32.08 PM" alt="Banner" height="100%"width="100%">
+     <button class="button button2"><span style="font-size:16px;cursor:pointer" onclick="openNav()">&#9776; open</span></button>
+   
+    <img src="images/Banner/outreach.gif" alt="Banner" height="100%"width="100%">
+    
+    <hr style="border: 2px solid #100f0a; width: 100%;">
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+
+<h1>USC Community Day, 2025</h1><h1 style="align-content: baseline;justify-content: space-between; text-align: center;"><img src="/Users/agurkar1/Desktop/9efe9c95-2c19-42b1-911c-a108ba46ab16.jpeg" alt="Banner" height="25%"width="25%">
+<img src="/Users/agurkar1/Desktop/7459694f-dedd-4ba7-b201-d42a4f3f3ac2.jpeg" alt="Banner" height="35%"width="35%">
+<img src="/Users/agurkar1/Desktop/3f84c3cd-8012-4bc5-906b-a1b4eba6de92.jpeg" alt="Banner" height="35%"width="25%">
+<h1>Birthday Celebrations</h1><img src="/Users/agurkar1/Desktop/fd8a0a2b-a177-490b-9e9f-b9b3b75e99d4.jpeg" alt="Banner" height="35%"width="35%">
+ </h1>
+     <hr style="border: 2px solid #100f0a; width: 75%;">
+     <hr style="border: 2px solid #100f0a; width: 100%;">
+ 
+
+
+</head>
+
+<body>
+<style>    button {
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    button img {
+      width: 150px;
+      transition: transform 0.3s ease;
+      text-align: center;
+    }
+
+    button:hover img {
+      transform: scale(1.2); /* make image 20% larger */
+    }
+  </style>  
+<style>
+    img{
+        justify-content: center;
+        text-align: center;
+        align-content: center;
+    }
+    h3{
+        font-size: large;
+        text-align: center;
+    }
+    a:link
+{
+    color:darkblue;
+}
+p{
+  font-size: 0.5em;
+  text-align: center;
+  font-weight: 100;
+  color:#ffffff;
+}
+a:hover
+{
+    color:darkcyan;
+}
+h1{
+
+    color:#100f0a;
+    font-size: 150%;
+    font-weight: lighter;
+    text-align: center;
+
+}
+h5{
+    list-style-type:none;
+    font-size: 1.3em;
+    font-weight: lighter;
+    text-align: center;
+    color: #10021a;
+}
+body {
+  background-image: url(images/grounded/curcuts.svg);
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+
+
+}
+
+.sidebar {
+    text-align:right;
+    fill:#100f0a;
+    color:rgb(4, 63, 63);
+
+}
+.box{
+    width: 200px;
+    height: 500px;
+    background-color: blueviolet;
+}
+h2{
+
+    color: #10021a;;
+    font-size: 2em;
+    text-align: center;
+    font-style: initial;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+}
+    .flip-card {
+      background-color: transparent;
+      width: 200px; ;
+      height: 200px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+
+    .flip-card-back {
+      background-color: #10021a;
+      color: #fe0000;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0px;
+      text-align: center;
+    }
+</style>
+
+
+<head>
+<style>
+.button {
+  background-color: #100f0a; /* Green */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button:hover {
+  background-color:#545457; /* Green */
+  color: white;
+}
+.banner{
+  align-self: start;
+}
+
+
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+  border-radius: 13%;}
+</style>
+
+
+</head>
+</body>
+
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #100f0a;
+  overflow-x: hidden;
+  transition: 0.7s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #ffd21f;
+  display: block;
+  transition: 0.1s;
+}
+    h4{
+      font-size: xx-large;
+        text-align: center;
+        font-weight: lighter;
+    }
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+ <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/index.html">Home</a>
+  
+  <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/meet%20the%20team.html">Meet the team</a>
+  <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/Mentors.html">Mentors</a>
+  <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/history.html">History</a>
+  <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/youtube.html">Educational Resources
+</a>
+   <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/donate.html">Donate</a> <a href="file:///Volumes/NO%20NAME/steel-synapse/AdityaSingh61.github.io/outreach.html">Outreach</a>
+  
+  <hr style="border: 2px solid #ffd21F; width: 75%;">
+</div>
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+<h1><footer style="background-image: url(image/madia/back.png);"><h4>    <img src="image/madia/photo item.svg" alt="Banner" height="50%"width="50%">
+<h1><a href="https://www.google.com/imgres?q=rick%20roll&imgurl=https%3A%2F%2Fi.ytimg.com%2Fvi%2FdQw4w9WgXcQ%2Fmaxresdefault.jpg&imgrefurl=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ&docid=6s4NuhB18CEGIM&tbnid=ykWkrdwI5JNXcM&vet=12ahUKEwjT-pbEsZqPAxXsLFkFHRAeFOkQM3oECCEQAA..i&w=1280&h=720&hcb=2&itg=1&ved=2ahUKEwjT-pbEsZqPAxXsLFkFHRAeFOkQM3oECCEQAA"><button><img src="image/madia/insta.svg" alt="Banner" height="50%"width="50%">
+</button></a><a href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWrRpclZgGkPglFpqmFTHVBpVtLHQrNSpSXTGVbqrTDNkJClvHWcsGgrZSHfXRgvzmrGvrQgv"><button><img src="image/madia/email.svg" alt="Banner" height="50%"width="50%">
+</button></a></button></a><a href="https://www.youtube.com/@steelsynapse01"><button><img src="image/madia/youtube.svg" alt="Banner" height="50%"width="50%">
+</button></a>     <hr style="border: 2px solid #ffffff; width: 35%;">
+<a href="https://www.uscsd.k12.pa.us/academics/usc-robotics-club">
+    <img src="image/madia/spon usc.svg" alt="Banner" height="35%"width="35%">
+</a>  <a href="https://www.firstlegoleague.org/">     <img src="image/madia/spon 1.svg" alt="Banner" height="35%"width="35%">
+
+
+</a>
+</h1></h1></h4></footer>
+
+</html> 
