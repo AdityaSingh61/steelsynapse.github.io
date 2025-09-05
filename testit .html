@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team with Popup Modal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .member {
+      text-align: center;
+      max-width: 200px;
+      cursor: pointer;
+    }
+
+    .member img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+
+    .member img:hover {
+      transform: scale(1.05);
+    }
+
+    .member h1 {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    /* Overlay background */
+    .overlay {
+      display: none;                 /* hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);   /* transparent black */
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Popup box */
+    .modal {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      width: 400px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+    }
+
+    .closebtn {
+      background: crimson;
+      border: none;
+      color: white;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <div class="team">
+    <div class="member" onclick="openModal('Aditya (Adi) Singh', 'Adi started with non-compettitive robotics at the Boyce middle school, and since 2024 moved to competitive robotics. He started his competitive robotics journey with Robo Birds and joined Steel Synapse in 2025. Outside of Robotics, Adi loves to cook, swim and play with his dog, CRISPR.')">
+      <img src="./images/meetthem/benny (1).svg" alt="Adi">
+      <h1>Aditya (Adi) Singh</h1>
+    </div>
+    <div class="member" onclick="openModal('Ayan Sharma', ' Ayan started coding from a young age and joined competitive robotics in 2024 as part of Robo Panthers, now evolved into Steel Synapse.')">
+      <img src="./images/meetthem/ayan.svg" alt="Ayan">
+      <h1>Ayan Sharma</h1>
+    </div>
+    <div class="member" onclick="openModal('Benjamin (Benny) Rovner', ' Benny loves building legos and started competitive robotics in 2023 with Brick Busters and joined Robo Panthers in 2024 (now Steel Synapse).')">
+      <img src="./images/meetthem/adi.svg" alt="Ayan">
+      <h1>Benjamin (Benny) Rovner</h1>
+    </div>
+    <div class="member" onclick="openModal('Porter Guarino', 'Porter loves coding and in 2024 started competitive robotics with Robo Birds and joined Steel Synapse since 2025.')">
+      <img src="./images/meetthem/poter.svg" alt="Ayan">
+      <h1>Porter Guarino</h1>
+    </div>
+    <div class="member" onclick="openModal('Rayansh Kature', 'Rayansh is an all rounder in our team- he loves to build and likes to code. He started competitive robotics in 2023 with Microbitz (evolved into Robo Panthers and now Steel Synapse).')">
+      <img src="./images/meetthem/ray.svg" alt="Ayan">
+      <h1>Rayansh Kature</h1>
+    </div>
+    <div class="member" onclick="openModal('Siddh Patel', ' Sid loves coding and has been moving towards robot building in our team. He started competitive robotics in 2023 with Microbitz (evolved into Robo Panthers and now Steel Synapse).')">
+      <img src="./images/meetthem/sidhh.svg" alt="Ayan">
+      <h1>Siddh Patel</h1>
+    </div>
+    <div class="member" onclick="openModal('Tarun Bharath', 'Tarun is the  mechanical guy in our team. He loves to build and is learning and getting better with coding. He started competitive robotics in 2023 with Microbitz (evolved into Robo Panthers and now Steel Synapse).')">
+      <img src="./images/meetthem/Lil t.svg" alt="Ayan">
+      <h1>Tarun Bharath</h1>
+    </div>
+  </div>
+
+  <!-- Overlay + Modal -->
+  <div id="overlay" class="overlay">
+    <div class="modal">
+      <h2 id="modalTitle"></h2>
+      <p id="modalText"></p>
+      <button class="closebtn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(name, text) {
+      document.getElementById("modalTitle").innerText = name;
+      document.getElementById("modalText").innerText = text;
+      document.getElementById("overlay").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("overlay").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
