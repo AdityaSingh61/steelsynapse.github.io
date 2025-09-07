@@ -1,42 +1,11 @@
 <!DOCTYPE html>
-<html  lang="en-US">
-
+<html lang="en-US">
 <head>
-    <meta charset ="utf-8"/>
-    <title>Steel Synapse</title>
+  <meta charset="utf-8"/>
+  <title>Steel Synapse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-    /* Style the navigation bar */
-.topnav a {
-  display: block;
-  color: #ffd21f;
-  text-align: center;
-  padding: 14px 20px ;
-  text-decoration: none; 
-    width: 100%;
-  block-size: 100%;
-}
-.topnav a:hover {
-   background-color: #100f0a;
-    color: #f1f1f1;
-
-}
-    /* Highlight the active page */
-.topnav a.active {
-      background-color: #ffd21f; /* Green */
-      color: #333;
-    }
-.topnav {
-  width: 100%;
-  block-size: 100%;
-  display: block;
-  background-color: #100f0a;
-  display: flex;
-  justify-content: center;
-  margin: -100px;
-}
-
-
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -50,15 +19,150 @@
       display: block;
     }
 
+    /* Top navigation */
+    .topnav {
+      background-color: #100f0a;
+      display: flex;
+      justify-content: center;
+    }
+    .topnav a {
+      display: block;
+      color: #ffd21f;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+    .topnav a:hover {
+      background-color: #100f0a;
+      color: #f1f1f1;
+    }
+    .topnav a.active {
+      background-color: #ffd21f;
+      color: #333;
+    }
 
+    /* Team grid */
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .member {
+      text-align: center;
+      max-width: 200px;
+      cursor: pointer;
+    }
+    .member img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+    .member img:hover {
+      transform: scale(1.05);
+    }
+    .member h1 {
+      font-size: medium;
+      margin-top: 10px;
+    }
 
+    /* Modal overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #4b4a44;
+      border-radius: 15px;
+      padding: 20px;
+      width: 400px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    .modal h2 { margin-top: 0; color: #ffd21f; }
+    .modal p { color: #fff; }
+    .closebtn {
+      background: #ffd21f;
+      border: none;
+      color: #100f0a;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
 
+    /* Side nav */
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0; left: 0;
+      background-color: #100f0a;
+      overflow-x: hidden;
+      transition: 0.7s;
+      padding-top: 60px;
+      z-index: 1100;
+    }
+    .sidenav a {
+      padding: 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #ffd21f;
+      display: block;
+    }
+    .sidenav a:hover { color: #f1f1f1; }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0; right: 25px;
+      font-size: 36px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+    }
+    footer img {
+      margin: -10px;
+    }
+    footer button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    footer button img {
+      width: 120px;
+      transition: transform 0.3s ease;
+    }
+    footer button:hover img {
+      transform: scale(1.2);
+    }
   </style>
-  
 </head>
 <body>
 
-<h1 style="font-size: medium;font-weight: lighter;">
+  <!-- Banner -->
+  <div class="banner">
+    <img src="./images/grounded/topper.png" alt="Banner">
+  </div>
+
+  <!-- Top Nav -->
   <div class="topnav">
     <a href="./index.html">Home</a>
     <a href="./new_meet_the_team.html">Meet the team</a>
@@ -68,8 +172,6 @@
     <a href="./new_donate.html">Donate</a>
     <a href="./new_outreach.html">Outreach</a>
   </div>
-
-</h1>
 
 <style>    button {
       border: none;
@@ -104,8 +206,11 @@
       animation: fade 44s infinite;
     }
 
-
-  .slideshow-container {
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+       /*    .slideshow-container {
       position: relative;
       width: 80%;
       max-width: 800px;
@@ -115,8 +220,8 @@
       border-radius: 10px;
       background: #100f0a;
     }
-
-    
+*/
+    }
     .slide:nth-child(1) { animation-delay: 0s; }
     .slide:nth-child(2) { animation-delay: 4s; }
     .slide:nth-child(3) { animation-delay: 8s; }
@@ -149,9 +254,6 @@
 
 </style>
 </style>
-  <div class="banner">
-    <img src="./images/grounded/topper.png" alt="Banner">
-  </div>
 <h1>
 <div style="border: 10px dashed black; padding: 10px; display: inline-block;justify-content: center;text-align: center;align-content: center;">
 
