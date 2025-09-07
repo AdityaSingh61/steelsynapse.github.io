@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <title>Steel Synapse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-image: url(./images/grounded/curcuts.svg);
+    }
+
+    /* Top banner */
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Top navigation */
+    .topnav {
+      background-color: #100f0a;
+      display: flex;
+      justify-content: center;
+    }
+    .topnav a {
+      display: block;
+      color: #ffd21f;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+    .topnav a:hover {
+      background-color: #100f0a;
+      color: #f1f1f1;
+    }
+    .topnav a.active {
+      background-color: #ffd21f;
+      color: #333;
+    }
+
+    /* Team grid */
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;}
+        .member {
+      text-align: center;
+      max-width: 200px;
+      cursor: pointer;}
+        .member img {
+   width: 100%;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+ .member img:hover {
+      transform: scale(1.05);
+    }
+ .member h1 {
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    /* Modal overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;  }
+    .modal {
+      background: #4b4a44;
+      border-radius: 15px;
+      padding: 20px;
+      width: 400px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    .modal h2 { margin-top: 0; color: #ffd21f; }
+    .modal p { color: #fff; }
+    .closebtn {
+      background: #ffd21f;
+      border: none;
+      color: #100f0a;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+ }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Side nav */
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0; left: 0;
+      background-color: #100f0a;
+      overflow-x: hidden;
+      transition: 0.7s;
+      padding-top: 60px;
+      z-index: 1100;
+    }
+    .sidenav a {
+      padding: 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #ffd21f;
+      display: block;
+    }
+    .sidenav a:hover { color: #f1f1f1; }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0; right: 25px;
+      font-size: 36px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+    }
+    footer img {
+      margin: -10px;
+    }
+    footer button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    footer button img {
+      width: 120px;
+      transition: transform 0.3s ease;
+    }
+    footer button:hover img {
+      transform: scale(1.2);
+    }
+      /* Mentor Cards */
+    .mentor-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .mentor-card {
+            background-color: rgba(16,15,10,0.85);
+            color: #fff;
+            border-radius: 15px;
+            width: 260px;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .mentor-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .mentor-card h3 { margin: 10px 0 5px; color: #ffd21f; }
+        .mentor-card p { font-size: 1em; color: #ffffffb8; }
+  </style>
+</head>
+<body>
+
+  <!-- Banner -->
+  <div class="banner">
+    <img src="./images/grounded/topper.png" alt="Banner">
+  </div>
+
+  <!-- Top Nav -->
+  <div class="topnav">
+    <a href="./index.html">Home</a>
+    <a href="./new_meet_the_team.html">Meet the team</a>
+    <a href="./new_mentors.html">Mentors</a>
+    <a href="./new_history.html">History</a>
+    <a href="./new_edu.html">Educational Resources</a>
+    <a href="./new_donate.html">Donate</a>
+    <a href="./new_outreach.html">Outreach</a>
+  </div>
+
+  <h1 style="margin: -6px;"><img src="./images/Banner/mentors.svg" alt="Banner" width="100%"></h1>
+
+  <hr style="border: 2px solid #100f0a; width: 100%;">
+  <hr style="border: 2px solid #100f0a; width: 65%;">
+
+
+</head>
+<body>
+
+   
+
+    <!-- Mentor Section -->
+    <h1 style="font-size:large;font-weight:100;text-align: center;">Each Season we have been blessed with amazing mentors. Our coaches guided us regularly for different aspects of our FLL journey, always motivating us through the challenges we faced. In addition we had mentors who brought in their specific expertise to help us in our Innovation Projects and learnings. We want to acknowledge their contribution to our team.
+</h1>
+  <hr style="border: 1px solid #100f0a; width: 100%;">
+
+    <div class="mentor-container">
+<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Matt Wilson</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
+
+        <!-- Matt Wilson -->
+        <div class="mentor-card">
+            <img src="./images/mentors/matt_wilson.jpg" alt="Matt Wilson">
+            <h3>Mr. Mathew (Matt) Wilson</h3>
+            <p>Mr. Wilson began his robotics career in 2016 with Robomatter, creating curricula for VEX and LEGO platforms and serving as a programming judge at VEX Worlds. He later mentored winning competitive teams, including the Gear Grinders, and has since expanded USC Robotics by guiding teams to state championships, running workshops, and supporting coaches locally and nationally. Now, as USC FLL Coordinator, he is committed to building a strong and thriving robotics community. </p>
+        </div>
+<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Current Coaches</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
+
+        <!-- Current Coaches -->
+        <div class="mentor-card">
+            <img src="./images/mentors/meenakshi_sundaram.jpg" alt="Meenakshi Sundaram">
+            <h3>Ms. Meenakshi Sundaram</h3>
+            <p>Meenakshi (Minnie) Sundaram, a parent of two USCSD students, has coached middle school robotics for the past two years and actively volunteers at Streams and Boyce. Passionate about the program’s ability to build creativity, problem-solving, technical, and teamwork skills, she values the strong community fostered by coaches and families. As a liaison with the elementary schools, she looks forward to helping the Robotics Boosters grow and strengthen the program for the future.</p>
+        </div>
+
+        <div class="mentor-card">
+            <img src="./images/Mentors/aditi.jpeg" alt="Aditi Gurkar">
+            <h3>Dr. Aditi Gurkar</h3>
+            <p>Dr. Gurkar is a Professor at the University of Pittsburgh and has recently joined our team as a coach. She consistently motivates us to try and not give up. Her emphasis for us is to learn and work independently but together.</p>
+          </h6>
+
+        </div>
+
+        <div class="mentor-card">
+            <img src="./images/mentors/slava_rovner.jpg" alt="Slava Rovner">
+            <h3>Mr. Slava Rovner</h3>
+            <p>This will be my third season of coaching a middle school FLL team. I have a PhD in Electrical and Computer Engineering and enjoy sharing my passion for programming and engineering with young minds. My goal as a coach has been to create a fun and inclusive environment where every team member feels like their ideas are heard and considered. I want to inspire kids to explore STEM through teamwork, problem-solving, the scientific method, and creativity.</p>
+        </div>
+<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Past Coach</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
+
+        <!-- Past Coach -->
+        <div class="mentor-card">
+            <img src="./images/mentors/mike_ressler.jpg" alt="Mike Ressler">
+            <h3>Mr. Mike Ressler</h3>
+            <p>Mike Ressler, CTO of Diamond Kinetics and SidelineHD, has a long history of blending technology and youth sports, from founding StatEasy to coaching multiple teams in soccer, baseball, wrestling, and FLL robotics. A Carnegie Mellon computer science graduate and Upper St. Clair resident since 2017, he is deeply involved in the community through coaching and board service with Community Human Services. Passionate about creating opportunities for kids, he is committed to expanding access to robotics through competitive play.</p>
+        </div>
+<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Additional Mentors</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
+        <!-- Additional Mentors -->
+        <div class="mentor-card">
+            <img src="./images/mentors/rachel_roos.jpg" alt="Rachel Roos">
+            <h3>Ms. Rachel Roos</h3>
+            <p>Ms Roos is a bioengineer who worked at University of Pittsburgh. In our 2023 season she guided us through our innovation project idea of creating augmented reality lego building experience by providing us feedback on our designs and guiding us in use of materials to create our sensors.</p>
+        </div>
+
+        <div class="mentor-card">
+            <img src="./images/mentors/zakiy_alfikri.jpg" alt="Zakiy Alfikri">
+            <h3>Mr. Zakiy Alfikri</h3>
+            <p>Mr. Alfikri is a bioengineer working at University of Pittsburgh. In the 2023 season he along with Ms. Roos guided us through our innovation project especially helping us understand the underlying principles of the proposed solution.</p>
+        </div>
+
+        <div class="mentor-card">
+            <img src="./images/mentors/sainyam_arora.jpg" alt="Sainyam Arora">
+            <h3>Mr. Sainyam Arora</h3>
+            <p>Mr. Arora is a chemical engineer working for Jameson Mathey in Savannah. In the 2024 season we created a prototype based on principles of a battery for conducting ocean water electrolysis to combact ocean acidification. He guided us by answering our questions and proding us to think of the feasibility of the proposed solution.</p>
+        </div>
+
+        <div class="mentor-card">
+            <img src="./images/mentors/samiksha_kature.jpg" alt="Samiksha Kature">
+            <h3>Ms. Samiksha Kature</h3>
+            <p>Ms. Kature is a software engineer woking as a data analyst in Jameson Mathey in Philladelphia. She volunteered her time in the 2025 season to train us on coding using python language.</p>
+        </div>
+    </div>
+
+    <hr>
+
+  <footer style="text-align:center; margin-top:50px;">
+    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
+    <div>
+      <a href="mailto:steelsynapse01@gmail.com">
+        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
+
+      <a href="https://www.youtube.com/@steelsynapse01">
+        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
+      </a>      </a>
+    </div>
+  </footer>
+
+</body>
+</html>

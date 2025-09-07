@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <title>Steel Synapse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-image: url(./images/grounded/curcuts.svg);
+    }
+
+    /* Top banner */
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Top navigation */
+    .topnav {
+      background-color: #100f0a;
+      display: flex;
+      justify-content: center;
+    }
+    .topnav a {
+      display: block;
+      color: #ffd21f;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+    .topnav a:hover {
+      background-color: #100f0a;
+      color: #f1f1f1;
+    }
+    .topnav a.active {
+      background-color: #ffd21f;
+      color: #333;
+    }
+
+    /* Team grid */
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .member {
+      text-align: center;
+      max-width: 200px;
+      cursor: pointer;
+    }
+    .member img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+    .member img:hover {
+      transform: scale(1.05);
+    }
+    .member h1 {
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    /* Modal overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #4b4a44;
+      border-radius: 15px;
+      padding: 20px;
+      width: 400px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    .modal h2 { margin-top: 0; color: #ffd21f; }
+    .modal p { color: #fff; }
+    .closebtn {
+      background: #ffd21f;
+      border: none;
+      color: #100f0a;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Side nav */
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0; left: 0;
+      background-color: #100f0a;
+      overflow-x: hidden;
+      transition: 0.7s;
+      padding-top: 60px;
+      z-index: 1100;
+    }
+    .sidenav a {
+      padding: 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #ffd21f;
+      display: block;
+    }
+    .sidenav a:hover { color: #f1f1f1; }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0; right: 25px;
+      font-size: 36px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+    }
+    footer img {
+      margin: -10px;
+    }
+    footer button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    footer button img {
+      width: 120px;
+      transition: transform 0.3s ease;
+    }
+    footer button:hover img {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner -->
+  <div class="banner">
+    <img src="./images/grounded/topper.png" alt="Banner">
+  </div>
+
+  <!-- Top Nav -->
+  <div class="topnav">
+    <a href="./index.html">Home</a>
+    <a href="./new_meet_the_team.html">Meet the team</a>
+    <a href="./new_mentors.html">Mentors</a>
+    <a href="./new_history.html">History</a>
+    <a href="./new_edu.html">Educational Resources</a>
+    <a href="./new_donate.html">Donate</a>
+    <a href="./new_outreach.html">Outreach</a>
+  </div>
+
+<style>    button {
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    button img {
+      width: 150px;
+      transition: transform 0.3s ease;
+    }
+
+    button:hover img {
+      transform: scale(1.2); /* make image 20% larger */
+    }
+  </style>       <style>
+    .slideshow-container {
+      position: relative;
+      width: 700px;
+      height: 400px;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      animation: fade 44s infinite;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+       /*    .slideshow-container {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      height: 400px;
+      margin: 30px auto;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #100f0a;
+    }
+*/
+    }
+    .slide:nth-child(1) { animation-delay: 0s; }
+    .slide:nth-child(2) { animation-delay: 4s; }
+    .slide:nth-child(3) { animation-delay: 8s; }
+    .slide:nth-child(4) { animation-delay: 12s; }
+    .slide:nth-child(5) { animation-delay: 16s; }
+    .slide:nth-child(6) { animation-delay: 20s; }
+    .slide:nth-child(7) { animation-delay: 24s; }
+    .slide:nth-child(8) { animation-delay: 28s; }
+    .slide:nth-child(9) { animation-delay: 32s; }
+    .slide:nth-child(10) { animation-delay: 36s; }
+    .slide:nth-child(11) { animation-delay: 40s; }
+
+
+
+
+    
+
+    @keyframes fade {
+      0%   { opacity: 0; }
+      8%   { opacity: 1; }
+      33%  { opacity: 1; }
+      41%  { opacity: 0; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+<style>
+
+
+</style>
+</style>
+<h1>
+<div style="border: 10px dashed black; padding: 10px; display: inline-block;justify-content: center;text-align: center;align-content: center;">
+
+  <div class="slideshow-container">
+    <div class="slide"><img src="./images/Banner/homebanner.svg" alt="Banner"></div>
+
+    <div class="slide"><img src="./images/home pager/photo1.jpeg" alt="Robot 3"></div>
+    <div class="slide"><img src="./images/home pager/photo2.jpeg" alt="Robot 4"></div>
+    <div class="slide"><img src="./images/home pager/photo3.jpeg" alt="Robot 5"></div>
+    <div class="slide"><img src="./images/home pager/photo4.jpeg" alt="Robot 6"></div>
+    <div class="slide"><img src="./images/home pager/photo5.jpeg" alt="Robot 7"></div>
+    <div class="slide"><img src="./images/home pager/photo6.jpeg" alt="Robot 8"></div>
+    <div class="slide"><img src="./images/home pager/photo7.jpeg" alt="Robot 9"></div>
+    <div class="slide"><img src="./images/home pager/photo8.jpeg" alt="Robot 10"></div>
+    <div class="slide"><img src="./images/home pager/photo9.jpeg" alt="Robot 11"></div>
+  </div>
+</div>
+</body>
+
+    
+    <hr style="border: 2px solid #100f0a; width: 100%;">
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+</head>
+
+<body>
+
+<style>
+h4{
+
+  font-size: larger;
+}
+    h3{
+      font-size: xx-large;
+        text-align: center;
+        font-weight: lighter;
+    }
+
+p{
+  font-size: 75%;
+  text-align: center;
+  font-weight: 100;
+  color:#ffffffb9;
+}
+a:hover
+{
+    color:darkcyan;
+}
+h1{
+
+    color:#100f0a;
+    font-size: 150%;
+    font-weight: lighter;
+    text-align: center;
+
+}
+h5{
+    list-style-type:none;
+    font-size: 1em;
+    font-weight:900;
+    text-align: center;
+    color: #fe0000;
+}
+body {
+  background-image: url(./images/grounded/curcuts.svg);
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+}
+
+.sidebar {
+    text-align:right;
+    fill:#100f0a;
+    color:rgb(4, 63, 63);
+
+}
+.box{
+    width: 200px;
+    height: 500px;
+    background-color: blueviolet;
+}
+h2{
+
+    color: #100f0a;;
+    font-size: 2em;
+    text-align: center;
+    font-style: initial;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
+}
+    .flip-card {
+      background-color: transparent;
+      width: 200px; 
+      height:200px;
+      perspective: 100%;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+
+    .flip-card-back {
+      background-color: #100f0a;
+      color: #fe0000;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0px;
+      text-align: center;
+    }
+
+
+    
+</style>
+
+
+<head>
+<style>
+.button {
+  background-color: #100f0a; /* Green */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button:hover {
+  background-color: #545457; /* Green */
+  color: white;
+}
+.banner{
+  align-self: start;
+}
+
+
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+  border-radius: 13%;}
+
+</style>
+</head>
+
+
+ 
+    <h2>
+       About Us
+    </h2>
+
+    <h1>
+      Steel Synapse is a group of enthusiastic students who love exploring science, technology, engineering and math (STEM) through the First Lego League (FLL) program (Team #53463).</h1>
+       <h1> Our team is made up of seven members, each with unique skills and ideas eager to collaborate, learn, and work towards improving ourselves. Motivated and guided by our coaches to think creatively, 
+       we enjoy problem solving, designing robots and working with each other.</h1><h1> We believe teamwork and having fun are the important foundations to achieving our goals.
+      Our mission is to grow as problem solvers, inventors and friends while making a positive impact through STEM.
+    </h1>
+        <hr style="border: 2px solid #100f0a; width: 100%;">
+        <hr style="border: 2px solid #100f0a; width: 75%;">
+
+</h1>
+
+</div>
+<style>body {
+  font-family: sans-serif;
+}
+.container > div {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: rgba(207, 232, 220, 0);
+  border: 2px solid rgba(79, 185, 227, 0);
+  
+}
+.container {
+  justify-content: center;
+  display: grid;
+  grid-template-columns: 75;
+}</style>
+      </h1>
+
+    <h2>Core Vales</h2>
+    <h1>
+      Our core values are as strong as steel!
+    </h1>
+    <h2>
+    <!-- Card 1 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="images/core/teamwork.png" alt="Image 1">
+      </div>
+      <div class="flip-card-back">
+        <p>We are as strong as steel when we work together.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="images/core/learning.png" alt="Image 2">
+      </div>
+      <div class="flip-card-back">
+        <p>We have a burning desire to learn.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="images/core/inpact.png" alt="Image 3">
+      </div>
+      <div class="flip-card-back">
+        <p>We ignite every synapse with purpose- applying what we learn to fortify the world.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="images/core/innovation.png" alt="Image 4">
+      </div>
+      <div class="flip-card-back">
+        <p>With creativity as our spark and persistence as our fuel, we solve problems.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="images/core/discovery.png" alt="Image 5">
+      </div>
+      <div class="flip-card-back">
+        <p>We explore with grit, forging skills and ideas into tools for change.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 6 -->
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="images/core/fun.png" alt="Image 6">
+      </div>
+      <div class="flip-card-back">
+        <p>We forge with passion and celebrate the sparks we create.</p>
+      </div>
+    </div>
+  </div>
+
+    </h2>
+<h5> Adapted core values from FLL </h5>
+    <hr style="border: 2px solid #100f0a; width: 100%;">
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+
+   
+    
+</body>
+
+<head>
+<style>
+.button {
+  background-color: #100f0a; /* Green */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button:hover {
+  background-color:#545457; /* Green */
+  color: white;
+}
+.banner{
+  align-self: start;
+}
+
+
+.button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+  border-radius: 13%;}
+
+</style>
+</head>
+</body>
+
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #100f0a;
+  overflow-x: hidden;
+  transition: 0.7s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #ffd21f;
+  display: block;
+  transition: 0.1s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+   <a href="./index.html">Home</a>
+     <hr style="border: 2px solid #ffd21F; width: 65%;">
+  <a href="./meettheteam.html">Meet the team</a>
+  <a href="./Mentors.html">Mentors</a>
+  <a href="./history.html">History</a>
+  <a href="./youtube.html">Educational Resources
+</a>
+   <a href="./donate.html">Donate</a> 
+   <a href="./outreach.html">Outreach</a>
+
+</div>
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+<h1 style="justify-content: center;align-items: center;align-content: center;text-align: center;">
+  <footer style="text-align:center; margin-top:50px;">
+    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
+    <div>
+      <a href="mailto:steelsynapse01@gmail.com">
+        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
+
+      <a href="https://www.youtube.com/@steelsynapse01">
+        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
+      </a>      </a>
+    </div>
+  </footer></h1>
+</body>
+</html> 

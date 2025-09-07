@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steel Synapse - History</title>
+  <style>
+    /* Navigation Bar */
+      body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-image: url(./images/grounded/curcuts.svg);
+      text-align: center;
+    }
+
+    /* Top banner */
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Top navigation */
+    .topnav {
+      background-color: #100f0a;
+      display: flex;
+      justify-content: center;
+    margin: -6px;
+    }
+    .topnav a {
+      display: block;
+      color: #ffd21f;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+    .topnav a:hover {
+      background-color: #100f0a;
+      color: #f1f1f1;
+    }
+ 
+
+    /* Team grid */
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .member {
+      text-align: center;
+      max-width: 200px;
+      cursor: pointer;
+    }
+    .member img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+    .member img:hover {
+      transform: scale(1.05);
+    }
+    .member h1 {
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    /* Modal overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #4b4a44;
+      border-radius: 15px;
+      padding: 20px;
+      width: 400px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow-y: auto;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    .modal h2 { margin-top: 0; color: #ffd21f; }
+    .modal p { color: #fff; }
+    .closebtn {
+      background: #ffd21f;
+      border: none;
+      color: #100f0a;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Side nav */
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0; left: 0;
+      background-color: #100f0a;
+      overflow-x: hidden;
+      transition: 0.7s;
+      padding-top: 60px;
+      z-index: 1100;
+    }
+    .sidenav a {
+      padding: 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #ffd21f;
+      display: block;
+    }
+    .sidenav a:hover { color: #f1f1f1; }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0; right: 25px;
+      font-size: 36px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+    }
+    footer img {
+      margin: -10px;
+    }
+    footer button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    footer button img {
+      width: 120px;
+      transition: transform 0.3s ease;
+    }
+    footer button:hover img {
+      transform: scale(1.2);
+    }
+  
+   
+    h1, h2, h5, p {
+      margin: 10px 0;
+    }
+    hr {
+      border: 2px solid #100f0a;
+      width: 75%;
+      margin: 20px auto;
+    }
+
+    /* Collapsible Sections */
+    .collapsible {
+      background-color: #ffd21f;
+      color: #100f0a;
+      cursor: pointer;
+      padding: 14px;
+      width: 60%;
+      border: none;
+      text-align: center;
+      outline: none;
+      font-size: 1.5em;
+      font-weight: bold;
+      margin: 20px auto;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+    .collapsible:hover {
+      background-color: #e6bf1a;
+    }
+    .content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+      width: 80%;
+      margin: 0 auto;
+      background: rgba(255, 210, 31, 0.1);
+      border-radius: 10px;
+      padding: 0 20px;
+    }
+    .content.open {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* Side Navigation */
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #100f0a;
+      overflow-x: hidden;
+      transition: 0.7s;
+      padding-top: 60px;
+    }
+    .sidenav a {
+      padding: 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #ffd21f;
+      display: block;
+    }
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      text-align: center;
+    }
+    footer img {
+      margin: 10px;
+    }
+    button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    button img {
+      width: 100px;
+      transition: transform 0.3s ease;
+    }
+    button:hover img {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner -->
+  <img src="./images/grounded/topper.png" alt="Banner" width="100%">
+    <!-- Navigation -->
+  <div class="topnav">
+    <a href="./index.html">Home</a>
+    <a href="./meettheteam.html">Meet the team</a>
+    <a href="./Mentors.html">Mentors</a>
+    <a href="./history.html" class="active">History</a>
+    <a href="./youtube.html">Educational Resources</a>
+    <a href="./donate.html">Donate</a>
+    <a href="./outreach.html">Outreach</a>
+  </div>
+  <img src="images/Banner/history (1).png" alt="History Banner" width="100%">
+
+
+    <hr style="border: 2px solid #100f0a; width: 100%;">
+   <h1>Click to learn about our TEAM!</h1>
+  <!-- Collapsible History Sections -->
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+  <button class="collapsible">2023 - Master Piece (Team Microbitz)</button>
+  <div class="content">
+    <p>Our 1st year we were a team of 6 members (Genevieve, Naisha, Prachi, Rayansh, Siddh and Tarun). Our mentors were Mr. Mike Ressler and Ms. Minnie Sundaram. This season was a huge learning curve for us from understanding the rules of FLL to learning scratch programming for coding as well as learning to work as a team. It was a great season as we learnt so much and won 3rd place in core values during the regional competition.</p>
+    <img src="./images/history/Screenshot 2025-08-17 at 6.57.22 PM.png" alt="2023 Team Pic 1" width="35%">
+    <img src="./images/history/Screenshot 2025-08-17 at 6.57.32 PM.png" alt="2023 Team Pic 2" width="35%">
+    <p>Benny's old team was the <strong>Brick Busters</strong> (#53462).</p>
+  </div>
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+  <button class="collapsible">2024 - Submerged (The Robo Panthers)</button>
+  <div class="content">
+    <p>We were reassigned into teams and only 3 of us from the original team ended up together along with 2 new members (Ayan, Benny, Rayansh, Siddh and Tarun). We were mentored by Mr. Slava Rovner and Ms. Minnie Sundaram. This was a season where we were more organized, and used different strategies. The season was great in terms of learning engineering design principles and creating prototypes. We won twice in the scrimmages and had a special recognition for our Robot design.</p>
+    <img src="./images/history/Screenshot 2025-08-17 at 6.59.02 PM.png" alt="2024 Team Pic 1" width="35%">
+    <img src="./images/history/Screenshot 2025-08-17 at 6.58.05 PM.png" alt="2024 Team Pic 2" width="35%">
+    <p>Adi's and Porter's old team was the <strong>Robo Birds</strong><!--robo bird team number-->.</p>
+  </div>
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+  <button class="collapsible">2025 - Unearthed (Steel Synapse)</button>
+  <div class="content">
+    <p>This season we have been lucky as we were able to retain all members of the team and add 2 new members, making us the steely 7 (Adi, Ayan, Benny, Porter, Rayansh, Siddh and Tarun). This season we have 3 mentors in Mr. Slava Rovner, Dr. Aditi Gurkar and Ms. Minnie Sundaram. We plan on continuing with this name and identity to Forge New Solutions to the challenges we face together.</p>
+    <img src="./images/grounded/curcuts.svg" alt="Placeholder 1" width="35%">
+    <img src="./images/grounded/curcuts.svg" alt="Placeholder 2" width="35%">
+  </div>
+    <hr style="border: 2px solid #100f0a; width: 75%;">
+  <!-- Side Navigation -->
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="./index.html">Home</a>
+    <a href="./meettheteam.html">Meet the team</a>
+    <a href="./Mentors.html">Mentors</a>
+    <a href="./history.html">History</a>
+    <hr style="border: 2px solid #ffd21f; width: 75%;">
+    <a href="./youtube.html">Educational Resources</a>
+    <a href="./donate.html">Donate</a>
+    <a href="./outreach.html">Outreach</a>
+  </div>
+
+  <!-- Footer -->
+   <footer style="text-align:center; margin-top:50px;">
+    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
+    <div>
+      <a href="mailto:steelsynapse01@gmail.com">
+        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
+
+      <a href="https://www.youtube.com/@steelsynapse01">
+        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
+      </a>      </a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Side nav
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+
+    // Collapsible history
+    const collapsibles = document.querySelectorAll(".collapsible");
+    collapsibles.forEach(btn => {
+      btn.addEventListener("click", function() {
+        this.classList.toggle("active");
+        const content = this.nextElementSibling;
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+          content.classList.remove("open");
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+          content.classList.add("open");
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

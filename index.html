@@ -4,7 +4,7 @@
 <head>
     <meta charset ="utf-8"/>
     <title>Steel Synapse</title>
-     <img src="./images/grounded/topper.png" alt="Banner" height="100%"width="100%;"border: 10px black>
+
 <style>
     /* Style the navigation bar */
 .topnav a {
@@ -13,6 +13,8 @@
   text-align: center;
   padding: 14px 20px ;
   text-decoration: none; 
+    width: 100%;
+  block-size: 100%;
 }
 .topnav a:hover {
    background-color: #100f0a;
@@ -25,34 +27,46 @@
       color: #333;
     }
 .topnav {
-
+  width: 100%;
+  block-size: 100%;
+  display: block;
   background-color: #100f0a;
   display: flex;
   justify-content: center;
+  margin: -100px;
 }
 
 
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-image: url(./images/grounded/curcuts.svg);
+    }
 
+    /* Top banner */
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
 
 
 
   </style>
+  
 </head>
 <body>
 
 <h1 style="font-size: medium;font-weight: lighter;">
   <div class="topnav">
-
-   <a href="./index.html">Home</a>
-
-  <a href="./meettheteam.html">Meet the team</a>
-  <a href="./Mentors.html">Mentors</a>
-  <a href="./history.html">History</a>
-  <a href="./youtube.html">Educational Resources
-</a>
-   <a href="./donate.html">Donate</a> 
-   <a href="./outreach.html">Outreach</a>
+    <a href="./index.html">Home</a>
+    <a href="./new_meet_the_team.html">Meet the team</a>
+    <a href="./new_mentors.html">Mentors</a>
+    <a href="./new_history.html">History</a>
+    <a href="./new_edu.html">Educational Resources</a>
+    <a href="./new_donate.html">Donate</a>
+    <a href="./new_outreach.html">Outreach</a>
   </div>
 
 </h1>
@@ -87,27 +101,38 @@
       width: 100%;
       height: 100%;
       opacity: 0;
-      animation: fade 12s infinite;
+      animation: fade 44s infinite;
     }
 
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-       
+
+  .slideshow-container {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      height: 400px;
+      margin: 30px auto;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #100f0a;
     }
 
-    .slide:nth-child(1) {
-      animation-delay: 0s;
-    }
+    
+    .slide:nth-child(1) { animation-delay: 0s; }
+    .slide:nth-child(2) { animation-delay: 4s; }
+    .slide:nth-child(3) { animation-delay: 8s; }
+    .slide:nth-child(4) { animation-delay: 12s; }
+    .slide:nth-child(5) { animation-delay: 16s; }
+    .slide:nth-child(6) { animation-delay: 20s; }
+    .slide:nth-child(7) { animation-delay: 24s; }
+    .slide:nth-child(8) { animation-delay: 28s; }
+    .slide:nth-child(9) { animation-delay: 32s; }
+    .slide:nth-child(10) { animation-delay: 36s; }
+    .slide:nth-child(11) { animation-delay: 40s; }
 
-    .slide:nth-child(2) {
-      animation-delay: 4s;
-    }
 
-    .slide:nth-child(3) {
-      animation-delay: 8s;
-    }
+
+
+    
 
     @keyframes fade {
       0%   { opacity: 0; }
@@ -124,21 +149,26 @@
 
 </style>
 </style>
+  <div class="banner">
+    <img src="./images/grounded/topper.png" alt="Banner">
+  </div>
 <h1>
 <div style="border: 10px dashed black; padding: 10px; display: inline-block;justify-content: center;text-align: center;align-content: center;">
 
-  <div class="slideshow-container" style="background-color: #100f0a">
-    <div class="slide">
-    <img src="images/Banner/homebanner.svg" alt="Banner" height="100%"width="100%">
-    </div>
-    <div class="slide">
-      <img src="images/history/Screenshot 2025-08-17 at 6.58.05 PM.png" alt=>
-    </div>
-    <div class="slide">
-      <img src="images/history/Screenshot 2025-08-17 at 6.59.02 PM.png" alt="robot pic">
-    </div>
+  <div class="slideshow-container">
+    <div class="slide"><img src="./images/Banner/homebanner.svg" alt="Banner"></div>
+
+    <div class="slide"><img src="./images/home pager/photo1.jpeg" alt="Robot 3"></div>
+    <div class="slide"><img src="./images/home pager/photo2.jpeg" alt="Robot 4"></div>
+    <div class="slide"><img src="./images/home pager/photo3.jpeg" alt="Robot 5"></div>
+
+    <div class="slide"><img src="./images/home pager/photo5.jpeg" alt="Robot 7"></div>
+    <div class="slide"><img src="./images/home pager/photo6.jpeg" alt="Robot 8"></div>
+    <div class="slide"><img src="./images/home pager/photo7.jpeg" alt="Robot 9"></div>
+    <div class="slide"><img src="./images/home pager/photo8.jpeg" alt="Robot 10"></div>
+    <div class="slide"><img src="./images/home pager/photo9.jpeg" alt="Robot 11"></div>
   </div>
-</div></h1>
+</div>
 </body>
 
     
@@ -158,10 +188,7 @@ h4{
         text-align: center;
         font-weight: lighter;
     }
-    a:link
-{
-    color:darkblue;
-}
+
 p{
   font-size: 75%;
   text-align: center;
@@ -530,8 +557,17 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
 </script>
-<h1><footer><img src="./images/madia/photoitem.svg" alt="Banner" height="700px"width="700px"><a href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWrRpclZgGkPglFpqmFTHVBpVtLHQrNSpSXTGVbqrTDNkJClvHWcsGgrZSHfXRgvzmrGvrQgv"><button><img src="./images/madia/email.svg" alt="Banner" height="90%"width="90%">
-</button></a></button></a><a href="https://www.youtube.com/@steelsynapse01"><button><img src="./images/madia/youtube.svg" alt="Banner" height="90%"width="90%"></footer>
-</h1></h1></h4></footer>
+<h1 style="justify-content: center;align-items: center;align-content: center;text-align: center;">
+  <footer style="text-align:center; margin-top:50px;">
+    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
+    <div>
+      <a href="mailto:steelsynapse01@gmail.com">
+        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
+
+      <a href="https://www.youtube.com/@steelsynapse01">
+        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
+      </a>      </a>
+    </div>
+  </footer></h1>
 </body>
 </html> 

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steel Synapse - Outreach</title>
+
+  <style>
+    /* Top navigation */
+    .topnav {
+      background-color: #100f0a;
+      display: flex;
+      justify-content: center;
+      margin: -6px;
+    }
+    .topnav a {
+      display: block;
+      color: #ffd21f;
+      text-align: center;
+      padding: 14px 20px;
+      text-decoration: none;
+    }
+    .topnav a:hover {
+      background-color: #100f0a;
+      color: #f1f1f1;
+    }
+ 
+
+
+    /* --- SIDENAV --- */
+    .menu-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 30px;
+      color: #ffd21f;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      background-color: #100f0a;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+    .sidenav a {
+      padding: 8px 32px;
+      text-decoration: none;
+      font-size: 22px;
+      color: #ffd21f;
+      display: block;
+      transition: 0.3s;
+    }
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 36px;
+    }
+
+    /* --- BODY --- */
+
+        body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-image: url(./images/grounded/curcuts.svg);
+      text-align: center;
+      
+    }
+    h1 {
+      font-weight: lighter;
+      margin: 20px 0;
+    }
+    .outreach-images {
+      display: fill;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px auto;
+    }
+    .outreach-images img {
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .outreach-images img:hover {
+      transform: scale(1.05);
+    }
+
+    /* --- LIGHTBOX --- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .close-lightbox {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      font-size: 40px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* --- ARROWS --- */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 60px;
+      color: white;
+      text-decoration: none;
+      padding: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      user-select: none;
+    }
+    .nav-arrow:hover {
+      color: #ffd21f;
+    }
+    .nav-left { left: 20px; }
+    .nav-right { right: 20px; }
+
+    /* --- FOOTER --- */
+    footer {
+      background: #100f0a00;
+      padding: 0px;
+      margin-top: 0px;
+    }
+    footer img {
+      width: 500px;
+      margin: 10px;
+
+    }
+    footer img:hover {
+      transform: scale(1.2);
+    }
+     footer {
+      text-align: center;
+      padding: 20px;
+    }
+    footer img {
+      margin: -10px;
+    }
+    footer button {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    footer button img {
+      width: 120px;
+      transition: transform 0.3s ease;
+    }
+    footer button:hover img {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Side Menu Button -->
+  
+
+  <!-- Side Navigation -->
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="./index.html">Home</a>
+    <a href="./meettheteam.html">Meet the Team</a>
+    <a href="./Mentors.html">Mentors</a>
+    <a href="./history.html">History</a>
+    <a href="./youtube.html">Educational Resources</a>
+    <a href="./donate.html">Donate</a>
+    <a href="./outreach.html" class="active">Outreach</a>
+  </div>
+
+  <!-- Top Banner -->
+  <img src="./images/grounded/topper.png" alt="Banner" style="width:100%; height:auto;">
+
+  <!-- Top Navigation -->
+  <div class="topnav">
+    <a href="./index.html">Home</a>
+    <a href="./new_meet_the_team.html">Meet the team</a>
+    <a href="./new_mentors.html">Mentors</a>
+    <a href="./new_history.html">History</a>
+    <a href="./new_edu.html">Educational Resources</a>
+    <a href="./new_donate.html">Donate</a>
+    <a href="./new_outreach.html">Outreach</a>
+  </div>
+
+  <!-- Outreach Content -->
+  <img src="images/Banner/outreach.gif" alt="Outreach Banner" style="width:100%; height:auto;">
+
+  <hr style="border: 2px solid #100f0a; width: 100%;">
+  <hr style="border: 2px solid #100f0a; width: 65%;">
+  <h1>USC Community Day, 2025</h1>
+  <h1 style="text-align: center;justify-content: center;align-content: center;"><div class="outreach-images">
+    <img src="./images/outreach/3f84c3cd-8012-4bc5-906b-a1b4eba6de92.jpeg" alt="Community Day 1" onclick="openLightbox(0)">
+    <img src="./images/outreach/7459694f-dedd-4ba7-b201-d42a4f3f3ac2.jpeg" alt="Community Day 2" onclick="openLightbox(1)">
+    <img src="./images/outreach/9efe9c95-2c19-42b1-911c-a108ba46ab16.jpeg" alt="Community Day 3" onclick="openLightbox(2)">
+  </div></h1>
+
+  <hr style="border: 2px solid #100f0a; width: 65%;">
+  <hr style="border: 2px solid #100f0a; width: 100%;">
+
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+    <a class="nav-arrow nav-left" onclick="changeImage(-1)">&#10094;</a>
+    <img id="lightbox-img" src="" alt="">
+    <a class="nav-arrow nav-right" onclick="changeImage(1)">&#10095;</a>
+  </div>
+
+  <!-- Footer -->
+  <footer >
+   <h1 style="justify-content: center;"><img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px"></h1>
+    <div>
+      <a href="mailto:steelsynapse01@gmail.com">
+        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
+
+      <a href="https://www.youtube.com/@steelsynapse01">
+        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
+      </a>      </a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Side nav
+    function openNav() { document.getElementById("mySidenav").style.width = "250px"; }
+    function closeNav() { document.getElementById("mySidenav").style.width = "0"; }
+
+    // Lightbox
+    const images = [
+      "./images/outreach/3f84c3cd-8012-4bc5-906b-a1b4eba6de92.jpeg",
+      "./images/outreach/7459694f-dedd-4ba7-b201-d42a4f3f3ac2.jpeg",
+      "./images/outreach/9efe9c95-2c19-42b1-911c-a108ba46ab16.jpeg",
+ 
+    ];
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      document.getElementById("lightbox-img").src = images[currentIndex];
+      document.getElementById("lightbox").classList.add("active");
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").classList.remove("active");
+    }
+
+    function changeImage(direction) {
+      currentIndex = (currentIndex + direction + images.length) % images.length;
+      document.getElementById("lightbox-img").src = images[currentIndex];
+    }
+
+    // Keyboard controls
+    document.addEventListener("keydown", function(event) {
+      const lightbox = document.getElementById("lightbox");
+      if (!lightbox.classList.contains("active")) return;
+
+      if (event.key === "ArrowRight") changeImage(1);
+      if (event.key === "ArrowLeft") changeImage(-1);
+      if (event.key === "Escape") closeLightbox();
+    });
+  </script>
+
+</body>
+</html>
