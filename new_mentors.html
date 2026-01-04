@@ -203,34 +203,74 @@
 
 </head>
 <body>
+  <style>
+    .section-title {
+      font-size: xx-large;
+      font-weight: bold;
+      text-align: center;
+      margin: 60px 0 20px;
+    }
+    .section-title, hr {
+      border: 2px solid #100f0a;
+      width: 80%;
+      margin: 10px auto 40px;
+    }
+.mentor-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
+    width: 600px;
+    max-width: 95%;
+    margin: 0 auto;   /* ← THIS centers the card */
+}
+
+
+.mentor-horizontal img {
+    width: 200px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+.mentor-horizontal .mentor-text {
+    flex: 1;
+}
+    </style>
 
    
 
     <!-- Mentor Section -->
-    <h1 style="font-size:large;font-weight:100;text-align: center;">Each Season we have been blessed with amazing mentors. Our coaches guided us regularly for different aspects of our FLL journey, always motivating us through the challenges we faced. In addition we had mentors who brought in their specific expertise to help us in our Innovation Projects and learnings. We want to acknowledge their contribution to our team.
+    <h1 style="font-size:large;font-weight:100;text-align: center;">Each Season, we have been blessed with mentors who guided us regularly on different aspects of our FLL journey. Our coaches were always present, guiding us and motivating us through the challenges we faced. In addition, we had mentors who brought in their specific expertise to help us in our Innovation Projects and learning. We want to acknowledge their contribution to our team.
+
 </h1>
   <hr style="border: 1px solid #100f0a; width: 100%;">
-
+<div class="mentor-card mentor-horizontal">
+    <img src="./images/Mentors/matt wilson headshot.avif" alt="Matt Wilson">
+    <div class="mentor-text">
+        <h3>Mr. Mathew (Matt) Wilson</h3>
+        <p>
+            Mr. Wilson began his robotics career in 2016 with Robomatter, creating curricula
+            for VEX and LEGO platforms and serving as a programming judge at VEX Worlds.
+            He later mentored winning competitive teams, including the Gear Grinders, and
+            has since expanded USC Robotics by guiding teams to state championships,
+            running workshops, and supporting coaches locally and nationally.
+            Now, as USC FLL Coordinator, he is committed to building a strong and thriving
+            robotics community.
+        </p>
+    </div>
+</div>
     <div class="mentor-container">
-<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Matt Wilson</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
 
-        <!-- Matt Wilson -->
-        <div class="mentor-card">
-            <img src="./images/mentors/matt_wilson.jpg" alt="Matt Wilson">
-            <h3>Mr. Mathew (Matt) Wilson</h3>
-            <p>Mr. Wilson began his robotics career in 2016 with Robomatter, creating curricula for VEX and LEGO platforms and serving as a programming judge at VEX Worlds. He later mentored winning competitive teams, including the Gear Grinders, and has since expanded USC Robotics by guiding teams to state championships, running workshops, and supporting coaches locally and nationally. Now, as USC FLL Coordinator, he is committed to building a strong and thriving robotics community. </p>
-        </div>
-<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Current Coaches</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
-
+ <div class="section-title">Current Coaches</div>
         <!-- Current Coaches -->
         <div class="mentor-card">
-            <img src="./images/mentors/meenakshi_sundaram.jpg" alt="Meenakshi Sundaram">
+            <img src="./images/mentors/meenakshi_sundaram.jpeg" alt="Meenakshi Sundaram">
             <h3>Ms. Meenakshi Sundaram</h3>
-            <p>Meenakshi (Minnie) Sundaram, a parent of two USCSD students, has coached middle school robotics for the past two years and actively volunteers at Streams and Boyce. Passionate about the program’s ability to build creativity, problem-solving, technical, and teamwork skills, she values the strong community fostered by coaches and families. As a liaison with the elementary schools, she looks forward to helping the Robotics Boosters grow and strengthen the program for the future.</p>
+            <p>Meenakshi (Minnie) Sundaram, is a physical therapist working in physical therpay research at the University of Pittsburgh. As a parent of two USCSD students, she has coached middle school robotics for the past two years and actively volunteers at Streams and promotes robotics as a elementary school liasion for the Upper St CLair robotics boosters. She is passionate about the program and believes in allowing creativity, problem-solving, technical, and teamwork skills. She values the strong community fostered by the team, coaches and families. She works to inspire kids to work as a team, follow a scientific process, have fun while working hard and never fear trying new ideas.</p>
         </div>
 
         <div class="mentor-card">
-            <img src="./images/Mentors/aditi.jpeg" alt="Aditi Gurkar">
+            <img src="./images/Mentors/Aditi.png" alt="Aditi Gurkar">
             <h3>Dr. Aditi Gurkar</h3>
             <p>Dr. Gurkar is a Professor at the University of Pittsburgh and has recently joined our team as a coach. She consistently motivates us to try and not give up. Her emphasis for us is to learn and work independently but together.</p>
           </h6>
@@ -239,19 +279,11 @@
 
         <div class="mentor-card">
             <img src="./images/mentors/slava_rovner.jpg" alt="Slava Rovner">
-            <h3>Mr. Slava Rovner</h3>
-            <p>This will be my third season of coaching a middle school FLL team. I have a PhD in Electrical and Computer Engineering and enjoy sharing my passion for programming and engineering with young minds. My goal as a coach has been to create a fun and inclusive environment where every team member feels like their ideas are heard and considered. I want to inspire kids to explore STEM through teamwork, problem-solving, the scientific method, and creativity.</p>
+            <h3>Dr. Slava Rovner</h3>
+            <p>This will be his third season of coaching a middle school FLL team. He has a PhD in Electrical and Computer Engineering and enjoys sharing his passion for programming and engineering with young minds. As a coach his goal has been to create a fun and inclusive environment where every team member feels like their ideas are heard and considered. He works to inspire kids to explore STEM through teamwork, problem-solving, scientific method, and creativity. </p>
         </div>
-<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Past Coach</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
 
-        <!-- Past Coach -->
-        <div class="mentor-card">
-            <img src="./images/mentors/mike_ressler.jpg" alt="Mike Ressler">
-            <h3>Mr. Mike Ressler</h3>
-            <p>Mike Ressler, CTO of Diamond Kinetics and SidelineHD, has a long history of blending technology and youth sports, from founding StatEasy to coaching multiple teams in soccer, baseball, wrestling, and FLL robotics. A Carnegie Mellon computer science graduate and Upper St. Clair resident since 2017, he is deeply involved in the community through coaching and board service with Community Human Services. Passionate about creating opportunities for kids, he is committed to expanding access to robotics through competitive play.</p>
-        </div>
-<h1 style="font-size: xx-large;font-weight: bold;text-align: center;">Additional Mentors</h1>  <hr style="border: 2px solid #100f0a; width: 100%;">
-        <!-- Additional Mentors -->
+ <div class="section-title">Additional Mentors</div>        <!-- Additional Mentors -->
         <div class="mentor-card">
             <img src="./images/mentors/rachel_roos.jpg" alt="Rachel Roos">
             <h3>Ms. Rachel Roos</h3>
@@ -279,7 +311,7 @@
 
     <hr>
 
-  <footer style="text-align:center; margin-top:50px;">
+ <footer style="text-align:center; margin-top:50px;">
     <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
     <div>
       <a href="mailto:steelsynapse01@gmail.com">
@@ -287,9 +319,13 @@
 
       <a href="https://www.youtube.com/@steelsynapse01">
         <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
-      </a>      </a>
+      </a>   
+
+      <a href="https://www.instagram.com/steel_synapse/">
+        <button><img src="./images/madia/insta.svg" alt="instagram" height="70px" width="70px"></button>
+      </a>    
+    </a>
     </div>
   </footer>
-
-</body>
+</body></body>
 </html>
