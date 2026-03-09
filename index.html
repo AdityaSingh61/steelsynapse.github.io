@@ -2,16 +2,50 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8"/>
-  <title>Steel Synapse</title>
+  <title>Steel Synapse – FLL Team #53463</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --black:  #100f0a;
+      --card:   #18170e;
+      --mid:    #242318;
+      --yellow: #ffdd00;
+      --yhot:   #ffe933;
+      --red:    #fe0000;
+      --white:  #f5f4ef;
+      --muted:  rgba(245,244,239,0.55);
+      --border: rgba(255,221,0,0.14);
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-image: url(./images/grounded/curcuts.svg);
+      font-family:'Nunito',sans-serif;
+      background-color: var(--black);
+      background-image: url('./images/grounded/curcuts.svg');
+      background-size: 500px;
+      color: var(--white);
+      overflow-x: hidden;
     }
 
+    /* ── SPARKS ── */
+    .sparks { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .spark  { position:absolute; border-radius:50%; opacity:0; animation:floatSpark linear infinite; }
+    .spark:nth-child(1){ left:8%;  width:3px;height:3px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;   }
+    .spark:nth-child(2){ left:22%; width:4px;height:4px; background:var(--red);    animation-duration:13s; animation-delay:2s;   }
+    .spark:nth-child(3){ left:40%; width:5px;height:5px; background:var(--yellow); animation-duration:8s;  animation-delay:4s;   }
+    .spark:nth-child(4){ left:60%; width:3px;height:3px; background:var(--yhot);   animation-duration:15s; animation-delay:1s;   }
+    .spark:nth-child(5){ left:75%; width:4px;height:4px; background:var(--yellow); animation-duration:7s;  animation-delay:6s;   }
+    .spark:nth-child(6){ left:90%; width:2px;height:2px; background:var(--red);    animation-duration:11s; animation-delay:3s;   }
+    .spark:nth-child(7){ left:32%; width:3px;height:3px; background:var(--yellow); animation-duration:10s; animation-delay:5s;   }
+    .spark:nth-child(8){ left:53%; width:2px;height:2px; background:var(--red);    animation-duration:9s;  animation-delay:7.5s; }
+    @keyframes floatSpark {
+      0%  { transform:translateY(105vh); opacity:0; }
+      8%  { opacity:1; }
+      92% { opacity:0.7; }
+      100%{ transform:translateY(-8vh) rotate(360deg); opacity:0; }
+    }
+    
     /* Top banner */
     .banner img {
       width: 100%;
@@ -19,662 +53,1021 @@
       display: block;
     }
 
-    /* Top navigation */
-    .topnav {
-      background-color: #100f0a;
-      display: flex;
-      justify-content: center;
+    /* ── NAV ── */
+    nav {
+      position:sticky; top:0; z-index:500;
+      background:rgb(0, 0, 0);
+      backdrop-filter:blur(14px);
+      border-bottom:2px solid var(--border);
+      display:flex; align-items:center;
+      justify-content:space-between;
+      padding:0 36px; height:60px;
     }
-    .topnav a {
-      display: block;
-      color: #ffd21f;
-      text-align: center;
-      padding: 14px 20px;
-      text-decoration: none;
+    .nav-logo {
+      font-family:'Fredoka',sans-serif;
+      font-size:1.45rem; font-weight:700;
+      color:var(--yellow); text-decoration:none;
+      display:flex; align-items:center; gap:8px;
     }
-    .topnav a:hover {
-      background-color: #100f0a;
-      color: #f1f1f1;
+    .bolt { display:inline-block; animation:boltPulse 2.2s ease-in-out infinite; }
+    @keyframes boltPulse {
+      0%,100%{ transform:scale(1);   filter:drop-shadow(0 0 4px var(--yellow)); }
+      50%    { transform:scale(1.3); filter:drop-shadow(0 0 14px var(--yellow)); }
     }
-    .topnav a.active {
-      background-color: #ffd21f;
-      color: #333;
+    .nav-links { display:flex; gap:3px; list-style:none; }
+    .nav-links a {
+      font: size 0.9rem; font-weight:1000; letter-spacing:0.05em;
+      color:var(--muted); text-decoration:none;
+      padding:7px 12px; border-radius:20px;
+      transition:color .2s,background .2s;
+    }
+    .nav-links a:hover { color:var(--black); background:var(--yellow); }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative; width:100%; height:100vh;
+      min-height:620px; overflow:hidden;
+    }
+    .hero-city {
+      position:absolute; inset:0; z-index:0;
+      background:
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Pittsburgh_skyline_at_dusk_%28cropped%29.jpg/1280px-Pittsburgh_skyline_at_dusk_%28cropped%29.jpg')
+        center 65% / cover no-repeat;
+      filter:brightness(0.28) saturate(0.8);
+    }
+    .hero-slides { position:absolute; inset:0; z-index:1; }
+    .hero-slides img {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover; opacity:0;
+      animation:hFade 44s infinite;
+    }
+    .hero-slides img:nth-child(1) { animation-delay:0s;  }
+    .hero-slides img:nth-child(2) { animation-delay:4s;  }
+    .hero-slides img:nth-child(3) { animation-delay:8s;  }
+    .hero-slides img:nth-child(4) { animation-delay:12s; }
+    .hero-slides img:nth-child(5) { animation-delay:16s; }
+    .hero-slides img:nth-child(6) { animation-delay:20s; }
+    .hero-slides img:nth-child(7) { animation-delay:24s; }
+    .hero-slides img:nth-child(8) { animation-delay:28s; }
+    .hero-slides img:nth-child(9) { animation-delay:32s; }
+    .hero-slides img:nth-child(10){ animation-delay:36s; }
+    .hero-slides img:nth-child(11) { animation-delay:40s; }
+    .hero-slides img:nth-child(12) { animation-delay:44s; }
+    .hero-slides img:nth-child(13) { animation-delay:48s; }
+    .hero-slides img:nth-child(14) { animation-delay:52s; }
+    .hero-slides img:nth-child(15) { animation-delay:56s; }
+    .hero-slides img:nth-child(16) { animation-delay:60s; }
+    .hero-slides img:nth-child(17) { animation-delay:64s; }
+    .hero-slides img:nth-child(18) { animation-delay:68s; }
+    .hero-slides img:nth-child(19) { animation-delay:72s; }
+    .hero-slides img:nth-child(20){ animation-delay:76s; }
+    @keyframes hFade {
+      0%{opacity:0;} 8%{opacity:1;} 33%{opacity:1;} 41%{opacity:0;} 100%{opacity:0;}
+    }
+    .hero-overlay {
+      position:absolute; inset:0; z-index:2;
+      background:linear-gradient(to bottom,rgba(16,15,10,.4) 0%,rgba(16,15,10,.05) 40%,rgba(16,15,10,.9) 100%);
+    }
+    .hero-content {
+      position:absolute; inset:0; z-index:3;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:20px;
+    }
+    .hero-badge {
+      display:inline-block;
+      background:var(--yellow); color:var(--black);
+      font-family:'Fredoka',sans-serif;
+      font-size:1.8rem; font-weight:2000;
+      letter-spacing:0.08em; padding:6px 22px;
+      border-radius:30px; margin-bottom:20px;
+      box-shadow:0 0 28px rgba(255,221,0,0.5);
+      animation:popIn .7s ease both;
+    }
+    @keyframes popIn {
+      0%{transform:scale(.6);opacity:0;} 70%{transform:scale(1.07);} 100%{transform:scale(1);opacity:1;}
+    }
+    .hero-title {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(4.5rem,13vw,10rem);
+      font-weight:700; line-height:.9;
+      color:var(--white);
+      text-shadow:0 4px 50px rgba(0,0,0,.6);
+      animation:slideUp .9s ease .15s both;
+    }
+    .hero-title .y { color:var(--yellow); }
+    .hero-title .r { color:var(--red); }
+    @keyframes slideUp {
+      from{transform:translateY(30px);opacity:0;}
+      to  {transform:translateY(0);   opacity:1;}
+    }
+    .hero-sub {
+      margin:20px auto 0;
+      font-size:1.6rem; font-weight:900;
+      color:rgba(245,244,239,.88);
+      max-width:500px; line-height:1.65;
+      animation:slideUp .9s ease .35s both;
+    }
+    .hero-btns {
+      display:flex; gap:12px; justify-content:center;
+      margin-top:28px; flex-wrap:wrap;
+      animation:slideUp .9s ease .55s both;
+    }
+    .btn-y {
+      display:inline-block; padding:13px 30px;
+      background:var(--yellow); color:var(--black);
+      font-family:'Fredoka',sans-serif;
+      font-size:1rem; font-weight:700;
+      border-radius:30px; text-decoration:none;
+      box-shadow:0 4px 24px rgba(255,221,0,.45);
+      transition:transform .2s,background .2s,box-shadow .2s;
+    }
+    .btn-y:hover { background:var(--yhot); transform:translateY(-3px) scale(1.04); box-shadow:0 8px 32px rgba(255,221,0,.55); }
+    .btn-outline {
+      display:inline-block; padding:13px 30px;
+      border:2px solid rgba(255,221,0,.5); color:var(--yellow);
+      font-family:'Fredoka',sans-serif;
+      font-size:1rem; font-weight:700;
+      border-radius:30px; text-decoration:none;
+      transition:transform .2s,border-color .2s,background .2s;
+    }
+    .btn-outline:hover { border-color:var(--yellow); background:rgba(255,221,0,.1); transform:translateY(-3px); }
+    .scroll-caret {
+      position:absolute; bottom:26px; left:50%; z-index:3;
+      width:22px; height:22px;
+      border-right:2.5px solid rgba(255,221,0,.6);
+      border-bottom:2.5px solid rgba(255,221,0,.6);
+      transform:translateX(-50%) rotate(45deg);
+      animation:caretBounce 1.6s ease-in-out infinite;
+    }
+    @keyframes caretBounce {
+      0%,100%{bottom:26px;opacity:.5;} 50%{bottom:18px;opacity:1;}
     }
 
-    /* Team grid */
-    .team {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
+    /* ── CHAMPIONSHIP ── */
+    .champ-section {
+      position:relative; width:100%;
+      height:72vh; min-height:420px; overflow:hidden;
     }
-    .member {
-      text-align: center;
-      max-width: 200px;
-      cursor: pointer;
-    }
-    .member img {
-      width: 100%;
-      border-radius: 10px;
-      transition: transform 0.2s;
-    }
-    .member img:hover {
-      transform: scale(1.05);
-    }
-    .member h1 {
-      font-size: medium;
-      margin-top: 10px;
-    }
-
-    /* Modal overlay */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal {
-      background: #4b4a44;
-      border-radius: 15px;
-      padding: 20px;
-      width: 400px;
-      max-width: 90%;
-      max-height: 60%;
-      overflow-y: auto;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      animation: fadeIn 0.3s ease;
-    }
-    .modal h2 { margin-top: 0; color: #ffd21f; }
-    .modal p { color: #fff; }
-    .closebtn {
-      background: #ffd21f;
-      border: none;
-      color: #100f0a;
-      font-size: 16px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    /* Side nav */
-    .sidenav {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      top: 0; left: 0;
-      background-color: #100f0a;
-      overflow-x: hidden;
-      transition: 0.7s;
-      padding-top: 60px;
-      z-index: 1100;
-    }
-    .sidenav a {
-      padding: 8px 32px;
-      text-decoration: none;
-      font-size: 25px;
-      color: #ffd21f;
-      display: block;
-    }
-    .sidenav a:hover { color: #f1f1f1; }
-    .sidenav .closebtn {
+    .champ-section img {
+      width:45%; height:85%; object-fit:cover; display:block; float: right; max-width: 50%;
       position: absolute;
-      top: 0; right: 25px;
-      font-size: 36px;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 15px;
+    }
+    .champ-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(105deg,rgba(16,15,10,.9) 0%,rgba(16,15,10,.5) 55%,rgba(16,15,10,.1) 100%);
+      display:flex; align-items:center; padding:0 8%;
+    }
+    .champ-eyebrow {
+      font-size:.72rem; font-weight:700;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--yellow); margin-bottom:14px;
+    }
+    .champ-title {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(2.5rem,6vw,5rem);
+      font-weight:700; line-height:1.05;
+      color:var(--white); margin-bottom:16px;
+    }
+    .champ-title span { color:var(--yellow); }
+    .champ-body {
+      font-size:1rem; color:var(--muted);
+      max-width:380px; line-height:1.65;
     }
 
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
+    /* ── TEAM NUMBER ── */
+    .team-num-section {
+      position:relative; width:100%;
+      height:75vh; min-height:450px; overflow:hidden;
     }
-    footer img {
-      margin: -10px;
+    .team-num-section img {
+      width:100%; height:100%; object-fit:cover; display:block;
     }
-    footer button {
-      border: none;
-      background: none;
+    .team-num-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top,rgba(16,15,10,.92) 0%,rgba(16,15,10,.25) 55%,transparent 100%);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:flex-end;
+      padding-bottom:52px; text-align:center;
+    }
+    .team-num-big {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(4rem,14vw,10rem);
+      font-weight:700; color:var(--yellow); line-height:1;
+      text-shadow:0 0 80px rgba(255,221,0,.55);
+    }
+    .team-num-label {
+      font-size:.85rem; font-weight:700;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:rgba(245,244,239,.6); margin-top:8px;
+    }
+
+    /* ── SHARED SECTION LAYOUT ── */
+    .section { padding:80px 40px; position:relative; z-index:1; }
+    .section-inner { max-width:1060px; margin:0 auto; }
+    .section-label {
+      display:inline-block;
+      font-family:'Fredoka',sans-serif;
+      font-size:.78rem; font-weight:600;
+      letter-spacing:.16em; text-transform:uppercase;
+      color:var(--yellow);
+      background:rgba(255,221,0,.1);
+      border:1px solid rgba(255,221,0,.25);
+      border-radius:20px; padding:4px 14px;
+      margin-bottom:14px;
+    }
+    .section-title {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(2rem,4vw,3rem);
+      font-weight:700; line-height:1.1;
+      color:var(--white); margin-bottom:16px;
+    }
+    .section-title .y { color:var(--yellow); }
+    .section-divider {
+      border:none; border-top:1px solid var(--border);
+      margin:0 40px;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display:grid; grid-template-columns:1.1fr 1fr;
+      gap:64px; align-items:center;
+    }
+    .about-text p {
+      font-size:.97rem; color:var(--muted);
+      line-height:1.8; margin-bottom:14px;
+    }
+    .stats-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    }
+    .stat-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px; padding:26px 20px;
+      text-align:center;
+      transition:transform .25s,border-color .25s,box-shadow .25s;
+    }
+    .stat-card:hover {
+      transform:translateY(-5px);
+      border-color:rgba(255,221,0,.4);
+      box-shadow:0 10px 30px rgba(255,221,0,.08);
+    }
+    .stat-num {
+      font-family:'Fredoka',sans-serif;
+      font-size:2.8rem; font-weight:700;
+      color:var(--yellow); line-height:1;
+    }
+    .stat-lbl {
+      font-size:.75rem; font-weight:700;
+      color:var(--muted); text-transform:uppercase;
+      letter-spacing:.08em; margin-top:6px;
+    }
+    .curved-box {
+      border-radius: 15px;
+      padding: 10px 10px;
+      background-color: #00000068;
+      display: inline-block;
+    }
+
+    /* ── CORE VALUES — flip cards ── */
+    .values-section { background:var(--card); }
+    .values-intro {
+      font-size:.97rem; color:var(--muted);
+      line-height:1.7; margin-bottom:44px;
+      max-width:540px;
+    }
+    .flip-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+    .flip-card { height:210px; perspective:1000px; cursor:pointer; }
+    .flip-inner {
+      position:relative; width:100%; height:100%;
+      transition:transform .7s; transform-style:preserve-3d;
+    }
+    .flip-card.flipped .flip-inner { transform:rotateY(180deg); }
+    .flip-front, .flip-back {
+      position:absolute; width:100%; height:100%;
+      backface-visibility:hidden;
+      border-radius:16px; overflow:hidden;
+      border:2px solid var(--border);
+    }
+    .flip-front img {
+      width:100%; height:100%; object-fit:cover;
+      transition:transform .3s;
+    }
+    .flip-card:hover .flip-front img { transform:scale(1.06); }
+    .flip-front-label {
+      position:absolute; bottom:0; left:0; right:0;
+      padding:10px 14px;
+      background:linear-gradient(transparent,rgba(16,15,10,.85));
+      font-family:'Fredoka',sans-serif;
+      font-size:1rem; font-weight:700;
+      color:var(--yellow);
+    }
+    .flip-back {
+      background:var(--black);
+      transform:rotateY(180deg);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding:22px 18px; text-align:center;
+      border-color:rgba(255,221,0,.3);
+    }
+    .flip-back-icon { font-size:2rem; margin-bottom:12px; }
+    .flip-back p { font-size:1.5rem; color:var(--white); line-height:1.6; }
+    .values-note {
+      font-size:.72rem; color:rgba(255,221,0,.3);
+      letter-spacing:.12em; text-transform:uppercase;
+      margin-top:28px; text-align:center;
+    }
+
+    /* ── NEWS GRID — squares ── */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      max-width: 1060px;
+      margin: 40px auto 0;
+    }
+    .news-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
       cursor: pointer;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
     }
-    footer button img {
-      width: 120px;
-      transition: transform 0.3s ease;
+    .news-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,221,0,.45);
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
     }
-    footer button:hover img {
-      transform: scale(1.2);
+    .news-card-img {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .news-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .35s;
+    }
+    .news-card:hover .news-card-img img { transform: scale(1.07); }
+    .read-hint {
+      position: absolute; inset: 0;
+      background: rgba(16,15,10,.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .25s;
+    }
+    .news-card:hover .read-hint { opacity: 1; }
+    .read-hint span {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--yellow);
+      border: 2px solid var(--yellow);
+      border-radius: 30px;
+      padding: 8px 22px;
+    }
+    .news-card-body { padding: 18px 18px 22px; }
+    .news-date {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 8px;
+    }
+    .news-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--white); line-height: 1.3; margin-bottom: 8px;
+    }
+    .news-blurb {
+      font-size: .85rem; color: var(--muted); line-height: 1.6;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(10,9,6,.82);
+      backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 2px solid rgba(255,221,0,.3);
+      border-radius: 22px;
+      width: 100%; max-width: 620px;
+      max-height: 90vh; overflow-y: auto;
+      animation: modalPop .3s ease both;
+      position: relative;
+    }
+    @keyframes modalPop {
+      from { transform: scale(.9) translateY(20px); opacity: 0; }
+      to   { transform: scale(1)  translateY(0);    opacity: 1; }
+    }
+    .modal-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 20px 20px 0 0; }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-body { padding: 28px 30px 32px; }
+    .modal-date {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 10px;
+    }
+    .modal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.7rem; font-weight: 700;
+      color: var(--white); line-height: 1.15; margin-bottom: 16px;
+    }
+    .modal-text { font-size: .95rem; color: var(--muted); line-height: 1.8; }
+    .modal-text p { margin-bottom: 12px; }
+    .modal-text p:last-child { margin-bottom: 0; }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(16,15,10,.7);
+      border: 2px solid rgba(255,221,0,.3);
+      color: var(--yellow);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      width: 38px; height: 38px;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s;
+    }
+    .modal-close:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+
+    @media(max-width:720px){ .news-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:480px){ .news-grid { grid-template-columns: 1fr; } }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:1;
+      background:#0a0904;
+      border-top:2px solid rgba(255,221,0,.14);
+      padding:52px 40px 28px;
+    }
+    .footer-inner {
+      max-width:1060px; margin:0 auto;
+      display:flex; align-items:flex-start;
+      justify-content:space-between;
+      gap:40px; flex-wrap:wrap;
+    }
+    .footer-brand {
+      font-family:'Fredoka',sans-serif;
+      font-size:2rem; font-weight:700;
+      color:var(--yellow); line-height:1;
+    }
+    .footer-brand span {
+      display:block;
+      font-family:'Nunito',sans-serif;
+      font-size:.75rem; font-weight:400;
+      color:var(--muted); letter-spacing:.1em;
+      text-transform:uppercase; margin-top:5px;
+    }
+    .footer-links { display:flex; gap:4px; list-style:none; flex-wrap:wrap; }
+    .footer-links a {
+      font-size:.78rem; font-weight:700;
+      color:var(--muted); text-decoration:none;
+      padding:6px 10px; border-radius:4px;
+      transition:color .2s;
+    }
+    .footer-links a:hover { color:var(--yellow); }
+
+    /* ── SOCIAL BUTTONS ── */
+    .footer-social { display:flex; gap:10px; align-items:center; }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      text-decoration: none;
+      transition: all .28s cubic-bezier(.34, 1.56, .64, 1);
+      position: relative;
+      border: 2px solid transparent;
+    }
+    .social-btn:hover { transform: translateY(-7px) scale(1.12); }
+    .social-btn svg { width: 24px; height: 24px; transition: all .25s; }
+
+    /* Email */
+    .social-btn.btn-email {
+      background: linear-gradient(135deg, #1a1a12, #2a2a18);
+      border-color: rgba(255, 221, 0, .32);
+    }
+    .social-btn.btn-email svg { filter: drop-shadow(0 0 5px rgba(255, 221, 0, .55)); }
+    .social-btn.btn-email:hover {
+      background: linear-gradient(135deg, #ffdd00, #ffc800);
+      border-color: #ffdd00;
+      box-shadow: 0 10px 32px rgba(255, 221, 0, .5);
+    }
+    .social-btn.btn-email:hover svg { filter: none; }
+    .social-btn.btn-email:hover .es { stroke: #100f0a !important; }
+
+    /* YouTube */
+    .social-btn.btn-yt {
+      background: linear-gradient(135deg, #1a0808, #2e1010);
+      border-color: rgba(255, 40, 40, .32);
+    }
+    .social-btn.btn-yt svg { filter: drop-shadow(0 0 5px rgba(255, 60, 60, .45)); }
+    .social-btn.btn-yt:hover {
+      background: linear-gradient(135deg, #ff2020, #c50000);
+      border-color: #ff2222;
+      box-shadow: 0 10px 32px rgba(255, 0, 0, .55);
+    }
+    .social-btn.btn-yt:hover svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+
+    /* Instagram */
+    .social-btn.btn-ig {
+      background: linear-gradient(135deg, #130812, #1c0822);
+      border-color: rgba(220, 60, 160, .32);
+    }
+    .social-btn.btn-ig svg { filter: drop-shadow(0 0 5px rgba(200, 70, 180, .45)); }
+    .social-btn.btn-ig:hover {
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      border-color: #e6683c;
+      box-shadow: 0 10px 32px rgba(220, 39, 67, .55);
+    }
+    .social-btn.btn-ig:hover svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+
+    .footer-copy {
+      width:100%; text-align:center;
+      font-size:.7rem; color:rgba(255,255,255,.18);
+      letter-spacing:.06em; margin-top:28px;
+      padding-top:20px; border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    /* ── SUPPORTERS ── */
+    .supporters-section {
+      background: var(--card);
+      padding: 50px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .supporters-inner { max-width: 1060px; margin: 0 auto; }
+    .supporters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 30px;
+    }
+    .supporter-card {
+      background: var(--mid);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .supporter-logo {
+      width: 100px; height: 100px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .supporter-logo img { width: 240px; height: 240px; object-fit: contain; }
+    .supporter-logo .logo-placeholder { font-size: 2rem; line-height: 1; }
+    .supporter-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); line-height: 1.2;
+    }
+    .supporter-type {
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .supporters-note {
+      margin-top: 24px;
+      font-size: .82rem; color: var(--muted); font-style: italic;
+    }
+    .supporters-note a { color: var(--yellow); font-weight: 700; font-style: normal; text-decoration: none; }
+    .supporters-note a:hover { text-decoration: underline; }
+
+    @media(max-width:540px){ .supporters-section { padding: 40px 20px; } }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:800px){
+      .nav-links { display:none; }
+      .about-grid { grid-template-columns:1fr; gap:40px; }
+      .flip-grid  { grid-template-columns:1fr 1fr; }
+      .news-card  { grid-template-columns:1fr; }
+      .news-thumb { height:180px; }
+    }
+    @media(max-width:540px){
+      .flip-grid { grid-template-columns:1fr; }
+      .section { padding:60px 20px; }
+      .section-divider { margin:0 20px; }
+      footer { padding:40px 20px 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Banner -->
+  <!-- SPARKS -->
+  <div class="sparks" aria-hidden="false">
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+  </div>
   <div class="banner">
     <img src="./images/grounded/topper.png" alt="Banner">
   </div>
 
-  <!-- Top Nav -->
-  <div class="topnav">
-    <a href="./index.html">Home</a>
-    <a href="./new_meet_the_team.html">Meet the team</a>
-    <a href="./new_mentors.html">Mentors</a>
-    <a href="./new_history.html">History</a>
-    <a href="./new_edu.html">Educational Resources</a>
-    <a href="./new_donate.html">Donate</a>
-    <a href="./new_outreach.html">Outreach</a>
-  </div>
-
-<style>    button {
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
-    }
-
-    button img {
-      width: 150px;
-      transition: transform 0.3s ease;
-    }
-
-    button:hover img {
-      transform: scale(1.2); /* make image 20% larger */
-    }
-  </style>       <style>
-    .slideshow-container {
-      position: relative;
-      width: 700px;
-      height: 400px;
-      margin: auto;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      animation: fade 44s infinite;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-       /*    .slideshow-container {
-      position: relative;
-      width: 80%;
-      max-width: 800px;
-      height: 400px;
-      margin: 30px auto;
-      overflow: hidden;
-      border-radius: 10px;
-      background: #100f0a;
-    }
-*/
-    }
-    .slide:nth-child(1) { animation-delay: 0s; }
-    .slide:nth-child(2) { animation-delay: 4s; }
-    .slide:nth-child(3) { animation-delay: 8s; }
-    .slide:nth-child(4) { animation-delay: 12s; }
-    .slide:nth-child(5) { animation-delay: 16s; }
-    .slide:nth-child(6) { animation-delay: 20s; }
-    .slide:nth-child(7) { animation-delay: 24s; }
-    .slide:nth-child(8) { animation-delay: 28s; }
-    .slide:nth-child(9) { animation-delay: 32s; }
-    .slide:nth-child(10) { animation-delay: 36s; }
-    .slide:nth-child(11) { animation-delay: 40s; }
-
-
-
-
-    
-
-    @keyframes fade {
-      0%   { opacity: 0; }
-      8%   { opacity: 1; }
-      33%  { opacity: 1; }
-      41%  { opacity: 0; }
-      100% { opacity: 0; }
-    }
-  </style>
-</head>
-<body>
-<style>
-
-
-</style>
-</style>
-<h1>
-<div style="border: 10px dashed black; padding: 10px; display: inline-block;justify-content: center;text-align: center;align-content: center;">
-
-  <div class="slideshow-container">
-    <div class="slide"><img src="./images/Banner/homebanner.svg" alt="Banner"></div>
-
-    <div class="slide"><img src="./images/home pager/Photo16.jpeg" alt="Robot 3"></div>
-    <div class="slide"><img src="./images/home pager/Photo12.jpeg" alt="Robot 4"></div>
-    <div class="slide"><img src="./images/home pager/Photo18.jpeg" alt="Robot 5"></div>
-    <div class="slide"><img src="./images/home pager/Photo14.jpeg" alt="Robot 6"></div>
-    <div class="slide"><img src="./images/home pager/Photo15.jpeg" alt="Robot 7"></div>
-    <div class="slide"><img src="./images/home pager/Photo11.jpeg" alt="Robot 8"></div>
-    <div class="slide"><img src="./images/home pager/Photo10.jpeg" alt="Robot 9"></div>
-    <div class="slide"><img src="./images/home pager/Photo13.jpeg" alt="Robot 10"></div>
-    <div class="slide"><img src="./images/home pager/Photo17.jpeg" alt="Robot 11"></div>
-  </div>
-</div>
-</body>
-
-    
-    <hr style="border: 2px solid #100f0a; width: 100%;">
-    <hr style="border: 2px solid #100f0a; width: 75%;">
-</head>
-
-<body>
-
-<style>
-h4{
-
-  font-size: larger;
-}
-    h3{
-      font-size: xx-large;
-        text-align: center;
-        font-weight: lighter;
-    }
-
-p{
-  font-size: 75%;
-  text-align: center;
-  font-weight: 100;
-  color:#ffffffb9;
-}
-a:hover
-{
-    color:darkcyan;
-}
-h1{
-
-    color:#100f0a;
-    font-size: 150%;
-    font-weight: lighter;
-    text-align: center;
-
-}
-h5{
-    list-style-type:none;
-    font-size: 1em;
-    font-weight:900;
-    text-align: center;
-    color: #fe0000;
-}
-body {
-  background-image: url(./images/grounded/curcuts.svg);
-  justify-content: center;
-  gap: 20px;
-  padding: 40px;
-}
-
-.sidebar {
-    text-align:right;
-    fill:#100f0a;
-    color:rgb(4, 63, 63);
-
-}
-.box{
-    width: 200px;
-    height: 500px;
-    background-color: blueviolet;
-}
-h2{
-
-    color: #100f0a;;
-    font-size: 2em;
-    text-align: center;
-    font-style: initial;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 40px;
-}
-    .flip-card {
-      background-color: transparent;
-      width: 200px; 
-      height:200px;
-      perspective: 100%;
-      cursor: pointer;
-    }
-
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-    }
-
-    .flip-card.flipped .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .flip-card-front img {
-      width: 100%;
-      height: 100%;
-      object-fit: fill;
-    }
-
-    .flip-card-back {
-      background-color: #100f0a;
-      color: #fe0000;
-      transform: rotateY(180deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0px;
-      text-align: center;
-    }
-
-
-    
-</style>
-
-
-<head>
-<style>
-.button {
-  background-color: #100f0a; /* Green */
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: 4px 2px;
-  cursor: pointer;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-}
-.button:hover {
-  background-color: #545457; /* Green */
-  color: white;
-}
-.banner{
-  align-self: start;
-}
-
-
-.button2:hover {
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-  border-radius: 13%;}
-
-</style>
-</head>
-
-
- 
-    <h2>
-       About Us
-    </h2>
-
-    <h1>
-      Steel Synapse is a group of enthusiastic students who love exploring science, technology, engineering and math (STEM) through the First Lego League (FLL) program (Team #53463).</h1>
-       <h1> Our team is made up of seven members, each with unique skills and ideas eager to collaborate, learn, and work towards improving ourselves. Motivated and guided by our coaches to think creatively, 
-       we enjoy problem solving, designing robots and working with each other.</h1><h1> We believe teamwork and having fun are the important foundations to achieving our goals.
-      Our mission is to grow as problem solvers, inventors and friends while making a positive impact through STEM.
-    </h1>
-        <hr style="border: 2px solid #100f0a; width: 100%;">
-        <hr style="border: 2px solid #100f0a; width: 75%;">
-
-</h1>
-
-</div>
-<style>body {
-  font-family: sans-serif;
-}
-.container > div {
-  border-radius: 5px;
-  padding: 10px;
-  background-color: rgba(207, 232, 220, 0);
-  border: 2px solid rgba(79, 185, 227, 0);
-  
-}
-.container {
-  justify-content: center;
-  display: grid;
-  grid-template-columns: 75;
-}</style>
-      </h1>
-
-    <h2>Core Vales</h2>
-    <h1>
-      Our core values are as strong as steel!
-    </h1>
-    <h2>
-    <!-- Card 1 -->
-  <div class="flip-card" onclick="this.classList.toggle('flipped')">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <img src="images/core/teamwork.png" alt="Image 1">
-      </div>
-      <div class="flip-card-back">
-        <p>We are as strong as steel when we work together.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Card 2 -->
-  <div class="flip-card" onclick="this.classList.toggle('flipped')">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <img src="images/core/learning.png" alt="Image 2">
-      </div>
-      <div class="flip-card-back">
-        <p>We have a burning desire to learn.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Card 3 -->
-  <div class="flip-card" onclick="this.classList.toggle('flipped')">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <img src="images/core/inpact.png" alt="Image 3">
-      </div>
-      <div class="flip-card-back">
-        <p>We ignite every synapse with purpose- applying what we learn to fortify the world.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Card 4 -->
-  <div class="flip-card" onclick="this.classList.toggle('flipped')">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <img src="images/core/innovation.png" alt="Image 4">
-      </div>
-      <div class="flip-card-back">
-        <p>With creativity as our spark and persistence as our fuel, we solve problems.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Card 5 -->
-  <div class="flip-card" onclick="this.classList.toggle('flipped')">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <img src="images/core/discovery.png" alt="Image 5">
-      </div>
-      <div class="flip-card-back">
-        <p>We explore with grit, forging skills and ideas into tools for change.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Card 6 -->
-  <div class="flip-card" onclick="this.classList.toggle('flipped')">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <img src="images/core/fun.png" alt="Image 6">
-      </div>
-      <div class="flip-card-back">
-        <p>We forge with passion and celebrate the sparks we create.</p>
-      </div>
-    </div>
-  </div>
-
-    </h2>
-<h5> Adapted core values from FLL </h5>
-    <hr style="border: 2px solid #100f0a; width: 100%;">
-    <hr style="border: 2px solid #100f0a; width: 75%;">
-
-   
-    
-</body>
-
-<head>
-<style>
-.button {
-  background-color: #100f0a; /* Green */
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: 4px 2px;
-  cursor: pointer;
-  -webkit-transition-duration: 0.4s; /* Safari */
-  transition-duration: 0.4s;
-}
-.button:hover {
-  background-color:#545457; /* Green */
-  color: white;
-}
-.banner{
-  align-self: start;
-}
-
-
-.button2:hover {
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-  border-radius: 13%;}
-
-</style>
-</head>
-</body>
-
-
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: "Lato", sans-serif;
-}
-
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #100f0a;
-  overflow-x: hidden;
-  transition: 0.7s;
-  padding-top: 60px;
-}
-
-.sidenav a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #ffd21f;
-  display: block;
-  transition: 0.1s;
-}
-
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-</style>
-</head>
-<body>
-
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-   <a href="./index.html">Home</a>
-     <hr style="border: 2px solid #ffd21F; width: 65%;">
-  <a href="./meettheteam.html">Meet the team</a>
-  <a href="./Mentors.html">Mentors</a>
-  <a href="./history.html">History</a>
-  <a href="./youtube.html">Educational Resources
-</a>
-   <a href="./donate.html">Donate</a> 
-   <a href="./new_outreach.html">Outreach</a>
-
-</div>
-<script>
-function openNav() {
-  document.getElementById("mySidenav").style.width = "250px";
-}
-
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-}
-</script>
-<h1 style="justify-content: center;align-items: center;align-content: center;text-align: center;">
- <footer style="text-align:center; margin-top:50px;">
-    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
-    <div>
-      <a href="mailto:steelsynapse01@gmail.com">
-        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
-
-      <a href="https://www.youtube.com/@steelsynapse01">
-        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
-      </a>   
-
-      <a href="https://www.instagram.com/steel_synapse/">
-        <button><img src="./images/madia/insta.svg" alt="instagram" height="70px" width="70px"></button>
-      </a>    
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="./index.html">
+      <span class="bolt"><img src="./images/madia/photoitem.svg" alt="item" width="70px" height="70px"></span> Steel Synapse
     </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./new_meet_the_team.html">Team</a></li>
+      <li><a href="./new_mentors.html">Mentors</a></li>
+      <li><a href="./new_history.html">History</a></li>
+      <li><a href="./new_edu.html">Resources</a></li>
+      <li><a href="./new_donate.html">Donate</a></li>
+      <li><a href="./new_outreach.html">Outreach</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-city"></div>
+    <div class="hero-slides">
+      <img src="./images/Banner/homebanner.svg"   alt="">
+      <img src="./images/home pager/Photo1.jpeg" alt="">
+      <img src="./images/home pager/Photo2.jpeg" alt="">
+      <img src="./images/home pager/Photo3.jpeg" alt="">
+      <img src="./images/home pager/Photo4.jpeg" alt="">
+      <img src="./images/home pager/Photo5.jpeg" alt="">
+      <img src="./images/home pager/Photo6.jpeg" alt="">
+      <img src="./images/home pager/Photo7.jpeg" alt="">
+      <img src="./images/home pager/Photo8.jpeg" alt="">
+      <img src="./images/home pager/Photo9.jpeg" alt="">
+      <img src="./images/home pager/Photo10.jpeg" alt="">
+      <img src="./images/home pager/Photo11.jpeg" alt="">
+      <img src="./images/home pager/Photo12.jpeg" alt="">
+      <img src="./images/home pager/Photo13.jpeg" alt="">
+      <img src="./images/home pager/Photo14.jpeg" alt="">
+      <img src="./images/home pager/Photo15.jpeg" alt="">
+      <img src="./images/home pager/Photo16.jpeg" alt="">
+      <img src="./images/home pager/Photo17.jpeg" alt="">
+      <img src="./images/home pager/Photo18.jpeg" alt="">
     </div>
-  </footer></h1>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><b>FLL Team #53463 · Pittsburgh, PA</b></div>
+      <h1 class="hero-title"><span class="y">Steel </span><span class="y">Syn</span><span class="y">apse</span></h1>
+      <p class="hero-sub">Forged in Steel. Connected by Code.</p>
+      <div class="hero-btns">
+        <a href="./new_meet_the_team.html" class="btn-y">Meet the Team</a>
+        <a href="./new_donate.html"        class="btn-outline">Support Us</a>
+      </div>
+    </div>
+    <div class="scroll-caret"></div>
+  </section>
+
+  <!-- CHAMPIONSHIP -->
+  <section class="champ-section">
+    <img src="images/home pager/champs.jpeg" alt="Championship">
+    <div class="champ-overlay">
+      <div>
+        <div class="champ-eyebrow">Achievement Unlocked</div>
+        <h2 class="champ-title">We Made It to<br><span>Championships!</span></h2>
+        <p class="champ-body">Hard work, late nights, and a whole lot of chocolate. At the State Championship Tournament (in Hershey), Steel Synapse made it to the Internationals - and loved every second!</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div>
+          <div class="curved-box" style="margin-bottom:18px;">
+          <div class="section-label">Who We Are</div>
+          <h2 class="section-title">Forged in <span class="y">Steel.</span><br>Connected by<span class="y"> Code.</span></h2>
+          <p class="about-text" style="font-size:.97rem;color:var(--muted);line-height:1.8;margin-bottom:14px;">
+            Steel Synapse is a group of enthusiastic students exploring science, technology, engineering, and math through the First Lego League program.
+          </p>
+          <p class="about-text" style="font-size:.97rem;color:var(--muted);line-height:1.8;margin-bottom:24px;">
+            Seven members, unique skills, and one shared drive — guided by great coaches to build robots, solve real-world problems, and grow together every season.
+          </p>
+          <a href="./new_meet_the_team.html" class="btn-y" style="font-size:.9rem;padding:11px 26px;">Meet the Team →</a>
+        </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">7</div><div class="stat-lbl">Team Members</div></div>
+          <div class="stat-card"><div class="stat-num">FLL</div><div class="stat-lbl">Program</div></div>
+          <div class="stat-card"><div class="stat-num">#53463</div><div class="stat-lbl">Team Number</div></div>
+          <div class="stat-card"><div class="stat-num">PGH</div><div class="stat-lbl">Pittsburgh, PA</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- CORE VALUES -->
+  <section class="section values-section">
+    <div class="section-inner">
+      <div class="section-label">What Drives Us</div>
+      <h2 class="section-title">Our Core <span class="y">Values</span></h2>
+      <p class="values-intro">As strong as steel — flip any card to learn more about what makes our team tick!</p>
+      <div class="flip-grid">
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front"><img src="images/core/teamwork.svg" alt="Teamwork"><div class="flip-front-label">Teamwork</div></div>
+            <div class="flip-back"><div class="flip-back-icon"></div><p>We are as strong as steel when we work together.</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front"><img src="images/core/learning.svg" alt="Learning"><div class="flip-front-label">Learning</div></div>
+            <div class="flip-back"><div class="flip-back-icon"></div><p>We have a burning desire to grow, question, and understand.</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front"><img src="images/core/impact.svg" alt="Impact"><div class="flip-front-label">Impact</div></div>
+            <div class="flip-back"><div class="flip-back-icon"></div><p>We apply what we learn to make the world a little stronger.</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front"><img src="images/core/innovation.svg" alt="Innovation"><div class="flip-front-label">Innovation</div></div>
+            <div class="flip-back"><div class="flip-back-icon"></div><p>Creativity is our spark. Persistence is our fuel.</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front"><img src="images/core/discovery.svg" alt="Discovery"><div class="flip-front-label">Discovery</div></div>
+            <div class="flip-back"><div class="flip-back-icon"></div><p>We explore with grit, forging ideas into tools for change.</p></div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-front"><img src="images/core/fun.svg" alt="Fun"><div class="flip-front-label">Fun</div></div>
+            <div class="flip-back"><div class="flip-back-icon"></div><p>We forge with passion and celebrate every spark we create.</p></div>
+          </div>
+        </div>
+
+      </div>
+      <p class="values-note">Adapted from FLL Core Values</p>
+    </div>
+  </section>
+
+  <!-- TEAM UPDATES -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="curved-box" style="margin-bottom:18px;">
+      <div class="section-label">Latest</div>
+      <h2 class="section-title">Team <span class="y">Updates</span></h2>
+
+      <div class="news-grid">
+
+        <div class="news-card" onclick="openModal('modal1')">
+          <div class="news-card-img">
+            <img src="./images/home pager/Photo16.jpeg" alt="">
+            <div class="read-hint"><span>Read More →</span></div>
+          </div>
+          <div class="news-card-body">
+            <div class="news-date">Month DD, YYYY</div>
+            <div class="news-title">We Qualified for Championships!</div>
+            <p class="news-blurb">After weeks of hard work and late-night practice, Steel Synapse earned a spot at the state championship.</p>
+          </div>
+        </div>
+
+        <div class="news-card" onclick="openModal('modal2')">
+          <div class="news-card-img">
+            <img src="./images/home pager/Photo12.jpeg" alt="">
+            <div class="read-hint"><span>Read More →</span></div>
+          </div>
+          <div class="news-card-body">
+            <div class="news-date">Month DD, YYYY</div>
+            <div class="news-title">Regional Competition Results 🤖</div>
+            <p class="news-blurb">We competed at regionals and showed off our robot, innovation project, and core values.</p>
+          </div>
+        </div>
+
+        <div class="news-card" onclick="openModal('modal3')">
+          <div class="news-card-img">
+            <img src="./images/home pager/Photo18.jpeg" alt="">
+            <div class="read-hint"><span>Read More →</span></div>
+          </div>
+          <div class="news-card-body">
+            <div class="news-date">Month DD, YYYY</div>
+            <div class="news-title">New Season Kickoff 🚀</div>
+            <p class="news-blurb">Steel Synapse is back! We kicked off our new FLL season with big goals and bigger ideas.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MODALS -->
+  <div class="modal-backdrop" id="modal1" onclick="closeOnBackdrop(event,'modal1')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal1')">✕</button>
+      <div class="modal-img"><img src="./images/home pager/Photo16.jpeg" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-date">Month DD, YYYY</div>
+        <div class="modal-title">We Qualified for Championships! 🏆</div>
+        <div class="modal-text">
+          <p>Write your full story here. What happened, where was it, who was there?</p>
+          <p>Add more paragraphs as needed. No limit!</p>
+          <p>Great place to thank coaches, mentors, and supporters too.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal2" onclick="closeOnBackdrop(event,'modal2')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal2')">✕</button>
+      <div class="modal-img"><img src="./images/home pager/Photo12.jpeg" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-date">Month DD, YYYY</div>
+        <div class="modal-title">Regional Competition Results 🤖</div>
+        <div class="modal-text">
+          <p>Write your full recap here. Scores, awards, highlights — put it all in!</p>
+          <p>Add more paragraphs as needed.</p>
+          <p>Shout out to everyone who came to cheer us on!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal3" onclick="closeOnBackdrop(event,'modal3')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal3')">✕</button>
+      <div class="modal-img"><img src="./images/home pager/Photo18.jpeg" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-date">Month DD, YYYY</div>
+        <div class="modal-title">New Season Kickoff 🚀</div>
+        <div class="modal-text">
+          <p>Write your kickoff story here. What's the new challenge? What are your goals?</p>
+          <p>Add more paragraphs as needed.</p>
+          <p>Here's to another great year! ⚡</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeOnBackdrop(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape')
+      document.querySelectorAll('.modal-backdrop.open')
+        .forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+  });
+  </script>
+
+  <!-- SUPPORTERS -->
+  <section class="supporters-section">
+    <div class="supporters-inner">
+      <div class="section-label">Thank You</div>
+      <h2 class="section-title">Our <span class="y">Supporters</span></h2>
+      <div class="supporters-grid">
+        
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/Usc.svg" alt="Name"></span></div>
+          <div><div class="supporter-name">Upper St. Clair</div><div class="supporter-type">School</div></div>
+        </div>
+        
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/lebo.svg" alt="Name"></span></div>
+          <div><div class="supporter-name">Mt Lebanon Library</div><div class="supporter-type">Community</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/makers.svg" alt="Name"></span></div>
+          <div><div class="supporter-name">Makers Asylum</div><div class="supporter-type">Mentor</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/Keff.svg" alt="Name"></span></div>
+          <div><div class="supporter-name">KEF Robotics</div><div class="supporter-type">Mentor</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/Cmu.svg" alt="Name"></span></div>
+          <div><div class="supporter-name">CMU Robotics</div><div class="supporter-type">School Mentor</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/pitt.svg" alt="Name"></span></div>
+          <div><div class="supporter-name">PITT Robotics</div><div class="supporter-type">School Mentor</div></div>
+        </div>
+
+      </div>
+      <p class="supporters-note">
+        Want to support us? <a href="./new_donate.html">Donate here →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        Steel Synapse
+        <span>Forged in Steel. Connected by Code.</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./new_meet_the_team.html">Team</a></li>
+        <li><a href="./new_mentors.html">Mentors</a></li>
+        <li><a href="./new_history.html">History</a></li>
+        <li><a href="./new_edu.html">Resources</a></li>
+        <li><a href="./new_donate.html">Donate</a></li>
+        <li><a href="./new_outreach.html">Outreach</a></li>
+      </ul>
+      <div class="footer-social">
+
+        <!-- Email -->
+        <a href="mailto:steelsynapse01@gmail.com" class="social-btn btn-email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="es" x="2" y="4" width="20" height="16" rx="3"
+                  stroke="#ffdd00" stroke-width="1.8" fill="none"/>
+            <path class="es" d="M2 8l10 6.5L22 8"
+                  stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt"
+           title="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4
+                     s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12
+                     a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96
+                     C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0
+                     1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
+                  fill="#ff2222"/>
+            <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="white"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig"
+           title="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="igG" x1="2" y1="22" x2="22" y2="2"
+                              gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#f09433"/>
+                <stop offset="50%"  stop-color="#dc2743"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5"
+                  stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="4.5"
+                    stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="6.5" r="1.4" fill="url(#igG)"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 Steel Synapse · All rights reserved</div>
+  </footer>
+
 </body>
-</html> 
+</html>

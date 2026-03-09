@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steel Synapse</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #100f0a;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: #ffd21f; transition: 0.3s; }
+    a:hover { color: #f1f1f1; }
+
+    /* Navigation */
+    .topnav {
+      display: flex;
+      justify-content: center;
+      background-color: #100f0a;
+      flex-wrap: wrap;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topnav a {
+      padding: 12px 20px;
+      font-weight: 500;
+    }
+
+    .topnav a.active {
+      background-color: #ffd21f;
+      color: #100f0a;
+      border-radius: 5px;
+    }
+
+    /* Hero / Banner */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      background: url('./images/Banner/homebanner.svg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      color: #ffd21f;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    .section {
+      padding: 60px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #ffd21f;
+    }
+
+    .section p {
+      font-size: 1.1rem;
+      color: #ffffffb9;
+      max-width: 900px;
+      margin: 0 auto 20px auto;
+    }
+
+    hr {
+      border: 2px solid #ffd21f;
+      width: 50px;
+      margin: 20px auto;
+    }
+
+    /* Core Values Cards */
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .flip-card {
+      background-color: transparent;
+      width: 180px;
+      height: 180px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .flip-card-back {
+      background-color: #100f0a;
+      color: #ffd21f;
+      transform: rotateY(180deg);
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    /* Team Section */
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .member {
+      background-color: #4b4a44;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 200px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .member img {
+      width: 100%;
+      display: block;
+    }
+
+    .member h3 {
+      margin: 10px 0;
+      color: #ffd21f;
+      font-size: 1.1rem;
+    }
+
+    .member p {
+      font-size: 0.9rem;
+      color: #fff;
+      padding: 0 10px 10px 10px;
+    }
+
+    .member:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #100f0a;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    footer img {
+      width: 70px;
+      margin: 0 10px;
+      transition: transform 0.3s;
+      vertical-align: middle;
+    }
+
+    footer img:hover {
+      transform: scale(1.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cards { flex-direction: column; align-items: center; }
+      .team { flex-direction: column; align-items: center; }
+      .hero h1 { font-size: 2rem; }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <div class="topnav">
+    <a href="./index.html" class="active">Home</a>
+    <a href="./new_meet_the_team.html">Meet the Team</a>
+    <a href="./new_mentors.html">Mentors</a>
+    <a href="./new_history.html">History</a>
+    <a href="./new_edu.html">Educational Resources</a>
+    <a href="./new_donate.html">Donate</a>
+    <a href="./new_outreach.html">Outreach</a>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Steel Synapse: FLL Team #53463</h1>
+  </div>
+
+  <!-- About Us -->
+  <div class="section" id="about">
+    <h2>About Us</h2>
+    <hr>
+    <p>Steel Synapse is a group of enthusiastic students who love exploring science, technology, engineering and math (STEM) through the First Lego League (FLL) program.</p>
+    <p>Our team is made up of seven members, each with unique skills and ideas eager to collaborate, learn, and work towards improving ourselves. Motivated and guided by our coaches, we enjoy problem solving, designing robots, and working with each other.</p>
+    <p>We believe teamwork and having fun are the important foundations to achieving our goals. Our mission is to grow as problem solvers, inventors and friends while making a positive impact through STEM.</p>
+  </div>
+
+  <!-- Core Values -->
+  <div class="section" id="core-values">
+    <h2>Core Values</h2>
+    <hr>
+    <div class="cards">
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/core/teamwork.png" alt="Teamwork">
+          </div>
+          <div class="flip-card-back">
+            We are as strong as steel when we work together.
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/core/learning.png" alt="Learning">
+          </div>
+          <div class="flip-card-back">
+            We have a burning desire to learn.
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/core/inpact.png" alt="Impact">
+          </div>
+          <div class="flip-card-back">
+            We ignite every synapse with purpose, applying what we learn to fortify the world.
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/core/innovation.png" alt="Innovation">
+          </div>
+          <div class="flip-card-back">
+            With creativity as our spark and persistence as our fuel, we solve problems.
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/core/discovery.png" alt="Discovery">
+          </div>
+          <div class="flip-card-back">
+            We explore with grit, forging skills and ideas into tools for change.
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <img src="images/core/fun.png" alt="Fun">
+          </div>
+          <div class="flip-card-back">
+            We forge with passion and celebrate the sparks we create.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>Contact Us:</p>
+    <a href="mailto:steelsynapse01@gmail.com"><img src="./images/madia/email.svg" alt="Email"></a>
+    <a href="https://www.youtube.com/@steelsynapse01"><img src="./images/madia/youtube.svg" alt="YouTube"></a>
+    <a href="https://www.instagram.com/steel_synapse/"><img src="./images/madia/insta.svg" alt="Instagram"></a>
+  </footer>
+
+  <script>
+    // Optional: close nav for mobile if clicked outside
+  </script>
+</body>
+</html>

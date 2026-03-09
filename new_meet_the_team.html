@@ -2,282 +2,723 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8"/>
-  <title>Steel Synapse</title>
+  <title>Meet the Team – Steel Synapse #53463</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+
+    /* ════════════════════════════════
+       VARIABLES & RESET
+    ════════════════════════════════ */
+    :root {
+      --black:  #100f0a;
+      --card:   #18170e;
+      --mid:    #242318;
+      --yellow: #ffdd00;
+      --yhot:   #ffe933;
+      --red:    #fe0000;
+      --white:  #f5f4ef;
+      --muted:  rgba(245,244,239,0.55);
+      --border: rgba(255,221,0,0.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-image: url(./images/grounded/curcuts.svg);
-    }
-
-    /* Top banner */
-    .banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* Top navigation */
-    .topnav {
-      background-color: #100f0a;
-      display: flex;
-      justify-content: center;
-    }
-    .topnav a {
-      display: block;
-      color: #ffd21f;
-      text-align: center;
-      padding: 14px 20px;
-      text-decoration: none;
-    }
-    .topnav a:hover {
-      background-color: #100f0a;
-      color: #f1f1f1;
-    }
-    .topnav a.active {
-      background-color: #ffd21f;
-      color: #333;
-    }
-
-    /* Team grid */
-    .team {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-    }
-    .member {
-      text-align: center;
-      max-width: 200px;
-      cursor: pointer;
-    }
-    .member img {
-      width: 100%;
-      border-radius: 10px;
-      transition: transform 0.2s;
-    }
-    .member img:hover {
-      transform: scale(1.05);
-    }
-    .member h1 {
-      font-size: medium;
-      margin-top: 10px;
-    }
-
-    /* Modal overlay */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal {
-      background: #4b4a44;
-      border-radius: 15px;
-      padding: 20px;
-      width: 400px;
-      max-width: 90%;
-      max-height: 60%;
-      overflow-y: auto;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      animation: fadeIn 0.3s ease;
-    }
-    .modal h2 { margin-top: 0; color: #ffd21f; }
-    .modal p { color: #fff; }
-    .closebtn {
-      background: #ffd21f;
-      border: none;
-      color: #100f0a;
-      font-size: 16px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    /* Side nav */
-    .sidenav {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      top: 0; left: 0;
-      background-color: #100f0a;
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--black);
+      background-image: url('./images/grounded/curcuts.svg');
+      background-size: 500px;
+      color: var(--white);
       overflow-x: hidden;
-      transition: 0.7s;
-      padding-top: 60px;
-      z-index: 1100;
-    }
-    .sidenav a {
-      padding: 8px 32px;
-      text-decoration: none;
-      font-size: 25px;
-      color: #ffd21f;
-      display: block;
-    }
-    .sidenav a:hover { color: #f1f1f1; }
-    .sidenav .closebtn {
-      position: absolute;
-      top: 0; right: 25px;
-      font-size: 36px;
     }
 
-    /* Footer */
-    footer {
+    /* ════════════════════════════════
+       FLOATING SPARKS
+    ════════════════════════════════ */
+    .sparks { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .spark  { position: absolute; border-radius: 50%; opacity: 0; animation: floatSpark linear infinite; }
+    .spark:nth-child(1) { left: 8%;  width: 3px; height: 3px; background: var(--yellow); animation-duration: 9s;   animation-delay: 0s;   }
+    .spark:nth-child(2) { left: 22%; width: 4px; height: 4px; background: var(--red);    animation-duration: 13s;  animation-delay: 2s;   }
+    .spark:nth-child(3) { left: 40%; width: 5px; height: 5px; background: var(--yellow); animation-duration: 8s;   animation-delay: 4s;   }
+    .spark:nth-child(4) { left: 60%; width: 3px; height: 3px; background: var(--yhot);   animation-duration: 15s;  animation-delay: 1s;   }
+    .spark:nth-child(5) { left: 75%; width: 4px; height: 4px; background: var(--yellow); animation-duration: 7s;   animation-delay: 6s;   }
+    .spark:nth-child(6) { left: 90%; width: 2px; height: 2px; background: var(--red);    animation-duration: 11s;  animation-delay: 3s;   }
+    .spark:nth-child(7) { left: 32%; width: 3px; height: 3px; background: var(--yellow); animation-duration: 10s;  animation-delay: 5s;   }
+    .spark:nth-child(8) { left: 53%; width: 2px; height: 2px; background: var(--red);    animation-duration: 9s;   animation-delay: 7.5s; }
+    @keyframes floatSpark {
+      0%   { transform: translateY(105vh); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 0.7; }
+      100% { transform: translateY(-8vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ════════════════════════════════
+       BANNER
+    ════════════════════════════════ */
+    .banner img { width: 100%; height: auto; display: block; }
+
+    /* ════════════════════════════════
+       NAV
+    ════════════════════════════════ */
+    nav {
+      position: sticky; top: 0; z-index: 500;
+      background: rgb(0,0,0);
+      backdrop-filter: blur(14px);
+      border-bottom: 2px solid var(--border);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 36px; height: 60px;
+    }
+    .nav-logo {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.45rem; font-weight: 700;
+      color: var(--yellow); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .bolt { display: inline-block; animation: boltPulse 2.2s ease-in-out infinite; }
+    @keyframes boltPulse {
+      0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 4px  var(--yellow)); }
+      50%      { transform: scale(1.3); filter: drop-shadow(0 0 14px var(--yellow)); }
+    }
+    .nav-links { display: flex; gap: 3px; list-style: none; }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em;
+      color: var(--muted); text-decoration: none;
+      padding: 7px 12px; border-radius: 20px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--black); background: var(--yellow); }
+
+    /* ════════════════════════════════
+       PAGE HEADER
+    ════════════════════════════════ */
+    .page-header {
+      position: relative; z-index: 1;
       text-align: center;
-      padding: 20px;
+      padding: 64px 40px 48px;
+      border-bottom: 1px solid var(--border);
     }
-    footer img {
-      margin: -10px;
+    .page-header-label {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(255,221,0,.1);
+      border: 1px solid rgba(255,221,0,.25);
+      border-radius: 20px; padding: 4px 14px;
+      margin-bottom: 14px;
     }
-    footer button {
-      border: none;
-      background: none;
+    .page-header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      color: var(--black);
+    }
+    .page-header h1 span { color: var(--yellow); }
+    .page-header p {
+      font-size: 1rem; color: var(--black);
+      margin-top: 12px; max-width: 500px;
+      margin-left: auto; margin-right: auto;
+      line-height: 1.7;
+    }
+    .textbox{
+      border:2px solid #100f0a00;
+      padding:20px;
+      border-radius:12px;
+      background:#00000051;
+      box-shadow:0 5px 12px rgba(0,0,0,0.25);
+    }
+
+    /* ════════════════════════════════
+       TEAM GRID
+    ════════════════════════════════ */
+    .team-section {
+      position: relative; z-index: 1;
+      padding: 60px 40px 80px;
+    }
+    .team-grid {
+      max-width: 1060px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .member-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
       cursor: pointer;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      text-align: center;
     }
-    footer button img {
-      width: 120px;
-      transition: transform 0.3s ease;
+    .member-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,221,0,.5);
+      box-shadow: 0 16px 40px rgba(0,0,0,.5);
     }
-    footer button:hover img {
-      transform: scale(1.2);
+    .member-img-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--mid);
+      position: relative;
     }
+    .member-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .35s;
+    }
+    .member-card:hover .member-img-wrap img { transform: scale(1.06); }
+    .member-hover-hint {
+      position: absolute; inset: 0;
+      background: rgba(16,15,10,.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .25s;
+    }
+    .member-card:hover .member-hover-hint { opacity: 1; }
+    .member-hover-hint span {
+      font-family: 'Fredoka', sans-serif;
+      font-size: .9rem; font-weight: 700;
+      color: var(--yellow);
+      border: 2px solid var(--yellow);
+      border-radius: 30px;
+      padding: 6px 18px;
+    }
+    .member-info { padding: 16px 14px 20px; }
+    .member-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--white); line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .member-role {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    /* ════════════════════════════════
+       MEMBER MODAL
+    ════════════════════════════════ */
+    .modal-backdrop {
+      display: flex;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(10,9,6,.85);
+      backdrop-filter: blur(10px);
+      align-items: center; justify-content: center;
+      padding: 24px;
+      transition: opacity .25s, visibility .25s;
+    }
+    .modal-backdrop.open { visibility: visible; opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--card);
+      border: 2px solid rgba(255,221,0,.3);
+      border-radius: 24px;
+      width: 100%; max-width: 520px;
+      max-height: 90vh; overflow-y: auto;
+      animation: modalPop .3s ease both;
+      position: relative;
+    }
+    @keyframes modalPop {
+      from { transform: scale(.9) translateY(20px); opacity: 0; }
+      to   { transform: scale(1)  translateY(0);    opacity: 1; }
+    }
+    .modal-avatar {
+      width: 100%; aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 22px 22px 0 0;
+    }
+    .modal-avatar img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .modal-body { padding: 28px 30px 32px; }
+    .modal-role {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 8px;
+    }
+    .modal-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.9rem; font-weight: 700;
+      color: var(--white); line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .modal-bio {
+      font-size: .95rem; color: var(--muted); line-height: 1.8;
+    }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(16,15,10,.7);
+      border: 2px solid rgba(255,221,0,.3);
+      color: var(--yellow);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      width: 38px; height: 38px;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s;
+    }
+    .modal-close:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    footer {
+      position: relative; z-index: 1;
+      background: #0a0904;
+      border-top: 2px solid rgba(255,221,0,.14);
+      padding: 52px 40px 28px;
+    }
+    .footer-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .footer-brand {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--yellow); line-height: 1;
+    }
+    .footer-brand span {
+      display: block;
+      font-family: 'Nunito', sans-serif;
+      font-size: .75rem; font-weight: 400;
+      color: var(--muted); letter-spacing: .1em;
+      text-transform: uppercase; margin-top: 5px;
+    }
+    .footer-links { display: flex; gap: 4px; list-style: none; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: .78rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 6px 10px; border-radius: 4px;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--yellow); }
+    .footer-social { display: flex; gap: 10px; align-items: center; }
+    .social-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px; border-radius: 16px;
+      text-decoration: none;
+      transition: all .28s cubic-bezier(.34,1.56,.64,1);
+      position: relative; border: 2px solid transparent;
+    }
+    .social-btn:hover { transform: translateY(-7px) scale(1.12); }
+    .social-btn svg { width: 24px; height: 24px; transition: all .25s; }
+    /* Email */
+    .social-btn.btn-email { background: linear-gradient(135deg,#1a1a12,#2a2a18); border-color: rgba(255,221,0,.32); }
+    .social-btn.btn-email svg { filter: drop-shadow(0 0 5px rgba(255,221,0,.55)); }
+    .social-btn.btn-email:hover { background: linear-gradient(135deg,#ffdd00,#ffc800); border-color: #ffdd00; box-shadow: 0 10px 32px rgba(255,221,0,.5); }
+    .social-btn.btn-email:hover svg { filter: none; }
+    .social-btn.btn-email:hover .es { stroke: #100f0a !important; }
+    /* YouTube */
+    .social-btn.btn-yt { background: linear-gradient(135deg,#1a0808,#2e1010); border-color: rgba(255,40,40,.32); }
+    .social-btn.btn-yt svg { filter: drop-shadow(0 0 5px rgba(255,60,60,.45)); }
+    .social-btn.btn-yt:hover { background: linear-gradient(135deg,#ff2020,#c50000); border-color: #ff2222; box-shadow: 0 10px 32px rgba(255,0,0,.55); }
+    /* Instagram */
+    .social-btn.btn-ig { background: linear-gradient(135deg,#130812,#1c0822); border-color: rgba(220,60,160,.32); }
+    .social-btn.btn-ig svg { filter: drop-shadow(0 0 5px rgba(200,70,180,.45)); }
+    .social-btn.btn-ig:hover { background: linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); border-color: #e6683c; box-shadow: 0 10px 32px rgba(220,39,67,.55); }
+    .footer-copy {
+      width: 100%; text-align: center;
+      font-size: .7rem; color: rgba(255,255,255,.18);
+      letter-spacing: .06em; margin-top: 28px;
+      padding-top: 20px; border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 900px) {
+      .team-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+      footer { padding: 44px 24px 0; }
+    }
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .team-section { padding: 40px 20px 60px; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      footer { padding: 40px 20px 0; }
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- Banner -->
+  <!-- ════════════════════════════════
+       SPARKS
+  ════════════════════════════════ -->
+  <div class="sparks" aria-hidden="False">
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+    <div class="spark"></div>
+  </div>
+
+  <!-- ════════════════════════════════
+       BANNER
+  ════════════════════════════════ -->
   <div class="banner">
-    <img src="./images/grounded/topper.png" alt="Banner">
+    <img src="./images/grounded/topper.png" alt="Steel Synapse Banner">
   </div>
 
-  <!-- Top Nav -->
-  <div class="topnav">
-    <a href="./index.html">Home</a>
-    <a href="./new_meet_the_team.html">Meet the team</a>
-    <a href="./new_mentors.html">Mentors</a>
-    <a href="./new_history.html">History</a>
-    <a href="./new_edu.html">Educational Resources</a>
-    <a href="./new_donate.html">Donate</a>
-    <a href="./new_outreach.html">Outreach</a>
-  </div>
-
-  <h1 style="margin: -10px;"><img src="./images/Banner/meatthetean.png" alt="Banner" width="100%"></h1>
-
-  <hr style="border: 2px solid #100f0a; width: 100%;">
-  <hr style="border: 2px solid #100f0a; width: 65%;">
-
-  <h4 style="font-size:xx-large;font-weight:900;text-align:center;">Know more about us</h4>
-
-  <!-- Team Grid -->
-  <div class="team">
-  <div class="member" onclick="openModal('Aditya (Adi) Singh', 'Adi started with non-competitive robotics at the school and then, since 2024, moved to competitive robotics. He started his competitive robotics journey with Robo Birds and has been with Steel Synapse since 2025.')">
-      <img src="./images/meetthem/benny (1).svg" alt="Adi">
-      <h1>Aditya (Adi) Singh</h1>
-           <p>Builder • Website maker</p>
-    </div>
-    <div class="member" onclick="openModal('Ayan Sharma', ' Ayan started coding from a young age and joined competitive robotics in the 2024 season with Robo Panthers, which eventually became the current Steel Synapse team.')">
-      <img src="./images/meetthem/ayan.svg" alt="Ayan">
-      <h1>Ayan Sharma</h1>
-      <p>Coder • Innovator</p>
-    </div>
-    <div class="member" onclick="openModal('Benjamin (Benny) Rovner', ' Benny loves building Legos and started competitive robotics in 2023 with Brick Busters and joined Robo Panthers in 2024, which eventually became the current Steel Synapse team.')">
-      <img src="./images/meetthem/adi.svg" alt="Ayan">
-      <h1>Benjamin (Benny) Rovner</h1>
-      <p>Builder • Designer</p>
-    </div>
-    <div class="member" onclick="openModal('Porter Guarino', 'Porter loves coding and, in 2024, started competitive robotics with Robo Birds and joined Steel Synapse in 2025.')">
-      <img src="./images/meetthem/poter.svg" alt="Ayan">
-      <h1>Porter Guarino</h1>
-      <p>Coder • Engineer</p>
-    </div>
-    <div class="member" onclick="openModal('Rayansh Kature', 'Rayansh is an all-rounder in our team; he loves to build and is good with coding. He started competitive robotics in 2023 with Microbitz, which later became Robo Panthers and eventually the current Steel Synapse team.')">
-      <img src="./images/meetthem/ray.svg" alt="Ayan">
-      <h1>Rayansh Kature</h1>
-      <p>All-rounder</p>
-    </div>
-    <div class="member" onclick="openModal('Siddh Patel', 'Siddh loves coding and has been moving toward building in our team. He started competitive robotics in 2023 with Microbitz, which later became Robo Panthers and eventually the current Steel Synapse team.')">
-      <img src="./images/meetthem/sidhh.svg" alt="Ayan">
-      <h1>Siddh Patel</h1>
-      <p>Coder • Builder</p>
-    </div>
-    <div class="member" onclick="openModal('Tarun Bharath', 'Tarun is the mechanical guy in our team. He loves to build and is learning and getting better with coding. He started competitive robotics in 2023 with Microbitz, which later became Robo Panthers and eventually the current Steel Synapse team.')">
-      <img src="./images/meetthem/lil t.svg" alt="Ayan">
-      <h1>Tarun Bharath</h1>
-     <p>Mechanical Lead</p>
-    </div>
-  </div>
-  </div>
-  <hr style="border: 2px solid #100f0a; width: 65%;"> 
-   <hr style="border: 2px solid #100f0a; width: 100%;">
-
-  <!-- Overlay Modal -->
-  <div id="overlay" class="overlay">
-    <div class="modal">
-      <h2 id="modalTitle"></h2>
-      <p id="modalText"></p>
-      <button class="closebtn" onclick="closeModal()">Close</button>
-    </div>
-  </div>
-
-  <!-- Side Nav -->
-  <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="./index.html">Home</a>
-    <a href="./meettheteam.html">Meet the team</a>
-    <hr style="border-top: 2px solid #ffd21F; width: 65%;">
-    <a href="./Mentors.html">Mentors</a>
-    <a href="./history.html">History</a>
-    <a href="./youtube.html">Educational Resources</a>
-    <a href="./donate.html">Donate</a>
-    <a href="./new_outreach.html">Outreach</a>
-  </div>
-
-  <!-- Footer -->
- <footer style="text-align:center; margin-top:50px;">
-    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
-    <div>
-      <a href="mailto:steelsynapse01@gmail.com">
-        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
-
-      <a href="https://www.youtube.com/@steelsynapse01">
-        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
-      </a>   
-
-      <a href="https://www.instagram.com/steel_synapse/">
-        <button><img src="./images/madia/insta.svg" alt="instagram" height="70px" width="70px"></button>
-      </a>    
+  <!-- ════════════════════════════════
+       NAV
+  ════════════════════════════════ -->
+  <nav>
+    <a class="nav-logo" href="./index.html">
+      <span class="bolt"><img src="./images/madia/photoitem.svg" alt="Logo" width="70px" height="70px"></span>
+      Steel Synapse
     </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./new_meet_the_team.html" class="active">Team</a></li>
+      <li><a href="./new_mentors.html">Mentors</a></li>
+      <li><a href="./new_history.html">History</a></li>
+      <li><a href="./new_edu.html">Resources</a></li>
+      <li><a href="./new_donate.html">Donate</a></li>
+      <li><a href="./new_outreach.html">Outreach</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════════════════════════════════
+       PAGE HEADER
+  ════════════════════════════════ -->
+  <div class="page-header">
+    <div class="textbox">
+    <div class="page-header-label">FLL Team #53463</div>
+    <h1>Meet the <span>Team</span></h1>
+    <p>Seven members, unique skills, one shared drive. Click any card to learn more about us!</p>
+  </div>
+</div>
+  <!-- ════════════════════════════════
+       TEAM GRID
+       To add a member: copy one .member-card block and its matching
+       .modal-backdrop block, give it a new id (member4, member5, etc.)
+  ════════════════════════════════ -->
+  <section class="team-section">
+    <div class="team-grid">
+
+      <!-- MEMBER 1 — Adi -->
+      <div class="member-card" onclick="openMember('member-adi')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/benny (1).svg" alt="Aditya Singh">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Aditya (Adi) Singh</div>
+          <div class="member-role">Builder · Website Maker</div>
+        </div>
+      </div>
+
+      <!-- MEMBER 2 — Ayan -->
+      <div class="member-card" onclick="openMember('member-ayan')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/ayan.svg" alt="Ayan Sharma">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Ayan Sharma</div>
+          <div class="member-role">Coder · Innovator</div>
+        </div>
+      </div>
+
+      <!-- MEMBER 3 — Benny -->
+      <div class="member-card" onclick="openMember('member-benny')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/adi.svg" alt="Benjamin Rovner">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Benjamin (Benny) Rovner</div>
+          <div class="member-role">Builder · Designer</div>
+        </div>
+      </div>
+
+      <!-- MEMBER 4 — Porter -->
+      <div class="member-card" onclick="openMember('member-porter')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/poter.svg" alt="Porter Guarino">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Porter Guarino</div>
+          <div class="member-role">Coder · Engineer</div>
+        </div>
+      </div>
+
+      <!-- MEMBER 5 — Rayansh -->
+      <div class="member-card" onclick="openMember('member-ray')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/ray.svg" alt="Rayansh Kature">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Rayansh Kature</div>
+          <div class="member-role">All-Rounder</div>
+        </div>
+      </div>
+
+      <!-- MEMBER 6 — Siddh -->
+      <div class="member-card" onclick="openMember('member-siddh')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/sidhh.svg" alt="Siddh Patel">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Siddh Patel</div>
+          <div class="member-role">Coder · Builder</div>
+        </div>
+      </div>
+
+      <!-- MEMBER 7 — Tarun -->
+      <div class="member-card" onclick="openMember('member-tarun')">
+        <div class="member-img-wrap">
+          <img src="./images/meetthem/lil t.svg" alt="Tarun Bharath">
+          <div class="member-hover-hint"><span>Learn More →</span></div>
+        </div>
+        <div class="member-info">
+          <div class="member-name">Tarun Bharath</div>
+          <div class="member-role">Mechanical Lead</div>
+        </div>
+      </div>
+
+      <!-- QUOTE — fills the empty 4th slot -->
+      <div style="
+        background: var(--card);
+        border: 2px solid var(--border);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 20px;
+        text-align: center;
+      ">
+        <p style="
+          font-family: 'Fredoka', sans-serif;
+          font-size: 1.45rem;
+          font-weight: 600;
+          line-height: 1.7;
+          margin: 0;
+          color: var(--white);
+        ">
+          <span style="color: var(--yellow);">Seven</span> brains.
+          <span style="color: var(--yellow);">Seven</span> pairs of hands.
+          <span style="color: var(--white);">One team</span>
+          <span style="color: var(--white);">together!</span>
+          <span style="color: var(--muted);">— Steel Synapse</span>
+        </p>
+      </div>
+
     </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       MEMBER MODALS
+       To edit: find the matching id and update name, role, bio text
+  ════════════════════════════════ -->
+
+  <!-- Adi -->
+  <div class="modal-backdrop" id="member-adi" onclick="closeOnBackdrop(event,'member-adi')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-adi')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/benny (1).svg" alt="Aditya Singh"></div>
+      <div class="modal-body">
+        <div class="modal-role">Builder · Website Maker</div>
+        <div class="modal-name">Aditya (Adi) Singh</div>
+        <p class="modal-bio">Adi started with non-competitive robotics at school and then, since 2024, moved to competitive robotics. He started his competitive robotics journey with Robo Birds and has been with Steel Synapse since 2025.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ayan -->
+  <div class="modal-backdrop" id="member-ayan" onclick="closeOnBackdrop(event,'member-ayan')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-ayan')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/ayan.svg" alt="Ayan Sharma"></div>
+      <div class="modal-body">
+        <div class="modal-role">Coder · Innovator</div>
+        <div class="modal-name">Ayan Sharma</div>
+        <p class="modal-bio">Ayan started coding from a young age and joined competitive robotics in the 2024 season with Robo Panthers, which eventually became the current Steel Synapse team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benny -->
+  <div class="modal-backdrop" id="member-benny" onclick="closeOnBackdrop(event,'member-benny')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-benny')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/adi.svg" alt="Benjamin Rovner"></div>
+      <div class="modal-body">
+        <div class="modal-role">Builder · Designer</div>
+        <div class="modal-name">Benjamin (Benny) Rovner</div>
+        <p class="modal-bio">Benny loves building Legos and started competitive robotics in 2023 with Brick Busters. He joined Robo Panthers in 2024, which eventually became the current Steel Synapse team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Porter -->
+  <div class="modal-backdrop" id="member-porter" onclick="closeOnBackdrop(event,'member-porter')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-porter')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/poter.svg" alt="Porter Guarino"></div>
+      <div class="modal-body">
+        <div class="modal-role">Coder · Engineer</div>
+        <div class="modal-name">Porter Guarino</div>
+        <p class="modal-bio">Porter loves coding and, in 2024, started competitive robotics with Robo Birds and joined Steel Synapse in 2025.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rayansh -->
+  <div class="modal-backdrop" id="member-ray" onclick="closeOnBackdrop(event,'member-ray')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-ray')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/ray.svg" alt="Rayansh Kature"></div>
+      <div class="modal-body">
+        <div class="modal-role">All-Rounder</div>
+        <div class="modal-name">Rayansh Kature</div>
+        <p class="modal-bio">Rayansh is an all-rounder on our team — he loves to build and is good with coding. He started competitive robotics in 2023 with Microbitz, which later became Robo Panthers and eventually the current Steel Synapse team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Siddh -->
+  <div class="modal-backdrop" id="member-siddh" onclick="closeOnBackdrop(event,'member-siddh')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-siddh')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/sidhh.svg" alt="Siddh Patel"></div>
+      <div class="modal-body">
+        <div class="modal-role">Coder · Builder</div>
+        <div class="modal-name">Siddh Patel</div>
+        <p class="modal-bio">Siddh loves coding and has been moving toward building in our team. He started competitive robotics in 2023 with Microbitz, which later became Robo Panthers and eventually the current Steel Synapse team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarun -->
+  <div class="modal-backdrop" id="member-tarun" onclick="closeOnBackdrop(event,'member-tarun')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeMember('member-tarun')">✕</button>
+      <div class="modal-avatar"><img src="./images/meetthem/lil t.svg" alt="Tarun Bharath"></div>
+      <div class="modal-body">
+        <div class="modal-role">Mechanical Lead</div>
+        <div class="modal-name">Tarun Bharath</div>
+        <p class="modal-bio">Tarun is the mechanical guy on our team. He loves to build and is learning and getting better with coding. He started competitive robotics in 2023 with Microbitz, which later became Robo Panthers and eventually the current Steel Synapse team.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       FOOTER
+  ════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+        Steel Synapse
+        <span>Forged in Steel. Connected by Code.</span>
+      </div>
+
+      <ul class="footer-links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./new_meet_the_team.html">Team</a></li>
+        <li><a href="./new_mentors.html">Mentors</a></li>
+        <li><a href="./new_history.html">History</a></li>
+        <li><a href="./new_edu.html">Resources</a></li>
+        <li><a href="./new_donate.html">Donate</a></li>
+        <li><a href="./new_outreach.html">Outreach</a></li>
+      </ul>
+
+      <div class="footer-social">
+
+        <!-- Email -->
+        <a href="/cdn-cgi/l/email-protection#5b282f3e3e372822353a2b283e6b6a1b3c363a323775383436" class="social-btn btn-email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="es" x="2" y="4" width="20" height="16" rx="3"
+                  stroke="#ffdd00" stroke-width="1.8" fill="none"/>
+            <path class="es" d="M2 8l10 6.5L22 8"
+                  stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt"
+           title="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4
+                     s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12
+                     a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96
+                     C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0
+                     1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
+                  fill="#ff2222"/>
+            <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="white"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig"
+           title="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="igG" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#f09433"/>
+                <stop offset="50%"  stop-color="#dc2743"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5"
+                  stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="4.5"
+                    stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="6.5" r="1.4" fill="url(#igG)"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 Steel Synapse · All rights reserved</div>
   </footer>
- 
-  <!-- Scripts -->
+
+  <!-- ════════════════════════════════
+       SCRIPTS
+  ════════════════════════════════ -->
   <script>
-    function openModal(name, text) {
-      document.getElementById("modalTitle").innerText = name;
-      document.getElementById("modalText").innerText = text;
-      document.getElementById("overlay").style.display = "flex";
+    function openMember(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
-    function closeModal() {
-      document.getElementById("overlay").style.display = "none";
+    function closeMember(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
     }
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
+    function closeOnBackdrop(e, id) {
+      if (e.target === document.getElementById(id)) closeMember(id);
     }
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape')
+        document.querySelectorAll('.modal-backdrop.open')
+          .forEach(function(m) {
+            m.classList.remove('open');
+            document.body.style.overflow = '';
+          });
+    });
   </script>
 </body>
 </html>

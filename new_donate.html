@@ -2,250 +2,497 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8"/>
-  <title>Steel Synapse</title>
+  <title>Donate – Steel Synapse #53463</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --black:  #100f0a;
+      --card:   #18170e;
+      --mid:    #242318;
+      --yellow: #ffdd00;
+      --yhot:   #ffe933;
+      --red:    #fe0000;
+      --white:  #f5f4ef;
+      --muted:  rgba(245,244,239,0.55);
+      --border: rgba(255,221,0,0.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-image: url(./images/grounded/curcuts.svg);
-    }
-
-    /* Top banner */
-    .banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* Top navigation */
-    .topnav {
-      background-color: #100f0a;
-      display: flex;
-      justify-content: center;
-    }
-    .topnav a {
-      display: block;
-      color: #ffd21f;
-      text-align: center;
-      padding: 14px 20px;
-      text-decoration: none;
-    }
-    .topnav a:hover {
-      background-color: #100f0a;
-      color: #f1f1f1;
-    }
-    .topnav a.active {
-      background-color: #ffd21f;
-      color: #333;
-    }
-
-    /* Team grid */
-    .team {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-    }
-    .member {
-      text-align: center;
-      max-width: 200px;
-      cursor: pointer;
-    }
-    .member img {
-      width: 100%;
-      border-radius: 10px;
-      transition: transform 0.2s;
-    }
-    .member img:hover {
-      transform: scale(1.05);
-    }
-    .member h1 {
-      font-size: medium;
-      margin-top: 10px;
-    }
-
-    /* Modal overlay */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal {
-      background: #4b4a44;
-      border-radius: 15px;
-      padding: 20px;
-      width: 400px;
-      max-width: 90%;
-      max-height: 60%;
-      overflow-y: auto;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      animation: fadeIn 0.3s ease;
-    }
-    .modal h2 { margin-top: 0; color: #ffd21f; }
-    .modal p { color: #fff; }
-    .closebtn {
-      background: #ffd21f;
-      border: none;
-      color: #100f0a;
-      font-size: 16px;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    /* Side nav */
-    .sidenav {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      top: 0; left: 0;
-      background-color: #100f0a;
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--black);
+      background-image: url('./images/grounded/curcuts.svg');
+      background-size: 500px;
+      color: var(--white);
       overflow-x: hidden;
-      transition: 0.7s;
-      padding-top: 60px;
-      z-index: 1100;
-    }
-    .sidenav a {
-      padding: 8px 32px;
-      text-decoration: none;
-      font-size: 25px;
-      color: #ffd21f;
-      display: block;
-    }
-    .sidenav a:hover { color: #f1f1f1; }
-    .sidenav .closebtn {
-      position: absolute;
-      top: 0; right: 25px;
-      font-size: 36px;
     }
 
-    /* Footer */
-    footer {
+    /* SPARKS */
+    .sparks { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .spark  { position: absolute; border-radius: 50%; opacity: 0; animation: floatSpark linear infinite; }
+    .spark:nth-child(1) { left: 8%;  width: 3px; height: 3px; background: var(--yellow); animation-duration: 9s;   animation-delay: 0s;   }
+    .spark:nth-child(2) { left: 22%; width: 4px; height: 4px; background: var(--red);    animation-duration: 13s;  animation-delay: 2s;   }
+    .spark:nth-child(3) { left: 40%; width: 5px; height: 5px; background: var(--yellow); animation-duration: 8s;   animation-delay: 4s;   }
+    .spark:nth-child(4) { left: 60%; width: 3px; height: 3px; background: var(--yhot);   animation-duration: 15s;  animation-delay: 1s;   }
+    .spark:nth-child(5) { left: 75%; width: 4px; height: 4px; background: var(--yellow); animation-duration: 7s;   animation-delay: 6s;   }
+    .spark:nth-child(6) { left: 90%; width: 2px; height: 2px; background: var(--red);    animation-duration: 11s;  animation-delay: 3s;   }
+    .spark:nth-child(7) { left: 32%; width: 3px; height: 3px; background: var(--yellow); animation-duration: 10s;  animation-delay: 5s;   }
+    .spark:nth-child(8) { left: 53%; width: 2px; height: 2px; background: var(--red);    animation-duration: 9s;   animation-delay: 7.5s; }
+    @keyframes floatSpark {
+      0%   { transform: translateY(105vh); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 0.7; }
+      100% { transform: translateY(-8vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* BANNER */
+    .banner img { width: 100%; height: auto; display: block; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 500;
+      background: rgb(0,0,0);
+      backdrop-filter: blur(14px);
+      border-bottom: 2px solid var(--border);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 36px; height: 60px;
+    }
+    .nav-logo {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.45rem; font-weight: 700;
+      color: var(--yellow); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .bolt { display: inline-block; animation: boltPulse 2.2s ease-in-out infinite; }
+    @keyframes boltPulse {
+      0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 4px  var(--yellow)); }
+      50%      { transform: scale(1.3); filter: drop-shadow(0 0 14px var(--yellow)); }
+    }
+    .nav-links { display: flex; gap: 3px; list-style: none; }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em;
+      color: var(--muted); text-decoration: none;
+      padding: 7px 12px; border-radius: 20px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--black); background: var(--yellow); }
+
+    /* ════════════════════════════════
+       HERO DONATE SECTION
+    ════════════════════════════════ */
+    .donate-hero {
+      position: relative; z-index: 1;
       text-align: center;
+      padding: 72px 40px 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-label {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(255,221,0,.1);
+      border: 1px solid rgba(255,221,0,.25);
+      border-radius: 20px; padding: 4px 14px;
+      margin-bottom: 14px;
+    }
+    .donate-hero h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      color: var(--white); margin-bottom: 20px;
+    }
+    .donate-hero h1 span { color: var(--yellow); }
+    .donate-hero p {
+      font-size: 1.1rem; color: var(--white);
+      max-width: 640px; margin: 0 auto 16px;
+      line-height: 1.8;
+    }
+    .donate-hero .sig {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem; color: var(--yellow);
+      margin-top: 8px;
+    }
+      .textbox{
+      border:2px solid #100f0a00;
+      padding:20px;
+      border-radius:12px;
+      background:#00000051;
+      box-shadow:0 5px 12px rgba(0,0,0,0.25);
+    }
+    /* ════════════════════════════════
+       IMPACT STATS
+    ════════════════════════════════ */
+    .impact-section {
+      position: relative; z-index: 1;
+      background: var(--card);
+      padding: 60px 40px;
+    }
+    .impact-inner {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .impact-card {
+      background: var(--mid);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: border-color .25s, transform .25s;
+    }
+    .impact-card:hover { border-color: rgba(255,221,0,.45); transform: translateY(-4px); }
+    .impact-emoji { font-size: 2.2rem; margin-bottom: 10px; }
+    .impact-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--yellow); margin-bottom: 8px;
+    }
+    .impact-desc {
+      font-size: .88rem; color: var(--white); line-height: 1.65;
+    }
+
+    /* ════════════════════════════════
+       WHAT YOUR MONEY DOES
+    ════════════════════════════════ */
+    .uses-section {
+      position: relative; z-index: 1;
+      padding: 70px 40px;
+    }
+    .uses-inner {
+      max-width: 860px; margin: 0 auto;
+    }
+    .section-label {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(255,221,0,.1);
+      border: 1px solid rgba(255,221,0,.25);
+      border-radius: 20px; padding: 4px 14px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700; color: var(--white);
+      margin-bottom: 36px;
+    }
+    .section-title span { color: var(--yellow); }
+    .uses-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .use-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 16px;
       padding: 20px;
+      transition: border-color .25s;
     }
-    footer img {
-      margin: -10px;
+    .use-item:hover { border-color: rgba(255,221,0,.4); }
+    .use-icon {
+      font-size: 1.8rem; flex-shrink: 0;
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,221,0,.08);
+      border-radius: 12px;
     }
-    footer button {
-      border: none;
-      background: none;
-      cursor: pointer;
+    .use-text h4 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--yellow); margin-bottom: 4px;
     }
-    footer button img {
-      width: 120px;
-      transition: transform 0.3s ease;
+    .use-text p { font-size: .85rem; color: var(--white); line-height: 1.6; }
+
+    /* ════════════════════════════════
+       DONATE FORM
+    ════════════════════════════════ */
+    .form-section {
+      position: relative; z-index: 1;
+      background: var(--card);
+      padding: 70px 40px 80px;
     }
-    footer button:hover img {
-      transform: scale(1.2);
+    .form-inner {
+      max-width: 860px; margin: 0 auto;
+      text-align: center;
+    }
+    .form-inner h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; color: var(--white);
+      margin-bottom: 10px;
+    }
+    .form-inner h2 span { color: var(--yellow); }
+    .form-inner p {
+      font-size: .95rem; color: var(--white);
+      margin-bottom: 36px; line-height: 1.7;
+    }
+    .form-wrap {
+      background: var(--mid);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 10px;
+    }
+    .form-wrap iframe {
+      width: 100%; height: 500px;
+      border: none; display: block;
+      border-radius: 12px;
+    }
+    .powered-by {
+      margin-top: 14px;
+      font-size: .75rem; color: var(--muted);
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      background: #0a0904;
+      border-top: 2px solid rgba(255,221,0,.14);
+      padding: 52px 40px 28px;
+    }
+    .footer-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .footer-brand {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--yellow); line-height: 1;
+    }
+    .footer-brand span {
+      display: block;
+      font-family: 'Nunito', sans-serif;
+      font-size: .75rem; font-weight: 400;
+      color: var(--muted); letter-spacing: .1em;
+      text-transform: uppercase; margin-top: 5px;
+    }
+    .footer-links { display: flex; gap: 4px; list-style: none; flex-wrap: wrap; }
+    .footer-links a {
+      font-size: .78rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 6px 10px; border-radius: 4px;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--yellow); }
+    .footer-social { display: flex; gap: 10px; align-items: center; }
+    .social-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px; border-radius: 16px;
+      text-decoration: none;
+      transition: all .28s cubic-bezier(.34,1.56,.64,1);
+      position: relative; border: 2px solid transparent;
+    }
+    .social-btn:hover { transform: translateY(-7px) scale(1.12); }
+    .social-btn svg { width: 24px; height: 24px; transition: all .25s; }
+    .social-btn.btn-email { background: linear-gradient(135deg,#1a1a12,#2a2a18); border-color: rgba(255,221,0,.32); }
+    .social-btn.btn-email svg { filter: drop-shadow(0 0 5px rgba(255,221,0,.55)); }
+    .social-btn.btn-email:hover { background: linear-gradient(135deg,#ffdd00,#ffc800); border-color: #ffdd00; box-shadow: 0 10px 32px rgba(255,221,0,.5); }
+    .social-btn.btn-email:hover svg { filter: none; }
+    .social-btn.btn-email:hover .es { stroke: #100f0a !important; }
+    .social-btn.btn-yt { background: linear-gradient(135deg,#1a0808,#2e1010); border-color: rgba(255,40,40,.32); }
+    .social-btn.btn-yt svg { filter: drop-shadow(0 0 5px rgba(255,60,60,.45)); }
+    .social-btn.btn-yt:hover { background: linear-gradient(135deg,#ff2020,#c50000); border-color: #ff2222; box-shadow: 0 10px 32px rgba(255,0,0,.55); }
+    .social-btn.btn-ig { background: linear-gradient(135deg,#130812,#1c0822); border-color: rgba(220,60,160,.32); }
+    .social-btn.btn-ig svg { filter: drop-shadow(0 0 5px rgba(200,70,180,.45)); }
+    .social-btn.btn-ig:hover { background: linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); border-color: #e6683c; box-shadow: 0 10px 32px rgba(220,39,67,.55); }
+    .footer-copy {
+      width: 100%; text-align: center;
+      font-size: .7rem; color: rgba(255,255,255,.18);
+      letter-spacing: .06em; margin-top: 28px;
+      padding-top: 20px; border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .impact-inner { grid-template-columns: 1fr; }
+      .uses-grid { grid-template-columns: 1fr; }
+      .donate-hero, .uses-section, .form-section { padding: 50px 20px; }
+      .impact-section { padding: 50px 20px; }
+      footer { padding: 40px 20px 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Banner -->
+  <div class="sparks" aria-hidden="true">
+    <div class="spark"></div><div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+  </div>
+
   <div class="banner">
-    <img src="./images/grounded/topper.png" alt="Banner">
+    <img src="./images/grounded/topper.png" alt="Steel Synapse Banner">
   </div>
 
-  <!-- Top Nav -->
-  <div class="topnav">
-    <a href="./index.html">Home</a>
-    <a href="./new_meet_the_team.html">Meet the team</a>
-    <a href="./new_mentors.html">Mentors</a>
-    <a href="./new_history.html">History</a>
-    <a href="./new_edu.html">Educational Resources</a>
-    <a href="./new_donate.html">Donate</a>
-    <a href="./new_outreach.html">Outreach</a>
-  </div>
-
-  <h1 style="margin: -6px;"><img src="./images/Banner/donate.svg" alt="Banner" width="100%"></h1>
-
-  <hr style="border: 2px solid #100f0a; width: 100%;">
-  <hr style="border: 2px solid #100f0a; width: 65%;">
-
-    <h1 style="font-size: larger;font-weight:lighter;text-align: center;">If you like what we do and where we are trying to go, please consider donating! 
-The money you donate is used by the Upper St Clair Robotics Booster Organization to fund our travel and LEGO materials we need for a successful season.
-Thank you for your generosity!
--Team Steel Synapse</h1>
-   <hr style="border: 2px solid #100f0a; width: 75%;">
-
-    <p style="text-align: center;"><iframe 
-  src="https://www.zeffy.com/en-US/embed/donation-form/donate-to-usc-robotics-boosters" 
-  width="80%" 
-  height="450" 
-  frameborder="0" 
-  style="border:none;overflow:hidden;color:#ffd21f;" 
-  allowfullscreen>
-</iframe>
-
-  </p>
-     <hr style="border: 2px solid #100f0a; width: 75%;">
-     <hr style="border: 2px solid #100f0a; width: 100%;">
-   
-
-
-  <!-- Side Nav -->
-  <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="./index.html">Home</a>
-    <a href="./meettheteam.html">Meet the team</a>
-    <hr style="border-top: 2px solid #ffd21F; width: 65%;">
-    <a href="./Mentors.html">Mentors</a>
-    <a href="./history.html">History</a>
-    <a href="./youtube.html">Educational Resources</a>
-    <a href="./donate.html">Donate</a>
-    <a href="./new_outreach.html">Outreach</a>
-  </div>
-
-  <!-- Footer -->
- <footer style="text-align:center; margin-top:50px;">
-    <img src="./images/madia/photoitem.svg" alt="Banner" height="500px" width="500px">
-    <div>
-      <a href="mailto:steelsynapse01@gmail.com">
-        <button><img src="./images/madia/email.svg" alt="Email" height="70px" width="70px"></button>
-
-      <a href="https://www.youtube.com/@steelsynapse01">
-        <button><img src="./images/madia/youtube.svg" alt="YouTube" height="70px" width="70px"></button>
-      </a>   
-
-      <a href="https://www.instagram.com/steel_synapse/">
-        <button><img src="./images/madia/insta.svg" alt="instagram" height="70px" width="70px"></button>
-      </a>    
+  <nav>
+    <a class="nav-logo" href="./index.html">
+      <span class="bolt"><img src="./images/madia/photoitem.svg" alt="Logo" width="70px" height="70px"></span>
+      Steel Synapse
     </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./new_meet_the_team.html">Team</a></li>
+      <li><a href="./new_mentors.html">Mentors</a></li>
+      <li><a href="./new_history.html">History</a></li>
+      <li><a href="./new_edu.html">Resources</a></li>
+      <li><a href="./new_donate.html" class="active">Donate</a></li>
+      <li><a href="./new_outreach.html">Outreach</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <div class="donate-hero">
+    <div class="textbox">
+      <div class="page-header-label">Support Steel Synapse</div>
+      <h1 style="color:#0a0904">Help Us <span>Build</span> the Future</h1>
+      <p style="color:#0a0904">We're seven students from Pittsburgh with big dreams — building robots, solving real-world problems, and inspiring the next generation of STEM leaders. But we can't do it alone.</p>
+      <p style="color:#0a0904">Every dollar you give goes directly toward the materials, travel, and resources that make our season possible. If you believe in what we're doing, please consider supporting us.</p>
+      <div class="sig">— Team Steel Synapse</div>
     </div>
+  </div>
+  <!-- ════ IMPACT STATS ════ -->
+  <div class="impact-section">
+    <div class="impact-inner">
+
+      <div class="impact-card">
+        <div class="impact-emoji"></div>
+        <div class="impact-title">3 Seasons Strong</div>
+        <p class="impact-desc">From our first robot in 2023 to competing at the state level — we keep growing every year.</p>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-emoji"></div>
+        <div class="impact-title">Real Competitions</div>
+        <p class="impact-desc">We travel to regional and state competitions, putting our robots and innovation projects to the test.</p>
+      </div>
+
+      <div class="impact-card">
+        <div class="impact-emoji"></div>
+        <div class="impact-title">Community Impact</div>
+        <p class="impact-desc">We give back through outreach and educational resources, teaching younger kids about STEM.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════ WHAT YOUR MONEY DOES ════ -->
+   
+  <div class="uses-section">
+    <div class="textbox">
+    <div class="uses-inner">
+      <div class="section-label">Transparency</div>
+      <h2 class="section-title">Where Your <span>Money Goes</span></h2>
+      <div class="uses-grid">
+
+        <div class="use-item">
+          <div class="use-icon">🧱</div>
+          <div class="use-text">
+            <h4>LEGO & Robot Parts</h4>
+            <p>Sensors, motors, and LEGO pieces that bring our robot designs to life each season.</p>
+          </div>
+        </div>
+
+        <div class="use-item">
+          <div class="use-icon">🚌</div>
+          <div class="use-text">
+            <h4>Travel & Competition Fees</h4>
+            <p>Getting our team to regional and state competitions takes real resources.</p>
+          </div>
+        </div>
+
+        <div class="use-item">
+          <div class="use-icon">📐</div>
+          <div class="use-text">
+            <h4>Prototyping Materials</h4>
+            <p>For our innovation projects, we build real prototypes that need supplies and tools.</p>
+          </div>
+        </div>
+
+        <div class="use-item">
+          <div class="use-icon">🎓</div>
+          <div class="use-text">
+            <h4>Learning & Outreach</h4>
+            <p>Resources to keep learning and to give back by teaching other kids about robotics.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+   </div>
+  </div> 
+  <!-- ════ DONATION FORM ════ -->
+  <div class="form-section">
+    <div class="form-inner">
+      <h2>Ready to Make a <span>Difference?</span></h2>
+      <p>Donations are managed by the Upper St. Clair Robotics Booster Organization. Every contribution, big or small, makes a real impact. Thank you for your generosity! 💛</p>
+      <div class="form-wrap">
+        <iframe
+          src="https://www.zeffy.com/en-US/embed/donation-form/donate-to-usc-robotics-boosters"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="powered-by">Donations processed securely via Zeffy · USC Robotics Boosters Organization</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        Steel Synapse
+        <span>Forged in Steel. Connected by Code.</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./new_meet_the_team.html">Team</a></li>
+        <li><a href="./new_mentors.html">Mentors</a></li>
+        <li><a href="./new_history.html">History</a></li>
+        <li><a href="./new_edu.html">Resources</a></li>
+        <li><a href="./new_donate.html">Donate</a></li>
+        <li><a href="./new_outreach.html">Outreach</a></li>
+      </ul>
+      <div class="footer-social">
+        <a href="mailto:steelsynapse01@gmail.com" class="social-btn btn-email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect class="es" x="2" y="4" width="20" height="16" rx="3" stroke="#ffdd00" stroke-width="1.8" fill="none"/>
+            <path class="es" d="M2 8l10 6.5L22 8" stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt" title="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="#ff2222"/>
+            <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="white"/>
+          </svg>
+        </a>
+        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig" title="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="igG" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f09433"/>
+                <stop offset="50%" stop-color="#dc2743"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="4.5" stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="6.5" r="1.4" fill="url(#igG)"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 Steel Synapse · All rights reserved</div>
   </footer>
- 
-  <!-- Scripts -->
-  <script>
-    function openModal(name, text) {
-      document.getElementById("modalTitle").innerText = name;
-      document.getElementById("modalText").innerText = text;
-      document.getElementById("overlay").style.display = "flex";
-    }
-    function closeModal() {
-      document.getElementById("overlay").style.display = "none";
-    }
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "250px";
-    }
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-    }
-  </script>
+
 </body>
 </html>
