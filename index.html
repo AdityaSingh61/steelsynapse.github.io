@@ -335,58 +335,35 @@
     }
 
     /* ── CORE VALUES — flip cards ── */
-    .values-section { background:var(--card); }
-    .values-intro {
-      font-size:.97rem; color:var(--muted);
-      line-height:1.7; margin-bottom:44px;
-      max-width:540px;
-    }
-    .flip-grid {
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:16px;
-    }
-    .flip-card { height:210px; perspective:1000px; cursor:pointer; }
-    .flip-inner {
-      position:relative; width:100%; height:100%;
-      transition:transform .7s; transform-style:preserve-3d;
-    }
-    .flip-card.flipped .flip-inner { transform:rotateY(180deg); }
-    .flip-front, .flip-back {
-      position:absolute; width:100%; height:100%;
-      backface-visibility:hidden;
-      border-radius:16px; overflow:hidden;
-      border:2px solid var(--border);
-    }
-    .flip-front img {
-      width:100%; height:100%; object-fit:cover;
-      transition:transform .3s;
-    }
-    .flip-card:hover .flip-front img { transform:scale(1.06); }
-    .flip-front-label {
-      position:absolute; bottom:0; left:0; right:0;
-      padding:10px 14px;
-      background:linear-gradient(transparent,rgba(16,15,10,.85));
-      font-family:'Fredoka',sans-serif;
-      font-size:1rem; font-weight:700;
-      color:var(--yellow);
-    }
-    .flip-back {
-      background:var(--black);
-      transform:rotateY(180deg);
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      padding:22px 18px; text-align:center;
-      border-color:rgba(255,221,0,.3);
-    }
-    .flip-back-icon { font-size:2rem; margin-bottom:12px; }
-    .flip-back p { font-size:1.5rem; color:var(--white); line-height:1.6; }
-    .values-note {
-      font-size:.72rem; color:rgba(255,221,0,.3);
-      letter-spacing:.12em; text-transform:uppercase;
-      margin-top:28px; text-align:center;
-    }
+  /* CORE VALUES — circular */
+    .values-section { background: var(--card); }
+    .values-intro { font-size: .97rem; color: var(--muted); line-height: 1.7; margin-bottom: 44px; max-width: 540px; }
+    .values-circle-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 36px; }
+    .value-circle-btn { display: flex; flex-direction: column; align-items: center; gap: 14px; cursor: pointer; background: none; border: none; transition: transform .25s; }
+    .value-circle-btn:hover { transform: translateY(-6px); }
+    .value-circle { width: 130px; height: 130px; border-radius: 50%; border: 3px solid var(--border); overflow: hidden; background: var(--mid); transition: border-color .25s, box-shadow .25s; }
+    .value-circle-btn:hover .value-circle { border-color: var(--yellow); box-shadow: 0 0 28px rgba(255,221,0,.35); }
+    .value-circle img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+    .value-circle-btn:hover .value-circle img { transform: scale(1.08); }
+    .value-circle-label { font-family: 'Fredoka', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); text-align: center; }
+    .value-circle-btn:hover .value-circle-label { color: var(--yellow); }
+    .values-note { font-size: .72rem; color: rgba(255,221,0,.3); letter-spacing: .12em; text-transform: uppercase; margin-top: 36px; text-align: center; }
 
+    /* VALUE SLIDESHOW MODAL */
+    .val-modal-backdrop { display: flex; visibility: hidden; opacity: 0; pointer-events: none; position: fixed; inset: 0; z-index: 1000; background: rgba(10,9,6,.92); backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 24px; transition: opacity .25s, visibility .25s; }
+    .val-modal-backdrop.open { visibility: visible; opacity: 1; pointer-events: all; }
+    .val-modal { background: var(--card); border: 2px solid rgba(255,221,0,.3); border-radius: 24px; width: 100%; max-width: 580px; position: relative; animation: modalPop .3s ease both; overflow: hidden; }
+    .val-modal-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
+    .val-modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .val-modal-body { padding: 22px 26px 28px; }
+    .val-modal-title { font-family: 'Fredoka', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--yellow); margin-bottom: 6px; }
+    .val-modal-caption { font-size: .92rem; color: var(--white); line-height: 1.7; }
+    .val-modal-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; gap: 10px; }
+    .val-nav-btn { background: rgba(255,221,0,.08); border: 1px solid rgba(255,221,0,.25); color: var(--yellow); font-family: 'Fredoka', sans-serif; font-size: 1rem; font-weight: 700; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: background .2s; }
+    .val-nav-btn:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+    .val-modal-counter { font-size: .8rem; color: var(--muted); font-family: 'Fredoka', sans-serif; }
+    .val-modal-close { position: absolute; top: 14px; right: 14px; background: rgba(16,15,10,.7); border: 2px solid rgba(255,221,0,.3); color: var(--yellow); font-family: 'Fredoka', sans-serif; font-size: 1.1rem; font-weight: 700; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; z-index: 2; }
+    .val-modal-close:hover { background: var(--yellow); color: var(--black); }
     /* ── NEWS GRID — squares ── */
     .news-grid {
       display: grid;
@@ -713,14 +690,14 @@
       <img src="./images/home pager/Photo1.jpeg" alt="">
       <img src="./images/home pager/Photo2.jpeg" alt="">
       <img src="./images/home pager/Photo3.jpeg" alt="">
-      <img src="./images/home pager/Photo4.jpeg" alt="">
+      <img src="./images/home pager/Photo11.jpeg" alt="">
       <img src="./images/home pager/Photo5.jpeg" alt="">
       <img src="./images/home pager/Photo6.jpeg" alt="">
       <img src="./images/home pager/Photo7.jpeg" alt="">
       <img src="./images/home pager/Photo8.jpeg" alt="">
       <img src="./images/home pager/Photo9.jpeg" alt="">
       <img src="./images/home pager/Photo10.jpeg" alt="">
-      <img src="./images/home pager/Photo11.jpeg" alt="">
+      <img src="./images/home pager/Photo4.jpeg" alt="">
       <img src="./images/home pager/Photo12.jpeg" alt="">
       <img src="./images/home pager/Photo13.jpeg" alt="">
       <img src="./images/home pager/Photo14.jpeg" alt="">
@@ -744,11 +721,22 @@
 
   <!-- CHAMPIONSHIP -->
   <section class="champ-section">
-    <img src="images/home pager/champs.jpeg" alt="Championship">
+    <img src="images/home pager/champs.jpeg" alt="Championship"><div style="
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  z-index: 10;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(255, 251, 0, 0.6), 0 2px 8px rgba(0,0,0,0.8);
+">6<sup style="font-size: 0.35em; vertical-align: super;">th</sup></div>
     <div class="champ-overlay">
       <div>
         <div class="champ-eyebrow">Achievement Unlocked</div>
-        <h2 class="champ-title">We Made It to<br><span>Championships!</span></h2>
+        <h2 class="champ-title">We Made It to<br><span>Internationals!</span></h2>
         <p class="champ-body">Hard work, late nights, and a whole lot of chocolate. At the State Championship Tournament (in Hershey), Steel Synapse made it to the Internationals - and loved every second!</p>
       </div>
     </div>
@@ -786,59 +774,49 @@
   <hr class="section-divider">
 
   <!-- CORE VALUES -->
-  <section class="section values-section">
-    <div class="section-inner">
-      <div class="section-label">What Drives Us</div>
-      <h2 class="section-title">Our Core <span class="y">Values</span></h2>
-      <p class="values-intro">As strong as steel — flip any card to learn more about what makes our team tick!</p>
-      <div class="flip-grid">
 
-        <div class="flip-card" onclick="this.classList.toggle('flipped')">
-          <div class="flip-inner">
-            <div class="flip-front"><img src="images/core/teamwork.svg" alt="Teamwork"><div class="flip-front-label">Teamwork</div></div>
-            <div class="flip-back"><div class="flip-back-icon"></div><p>We are as strong as steel when we work together.</p></div>
-          </div>
-        </div>
+<section class="section values-section">
+  <div class="section-inner">
+    <div class="section-label">What Drives Us</div>
+    <h2 class="section-title">Our Core <span class="y">Values</span></h2>
+    <p class="values-intro">Click any value to see it in action!</p>
 
-        <div class="flip-card" onclick="this.classList.toggle('flipped')">
-          <div class="flip-inner">
-            <div class="flip-front"><img src="images/core/learning.svg" alt="Learning"><div class="flip-front-label">Learning</div></div>
-            <div class="flip-back"><div class="flip-back-icon"></div><p>We have a burning desire to grow, question, and understand.</p></div>
-          </div>
-        </div>
+    <div class="values-circle-grid">
 
-        <div class="flip-card" onclick="this.classList.toggle('flipped')">
-          <div class="flip-inner">
-            <div class="flip-front"><img src="images/core/impact.svg" alt="Impact"><div class="flip-front-label">Impact</div></div>
-            <div class="flip-back"><div class="flip-back-icon"></div><p>We apply what we learn to make the world a little stronger.</p></div>
-          </div>
-        </div>
+      <button class="value-circle-btn" onclick="openValModal('teamwork')">
+        <div class="value-circle"><img src="images/core/teamwork.svg" alt="Teamwork"></div>
+        <div class="value-circle-label">Teamwork</div>
+      </button>
 
-        <div class="flip-card" onclick="this.classList.toggle('flipped')">
-          <div class="flip-inner">
-            <div class="flip-front"><img src="images/core/innovation.svg" alt="Innovation"><div class="flip-front-label">Innovation</div></div>
-            <div class="flip-back"><div class="flip-back-icon"></div><p>Creativity is our spark. Persistence is our fuel.</p></div>
-          </div>
-        </div>
+      <button class="value-circle-btn" onclick="openValModal('learning')">
+        <div class="value-circle"><img src="images/core/learning.svg" alt="Learning"></div>
+        <div class="value-circle-label">Learning</div>
+      </button>
 
-        <div class="flip-card" onclick="this.classList.toggle('flipped')">
-          <div class="flip-inner">
-            <div class="flip-front"><img src="images/core/discovery.svg" alt="Discovery"><div class="flip-front-label">Discovery</div></div>
-            <div class="flip-back"><div class="flip-back-icon"></div><p>We explore with grit, forging ideas into tools for change.</p></div>
-          </div>
-        </div>
+      <button class="value-circle-btn" onclick="openValModal('impact')">
+        <div class="value-circle"><img src="images/core/impact.svg" alt="Impact"></div>
+        <div class="value-circle-label">Impact</div>
+      </button>
 
-        <div class="flip-card" onclick="this.classList.toggle('flipped')">
-          <div class="flip-inner">
-            <div class="flip-front"><img src="images/core/fun.svg" alt="Fun"><div class="flip-front-label">Fun</div></div>
-            <div class="flip-back"><div class="flip-back-icon"></div><p>We forge with passion and celebrate every spark we create.</p></div>
-          </div>
-        </div>
+      <button class="value-circle-btn" onclick="openValModal('innovation')">
+        <div class="value-circle"><img src="images/core/innovation.svg" alt="Innovation"></div>
+        <div class="value-circle-label">Innovation</div>
+      </button>
 
-      </div>
-      <p class="values-note">Adapted from FLL Core Values</p>
+      <button class="value-circle-btn" onclick="openValModal('discovery')">
+        <div class="value-circle"><img src="images/core/discovery.svg" alt="Discovery"></div>
+        <div class="value-circle-label">Discovery</div>
+      </button>
+
+      <button class="value-circle-btn" onclick="openValModal('fun')">
+        <div class="value-circle"><img src="images/core/fun.svg" alt="Fun"></div>
+        <div class="value-circle-label">Fun</div>
+      </button>
+
     </div>
-  </section>
+    <p class="values-note">Adapted from FLL Core Values</p>
+  </div>
+</section>
 
   <!-- TEAM UPDATES -->
   <section class="section">
@@ -851,25 +829,25 @@
 
         <div class="news-card" onclick="openModal('modal1')">
           <div class="news-card-img">
-            <img src="./images/home pager/Photo16.jpeg" alt="">
+            <img src="./images/Team updates/Snuggle_up.jpeg" alt="">
             <div class="read-hint"><span>Read More →</span></div>
           </div>
           <div class="news-card-body">
-            <div class="news-date">Month DD, YYYY</div>
-            <div class="news-title">We Qualified for Championships!</div>
-            <p class="news-blurb">After weeks of hard work and late-night practice, Steel Synapse earned a spot at the state championship.</p>
+            <div class="news-date">March 6, 2026</div>
+            <div class="news-title">Streams Snuggle up and read</div>
+            <p class="news-blurb">Inspiring Elementary kids to experiment with Legos. Our message to them: All you have to do is imagine. If you can imagine it, you can build it. </p>
           </div>
         </div>
 
         <div class="news-card" onclick="openModal('modal2')">
           <div class="news-card-img">
-            <img src="./images/home pager/Photo12.jpeg" alt="">
+            <img src="./images/Team updates/National_pre.jpg" alt="">
             <div class="read-hint"><span>Read More →</span></div>
           </div>
           <div class="news-card-body">
-            <div class="news-date">Month DD, YYYY</div>
-            <div class="news-title">Regional Competition Results 🤖</div>
-            <p class="news-blurb">We competed at regionals and showed off our robot, innovation project, and core values.</p>
+            <div class="news-date">March 3, 2026</div>
+            <div class="news-title">Prep for WPI in full swing</div>
+            <p class="news-blurb">We're getting ready for the Worcster Polytechnic Invitational with our new robot and updated innovation project.</p>
           </div>
         </div>
 
@@ -893,14 +871,14 @@
   <div class="modal-backdrop" id="modal1" onclick="closeOnBackdrop(event,'modal1')">
     <div class="modal">
       <button class="modal-close" onclick="closeModal('modal1')">✕</button>
-      <div class="modal-img"><img src="./images/home pager/Photo16.jpeg" alt=""></div>
+      <div class="modal-img"><img src="./images/Team updates/Snuggle_up.jpeg" alt=""></div>
       <div class="modal-body">
-        <div class="modal-date">Month DD, YYYY</div>
-        <div class="modal-title">We Qualified for Championships! 🏆</div>
+        <div class="modal-date">March 6, 2026</div>
+        <div class="modal-title">Streams Snuggle up and read</div>
         <div class="modal-text">
-          <p>Write your full story here. What happened, where was it, who was there?</p>
-          <p>Add more paragraphs as needed. No limit!</p>
-          <p>Great place to thank coaches, mentors, and supporters too.</p>
+          <p>Inspiring Elementary kids to experiment with Legos. Our message to them: All you have to do is imagine.</p>
+          <p>If you can imagine it, you can build it.</p>
+          <p></p>
         </div>
       </div>
     </div>
@@ -909,14 +887,14 @@
   <div class="modal-backdrop" id="modal2" onclick="closeOnBackdrop(event,'modal2')">
     <div class="modal">
       <button class="modal-close" onclick="closeModal('modal2')">✕</button>
-      <div class="modal-img"><img src="./images/home pager/Photo12.jpeg" alt=""></div>
+      <div class="modal-img"><img src="./images/Team updates/National_pre.jpg" alt=""></div>
       <div class="modal-body">
-        <div class="modal-date">Month DD, YYYY</div>
-        <div class="modal-title">Regional Competition Results 🤖</div>
+        <div class="modal-date">March 3, 2026</div>
+        <div class="modal-title">Prep for WPI in full swing</div>
         <div class="modal-text">
-          <p>Write your full recap here. Scores, awards, highlights — put it all in!</p>
-          <p>Add more paragraphs as needed.</p>
-          <p>Shout out to everyone who came to cheer us on!</p>
+          <p>We're getting ready for the Worcster Polytechnic Invitational with our new robot and updated innovation project.</p>
+          <p></p>
+          <p></p>
         </div>
       </div>
     </div>
@@ -956,7 +934,77 @@
         .forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
   });
   </script>
+<!-- VALUES MODAL -->
+<div class="val-modal-backdrop" id="valModal" onclick="closeValOnBackdrop(event)">
+  <div class="val-modal">
+    <button class="val-modal-close" onclick="closeValModal()">✕</button>
+    <div class="val-modal-img"><img id="valModalImg" src="" alt=""></div>
+    <div class="val-modal-body">
+      <div class="val-modal-title" id="valModalTitle"></div>
+      <div class="val-modal-caption" id="valModalCaption"></div>
+      <div class="val-modal-nav">
+        <button class="val-nav-btn" onclick="shiftVal(-1)">← Prev</button>
+        <span class="val-modal-counter" id="valModalCounter"></span>
+        <button class="val-nav-btn" onclick="shiftVal(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+    <script>
+    const valData = {
+      teamwork:  { title:'Teamwork',  slides:[
+        {img:'images/core/teamwork.svg',  caption:'We are as strong as steel when we work together.'},
+        {img:'./images/core/Teamwork/Teamwork1.jpeg',  caption:'Every build starts with all hands on deck.'},
+        {img:'./images/core/Teamwork/Teamwork2.jpeg',  caption:'Helping other USC FLL teams: Lift Everyone!'},
+        {img:'./images/core/Teamwork/Teamwork3.jpeg',  caption:'Working together is the best way to think of creative solutions.'},
+        {img:'./images/core/Teamwork/Teamwork4.jpeg',  caption:'Side by side, circuit by circuit.'},
+      ]},
+      learning:  { title:'Learning',  slides:[
+        {img:'images/core/learning.svg',  caption:'Curiosity helps connect synapses.'},
+        {img:'./images/core/Learning/Learning1.jpeg',  caption:'From Scratch to Python — we never stop learning to code.Every .'},
+        {img:'./images/core/Learning/Learning2.jpeg',  caption:'Think tanks help us organize our thoughts and communicate our ideas.'},
+        {img:'./images/core/Learning/Learning3.jpeg',  caption:'We learn and grow as a TEAM.'},
+        {img:'./images/core/Learning/Learning4.jpeg',  caption:'Measure, Remeasure, measure..learn every minute!'},
+      ]},
+      impact:    { title:'Impact',    slides:[
+        {img:'images/core/impact.svg',    caption:'We apply what we learn to make the world a little stronger.'},
+        {img:'./images/core/Impact/Impact1.jpeg',  caption:'Teaching Elementary kids how to build with LEGO.'},
+        {img:'./images/core/Impact/Impact2.jpeg', caption:'Snuggle up- and read with our local elementary school\'s Storytime.'},
+        {img:'./images/core/Impact/Impact3.jpeg', caption:'Community buiding-- we\'re stronger together.'},
+        {img:'./images/core/Impact/Impact4.jpeg', caption:'Sharing with other USC FLL Robotics teams- leaning from shared experiences'},
+      ]},
+      innovation:{ title:'Innovation', slides:[
+        {img:'images/core/innovation.svg',caption:'Creativity is our spark. Persistence is our fuel.'},
+        {img:'./images/core/Innovation/Innovation1.jpeg', caption:'Prototyping new ideas, learning from failure, and trying again.'},
+        {img:'./images/core/Innovation/Innovation2.jpeg', caption:'When the first idea doesn\'t work, we invent a better one.'},
+        {img:'./images/core/Innovation/Innovation3.jpeg', caption:'Our robot is never finished — just improved.'},
+        {img:'./images/core/Innovation/Innovation4.jpeg', caption:'Innovation lives at the intersection of fun and determination.'},
+      ]},
+      discovery: { title:'Discovery', slides:[
+        {img:'images/core/discovery.svg', caption:'We explore with grit, forging ideas into tools for change.'},
+        {img:'./images/core/Discovery/Discovery1.jpeg', caption:'Discovering our past... and building our future.'},
+        {img:'./images/core/Discovery/Discovery2.jpeg', caption:'We learn from our heroes- learn from other robots'},
+        {img:'./images/core/Discovery/Discovery3.jpeg', caption:'Discovery is all about asking questions and finding new paths.'},
+        {img:'./images/core/Discovery/Discovery4.jpeg',   caption:'Steel Synapse — always exploring what\'s next.'},
+      ]},
+      fun:       { title:'Fun',       slides:[
+        {img:'images/core/fun.svg',       caption:'We forge with passion and celebrate every spark we create.'},
+        {img:'./images/core/Fun/Fun1.jpeg',  caption:'Singing squad- bestie goals'},
+        {img:'./images/core/Fun/Fun2.jpeg',  caption:'Win or lose, always have some sugary fun together.'},
+        {img:'./images/core/Fun/Fun3.jpeg',  caption:'Best friends- in fact chosen family- celebrating every moment together.'},
+        {img:'./images/core/Fun/Fun4.jpeg', caption:'Steel Synapse — serious about STEM, serious about fun.'},
+      ]},
+    };
+
+    let activeVal = null, activeValIdx = 0;
+    function openValModal(key) { activeVal=key; activeValIdx=0; renderVal(); document.getElementById('valModal').classList.add('open'); document.body.style.overflow='hidden'; }
+    function renderVal() { const d=valData[activeVal],s=d.slides[activeValIdx]; document.getElementById('valModalImg').src=s.img; document.getElementById('valModalTitle').textContent=d.title; document.getElementById('valModalCaption').textContent=s.caption; document.getElementById('valModalCounter').textContent=(activeValIdx+1)+' / '+d.slides.length; }
+    function shiftVal(dir) { activeValIdx=(activeValIdx+dir+valData[activeVal].slides.length)%valData[activeVal].slides.length; renderVal(); }
+    function closeValModal() { document.getElementById('valModal').classList.remove('open'); document.body.style.overflow=''; }
+    function closeValOnBackdrop(e) { if(e.target===document.getElementById('valModal')) closeValModal(); }
+    document.addEventListener('keydown',function(e){ if(document.getElementById('valModal').classList.contains('open')){ if(e.key==='ArrowRight') shiftVal(1); if(e.key==='ArrowLeft') shiftVal(-1); if(e.key==='Escape') closeValModal(); }});
+    </script>
   <!-- SUPPORTERS -->
   <section class="supporters-section">
     <div class="supporters-inner">
