@@ -58,7 +58,7 @@
       border-bottom: 2px solid var(--border);
       display: flex; align-items: center;
       justify-content: space-between;
-      padding: 0 36px; height: 60px;
+      padding: 0 20px; height: 60px;
     }
     .nav-logo {
       font-family: 'Fredoka', sans-serif;
@@ -81,6 +81,44 @@
     .nav-links a:hover,
     .nav-links a.active { color: var(--black); background: var(--yellow); }
 
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(255,221,0,.08); border: 1.5px solid rgba(255,221,0,.25);
+      cursor: pointer; gap: 5px; flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--yellow); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; top: 60px; z-index: 490;
+      background: rgba(0,0,0,.97);
+      backdrop-filter: blur(18px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 40px 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 14px 40px; border-radius: 20px; width: 100%; text-align: center;
+      border: 1.5px solid transparent;
+      transition: color .2s, background .2s, border-color .2s;
+    }
+    .mobile-menu a.active,
+    .mobile-menu a:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
     /* PAGE HEADER */
     .page-header {
       position: relative; z-index: 1;
@@ -101,7 +139,7 @@
     }
     .page-header h1 {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-size: clamp(2.4rem, 7vw, 5rem);
       font-weight: 700; line-height: 1.05;
       color: var(--white);
     }
@@ -112,16 +150,15 @@
       margin-left: auto; margin-right: auto;
       line-height: 1.8;
     }
-      .textbox{
-      border:2px solid #100f0a00;
-      padding:20px;
-      border-radius:12px;
-      background:#00000051;
-      box-shadow:0 5px 12px rgba(0,0,0,0.25);
+    .textbox {
+      border: 2px solid #100f0a00;
+      padding: 20px;
+      border-radius: 12px;
+      background: #00000051;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
     }
-    /* ════════════════════════════════
-       OUTREACH EVENT SECTIONS
-    ════════════════════════════════ */
+
+    /* OUTREACH EVENT SECTIONS */
     .event-section {
       position: relative; z-index: 1;
       padding: 70px 40px 80px;
@@ -153,7 +190,7 @@
     }
     .event-title {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
       font-weight: 700; color: var(--white);
     }
     .event-title span { color: var(--yellow); }
@@ -163,9 +200,7 @@
       line-height: 1.75;
     }
 
-    /* ════════════════════════════════
-       PHOTO GALLERY GRID
-    ════════════════════════════════ */
+    /* PHOTO GALLERY GRID */
     .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -219,9 +254,7 @@
     }
     .gallery-placeholder span { font-size: 1.8rem; }
 
-    /* ════════════════════════════════
-       MODAL (photo + date + caption)
-    ════════════════════════════════ */
+    /* PHOTO MODAL */
     .photo-modal-backdrop {
       display: flex;
       visibility: hidden;
@@ -231,7 +264,7 @@
       background: rgba(10,9,6,.92);
       backdrop-filter: blur(12px);
       align-items: center; justify-content: center;
-      padding: 24px;
+      padding: 16px;
       transition: opacity .25s, visibility .25s;
     }
     .photo-modal-backdrop.open {
@@ -240,7 +273,7 @@
     .photo-modal {
       background: var(--card);
       border: 2px solid rgba(255,221,0,.3);
-      border-radius: 24px;
+      border-radius: 22px;
       width: 100%; max-width: 680px;
       max-height: 90vh; overflow-y: auto;
       position: relative;
@@ -253,19 +286,19 @@
     .photo-modal img {
       width: 100%; aspect-ratio: 16/9;
       object-fit: cover; display: block;
-      border-radius: 22px 22px 0 0;
+      border-radius: 20px 20px 0 0;
     }
-    .photo-modal-body { padding: 22px 26px 28px; }
+    .photo-modal-body { padding: 20px 22px 24px; }
     .photo-modal-date {
       font-size: .75rem; font-weight: 700;
       letter-spacing: .12em; text-transform: uppercase;
       color: var(--yellow); margin-bottom: 8px;
     }
     .photo-modal-caption {
-      font-size: 1rem; color: var(--white); line-height: 1.7;
+      font-size: .95rem; color: var(--white); line-height: 1.7;
     }
     .photo-modal-nav {
-      display: flex; gap: 10px; margin-top: 18px;
+      display: flex; gap: 10px; margin-top: 16px;
     }
     .photo-nav-btn {
       flex: 1;
@@ -280,7 +313,7 @@
     }
     .photo-nav-btn:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
     .photo-modal-close {
-      position: absolute; top: 14px; right: 14px;
+      position: absolute; top: 12px; right: 12px;
       background: rgba(16,15,10,.7);
       border: 2px solid rgba(255,221,0,.3);
       color: var(--yellow);
@@ -299,17 +332,17 @@
       position: relative; z-index: 1;
       background: #0a0904;
       border-top: 2px solid rgba(255,221,0,.14);
-      padding: 52px 40px 28px;
+      padding: 52px 32px 28px;
     }
     .footer-inner {
       max-width: 1060px; margin: 0 auto;
       display: flex; align-items: flex-start;
       justify-content: space-between;
-      gap: 40px; flex-wrap: wrap;
+      gap: 32px; flex-wrap: wrap;
     }
     .footer-brand {
       font-family: 'Fredoka', sans-serif;
-      font-size: 2rem; font-weight: 700;
+      font-size: 1.8rem; font-weight: 700;
       color: var(--yellow); line-height: 1;
     }
     .footer-brand span {
@@ -355,15 +388,45 @@
       padding-top: 20px; border-top: 1px solid rgba(255,255,255,.05);
     }
 
-    @media (max-width: 900px) {
-      .gallery { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 800px) {
+      nav { padding: 0 16px; }
       .nav-links { display: none; }
-      .gallery { grid-template-columns: 1fr; }
-      .event-section, .event-section.alt-bg { padding: 50px 20px 60px; }
-      .event-section.alt-bg .event-inner { padding: 0 20px; }
-      footer { padding: 40px 20px 24px; }
+      .hamburger { display: flex; }
+      .page-header { padding: 48px 24px 36px; }
+      footer { padding: 40px 24px 20px; }
+      .footer-links { display: none; }
+    }
+
+    /* Tablet: 2-col gallery */
+    @media (max-width: 900px) {
+      .gallery { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .event-section { padding: 52px 24px 60px; }
+      .event-section.alt-bg { padding: 52px 0 60px; }
+      .event-section.alt-bg .event-inner { padding: 0 24px; }
+    }
+
+    /* Mobile: single column gallery, tighter padding */
+    @media (max-width: 540px) {
+      .page-header { padding: 40px 18px 30px; }
+      .textbox { padding: 16px; }
+
+      .event-section { padding: 44px 18px 52px; }
+      .event-section.alt-bg { padding: 44px 0 52px; }
+      .event-section.alt-bg .event-inner { padding: 0 18px; }
+
+      .gallery { grid-template-columns: 1fr; gap: 12px; }
+      .event-header { margin-bottom: 22px; }
+      .event-desc { font-size: .9rem; }
+
+      footer { padding: 36px 18px 18px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+    }
+
+    @media (max-width: 380px) {
+      .nav-logo { font-size: 1.15rem; }
     }
   </style>
 </head>
@@ -393,45 +456,57 @@
       <li><a href="./new_donate.html">Donate</a></li>
       <li><a href="./new_outreach.html" class="active">Outreach</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="./index.html"             onclick="closeMenu()">Home</a>
+    <a href="./new_meet_the_team.html" onclick="closeMenu()">Team</a>
+    <a href="./new_mentors.html"       onclick="closeMenu()">Mentors</a>
+    <a href="./new_history.html"       onclick="closeMenu()">History</a>
+    <a href="./new_edu.html"           onclick="closeMenu()">Resources</a>
+    <a href="./new_donate.html"        onclick="closeMenu()">Donate</a>
+    <a href="./new_outreach.html" class="active" onclick="closeMenu()">Outreach</a>
+  </div>
 
   <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="textbox">
-    <div class="page-header-label">FLL Team #53463</div>
-    <h1 style="color:#0a0904">Our <span>Outreach</span></h1>
-    <p style="color:#0a0904">We believe in giving back. Here's a look at the events and activities where we've connected with our community.</p>
+      <div class="page-header-label">FLL Team #53463</div>
+      <h1 style="color:#0a0904">Our <span>Outreach</span></h1>
+      <p style="color:#0a0904">We believe in giving back. Here's a look at the events and activities where we've connected with our community.</p>
+    </div>
   </div>
-  </div>
-  <!-- ══════════════════════════════
-       EVENT 1 — USC Community Day
-  ══════════════════════════════ -->
+
+  <!-- EVENT 1 — USC Community Day -->
   <div class="event-section">
     <div class="textbox">
-    <div class="event-header">
-      <div class="event-label">2025</div>
-      <div class="event-title">USC <span>Community Day</span></div>
-      <p class="event-desc">We set up a booth at USC Community Day 2025, showing off our robot and talking to families about FIRST LEGO League. It was a great chance to inspire younger kids and share what we love about robotics.</p>
-    </div>
-    <div class="gallery" id="gallery-usc">
-      <div class="gallery-item" onclick="openPhoto('gallery-usc', 0)">
-        <img src="./images/outreach/3f84c3cd-8012-4bc5-906b-a1b4eba6de92.jpeg" alt="Community Day 1">
-        <div class="gallery-item-overlay"><span>View Photo</span></div>
+      <div class="event-header">
+        <div class="event-label">2025</div>
+        <div class="event-title">USC <span>Community Day</span></div>
+        <p class="event-desc">We set up a booth at USC Community Day 2025, showing off our robot and talking to families about FIRST LEGO League. It was a great chance to inspire younger kids and share what we love about robotics.</p>
       </div>
-      <div class="gallery-item" onclick="openPhoto('gallery-usc', 1)">
-        <img src="./images/outreach/7459694f-dedd-4ba7-b201-d42a4f3f3ac2.jpeg" alt="Community Day 2">
-        <div class="gallery-item-overlay"><span>View Photo</span></div>
-      </div>
-      <div class="gallery-item" onclick="openPhoto('gallery-usc', 2)">
-        <img src="./images/outreach/9efe9c95-2c19-42b1-911c-a108ba46ab16.jpeg" alt="Community Day 3">
-        <div class="gallery-item-overlay"><span>View Photo</span></div>
+      <div class="gallery" id="gallery-usc">
+        <div class="gallery-item" onclick="openPhoto('gallery-usc', 0)">
+          <img src="./images/outreach/3f84c3cd-8012-4bc5-906b-a1b4eba6de92.jpeg" alt="Community Day 1">
+          <div class="gallery-item-overlay"><span>View Photo</span></div>
+        </div>
+        <div class="gallery-item" onclick="openPhoto('gallery-usc', 1)">
+          <img src="./images/outreach/7459694f-dedd-4ba7-b201-d42a4f3f3ac2.jpeg" alt="Community Day 2">
+          <div class="gallery-item-overlay"><span>View Photo</span></div>
+        </div>
+        <div class="gallery-item" onclick="openPhoto('gallery-usc', 2)">
+          <img src="./images/outreach/9efe9c95-2c19-42b1-911c-a108ba46ab16.jpeg" alt="Community Day 3">
+          <div class="gallery-item-overlay"><span>View Photo</span></div>
+        </div>
       </div>
     </div>
   </div>
-  </div>
-  <!-- ══════════════════════════════
-       EVENT 2 — Placeholder
-  ══════════════════════════════ -->
+
+  <!-- EVENT 2 — Placeholder -->
   <div class="event-section alt-bg">
     <div class="event-inner">
       <div class="event-header">
@@ -447,26 +522,23 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════
-       EVENT 3 — Placeholder
-  ══════════════════════════════ -->
+  <!-- EVENT 3 — Placeholder -->
   <div class="event-section">
     <div class="textbox">
-    <div class="event-header">
-      <div class="event-label">Coming Soon</div>
-      <div class="event-title">Event <span>Name Here</span></div>
-      <p class="event-desc">Description of this outreach event goes here — what you did, who you connected with, and why it mattered.</p>
-    </div>
-    <div class="gallery" id="gallery-3">
-      <div class="gallery-placeholder"><span>📷</span>Photo coming soon</div>
-      <div class="gallery-placeholder"><span>📷</span>Photo coming soon</div>
-      <div class="gallery-placeholder"><span>📷</span>Photo coming soon</div>
+      <div class="event-header">
+        <div class="event-label">Coming Soon</div>
+        <div class="event-title">Event <span>Name Here</span></div>
+        <p class="event-desc">Description of this outreach event goes here — what you did, who you connected with, and why it mattered.</p>
+      </div>
+      <div class="gallery" id="gallery-3">
+        <div class="gallery-placeholder"><span>📷</span>Photo coming soon</div>
+        <div class="gallery-placeholder"><span>📷</span>Photo coming soon</div>
+        <div class="gallery-placeholder"><span>📷</span>Photo coming soon</div>
+      </div>
     </div>
   </div>
-  </div>
-  <!-- ══════════════════════════════
-       EVENT 4 — Placeholder
-  ══════════════════════════════ -->
+
+  <!-- EVENT 4 — Placeholder -->
   <div class="event-section alt-bg">
     <div class="event-inner">
       <div class="event-header">
@@ -482,9 +554,7 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════════
-       PHOTO MODAL
-  ══════════════════════════════ -->
+  <!-- PHOTO MODAL -->
   <div class="photo-modal-backdrop" id="photoModal" onclick="closePhotoOnBackdrop(event)">
     <div class="photo-modal">
       <button class="photo-modal-close" onclick="closePhoto()">✕</button>
@@ -549,7 +619,7 @@
   </footer>
 
   <script>
-    /* ─── Gallery data per section ─── */
+    /* Gallery data */
     const galleries = {
       'gallery-usc': [
         { src: './images/outreach/3f84c3cd-8012-4bc5-906b-a1b4eba6de92.jpeg', date: 'USC Community Day · 2025', caption: 'Our team setting up and showing off the robot at USC Community Day.' },
@@ -559,7 +629,7 @@
     };
 
     let activeGallery = null;
-    let activeIndex  = 0;
+    let activeIndex   = 0;
 
     function openPhoto(galleryId, index) {
       const g = galleries[galleryId];
@@ -572,9 +642,8 @@
     }
 
     function showPhoto() {
-      const g = galleries[activeGallery];
-      const p = g[activeIndex];
-      document.getElementById('modalImg').src         = p.src;
+      const p = galleries[activeGallery][activeIndex];
+      document.getElementById('modalImg').src             = p.src;
       document.getElementById('modalDate').textContent    = p.date;
       document.getElementById('modalCaption').textContent = p.caption;
     }
@@ -594,13 +663,40 @@
       if (e.target === document.getElementById('photoModal')) closePhoto();
     }
 
+    /* Hamburger menu */
+    function toggleMenu() {
+      const btn  = document.getElementById('hamburger');
+      const menu = document.getElementById('mobileMenu');
+      const open = menu.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
     document.addEventListener('keydown', function(e) {
       const modal = document.getElementById('photoModal');
-      if (!modal.classList.contains('open')) return;
-      if (e.key === 'ArrowRight') shiftPhoto(1);
-      if (e.key === 'ArrowLeft')  shiftPhoto(-1);
-      if (e.key === 'Escape')     closePhoto();
+      if (modal.classList.contains('open')) {
+        if (e.key === 'ArrowRight') shiftPhoto(1);
+        if (e.key === 'ArrowLeft')  shiftPhoto(-1);
+        if (e.key === 'Escape')     closePhoto();
+        return;
+      }
+      if (e.key === 'Escape') closeMenu();
     });
+
+    /* Swipe support for photo modal */
+    let touchStartX = 0;
+    document.querySelector('.photo-modal').addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    document.querySelector('.photo-modal').addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50 && activeGallery) shiftPhoto(dx < 0 ? 1 : -1);
+    }, { passive: true });
   </script>
 
 </body>

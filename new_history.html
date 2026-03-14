@@ -7,10 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-
-    /* ════════════════════════════════
-       VARIABLES & RESET
-    ════════════════════════════════ */
     :root {
       --black:  #100f0a;
       --card:   #18170e;
@@ -33,9 +29,7 @@
       overflow-x: hidden;
     }
 
-    /* ════════════════════════════════
-       FLOATING SPARKS
-    ════════════════════════════════ */
+    /* SPARKS */
     .sparks { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .spark  { position: absolute; border-radius: 50%; opacity: 0; animation: floatSpark linear infinite; }
     .spark:nth-child(1) { left: 8%;  width: 3px; height: 3px; background: var(--yellow); animation-duration: 9s;   animation-delay: 0s;   }
@@ -53,14 +47,10 @@
       100% { transform: translateY(-8vh) rotate(360deg); opacity: 0; }
     }
 
-    /* ════════════════════════════════
-       BANNER
-    ════════════════════════════════ */
+    /* BANNER */
     .banner img { width: 100%; height: auto; display: block; }
 
-    /* ════════════════════════════════
-       NAV
-    ════════════════════════════════ */
+    /* NAV */
     nav {
       position: sticky; top: 0; z-index: 500;
       background: rgb(0,0,0);
@@ -68,7 +58,7 @@
       border-bottom: 2px solid var(--border);
       display: flex; align-items: center;
       justify-content: space-between;
-      padding: 0 36px; height: 60px;
+      padding: 0 20px; height: 60px;
     }
     .nav-logo {
       font-family: 'Fredoka', sans-serif;
@@ -91,9 +81,45 @@
     .nav-links a:hover,
     .nav-links a.active { color: var(--black); background: var(--yellow); }
 
-    /* ════════════════════════════════
-       PAGE HEADER
-    ════════════════════════════════ */
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(255,221,0,.08); border: 1.5px solid rgba(255,221,0,.25);
+      cursor: pointer; gap: 5px; flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--yellow); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; top: 60px; z-index: 490;
+      background: rgba(0,0,0,.97);
+      backdrop-filter: blur(18px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 40px 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 14px 40px; border-radius: 20px; width: 100%; text-align: center;
+      border: 1.5px solid transparent;
+      transition: color .2s, background .2s, border-color .2s;
+    }
+    .mobile-menu a.active,
+    .mobile-menu a:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+    /* PAGE HEADER */
     .page-header {
       position: relative; z-index: 1;
       text-align: center;
@@ -113,7 +139,7 @@
     }
     .page-header h1 {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-size: clamp(2.4rem, 7vw, 5rem);
       font-weight: 700; line-height: 1.05;
       color: var(--white);
     }
@@ -124,17 +150,15 @@
       margin-left: auto; margin-right: auto;
       line-height: 1.8;
     }
-    .textbox{
-      border:2px solid #100f0a00;
-      padding:20px;
-      border-radius:12px;
-      background:#00000051;
-      box-shadow:0 5px 12px rgba(0,0,0,0.25);
+    .textbox {
+      border: 2px solid #100f0a00;
+      padding: 20px;
+      border-radius: 12px;
+      background: #00000051;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
     }
 
-    /* ════════════════════════════════
-       HISTORY SECTION
-    ════════════════════════════════ */
+    /* HISTORY SECTION */
     .history-section {
       position: relative; z-index: 1;
       padding: 70px 40px 80px;
@@ -142,9 +166,7 @@
       margin: 0 auto;
     }
 
-    /* ════════════════════════════════
-       COLLAPSIBLE CARDS
-    ════════════════════════════════ */
+    /* COLLAPSIBLE CARDS */
     .season-card {
       background: var(--card);
       border: 2px solid var(--border);
@@ -176,7 +198,6 @@
       color: var(--yellow); line-height: 1;
       flex-shrink: 0;
     }
-   
     .season-theme {
       font-family: 'Fredoka', sans-serif;
       font-size: 1.25rem; font-weight: 700;
@@ -213,7 +234,7 @@
       margin-top: 22px;
     }
     .season-photos img {
-      flex: 1; min-width: 200px;
+      flex: 1; min-width: 160px;
       border-radius: 12px;
       border: 2px solid var(--border);
       object-fit: cover;
@@ -230,24 +251,22 @@
     }
     .season-note strong { color: var(--yellow); }
 
-    /* ════════════════════════════════
-       FOOTER
-    ════════════════════════════════ */
+    /* FOOTER */
     footer {
       position: relative; z-index: 1;
       background: #0a0904;
       border-top: 2px solid rgba(255,221,0,.14);
-      padding: 52px 40px 28px;
+      padding: 52px 32px 28px;
     }
     .footer-inner {
       max-width: 1060px; margin: 0 auto;
       display: flex; align-items: flex-start;
       justify-content: space-between;
-      gap: 40px; flex-wrap: wrap;
+      gap: 32px; flex-wrap: wrap;
     }
     .footer-brand {
       font-family: 'Fredoka', sans-serif;
-      font-size: 2rem; font-weight: 700;
+      font-size: 1.8rem; font-weight: 700;
       color: var(--yellow); line-height: 1;
     }
     .footer-brand span {
@@ -296,41 +315,64 @@
     /* ════════════════════════════════
        RESPONSIVE
     ════════════════════════════════ */
-    @media (max-width: 700px) {
+    @media (max-width: 800px) {
+      nav { padding: 0 16px; }
       .nav-links { display: none; }
-      .history-section { padding: 50px 20px 60px; }
-      footer { padding: 40px 20px 24px; }
-      .season-year { font-size: 1.5rem; }
+      .hamburger { display: flex; }
+
+      .page-header { padding: 48px 24px 36px; }
+      .history-section { padding: 48px 24px 60px; }
+
+      .season-toggle { padding: 20px 20px; }
+      .season-year { font-size: 1.7rem; }
+      .season-theme { font-size: 1.1rem; }
+      .season-body-inner { padding: 0 20px 24px; }
+
+      footer { padding: 40px 24px 20px; }
+      .footer-links { display: none; }
     }
 
+    @media (max-width: 540px) {
+      .page-header { padding: 40px 18px 30px; }
+      .textbox { padding: 16px; }
+
+      .history-section { padding: 40px 18px 52px; }
+
+      .season-toggle { padding: 16px 16px; gap: 10px; }
+      .season-toggle-left { gap: 12px; }
+      .season-year { font-size: 1.5rem; }
+      .season-theme { font-size: 1rem; }
+      .season-team { font-size: .72rem; }
+      .season-body-inner { padding: 0 16px 20px; }
+      .season-body-inner p { font-size: .9rem; }
+
+      /* Stack photos vertically on small screens */
+      .season-photos { flex-direction: column; }
+      .season-photos img { min-width: unset; width: 100%; max-height: 200px; }
+
+      footer { padding: 36px 18px 18px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+    }
+
+    @media (max-width: 380px) {
+      .nav-logo { font-size: 1.15rem; }
+      .season-year { font-size: 1.3rem; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ════════════════════════════════
-       SPARKS
-  ════════════════════════════════ -->
   <div class="sparks" aria-hidden="false">
-    <div class="spark"></div>
-    <div class="spark"></div>
-    <div class="spark"></div>
-    <div class="spark"></div>
-    <div class="spark"></div>
-    <div class="spark"></div>
-    <div class="spark"></div>
-    <div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
   </div>
 
-  <!-- ════════════════════════════════
-       BANNER
-  ════════════════════════════════ -->
   <div class="banner">
     <img src="./images/grounded/topper.png" alt="Steel Synapse Banner">
   </div>
 
-  <!-- ════════════════════════════════
-       NAV
-  ════════════════════════════════ -->
   <nav>
     <a class="nav-logo" href="./index.html">
       <span class="bolt"><img src="./images/madia/photoitem.svg" alt="Logo" width="70px" height="70px"></span>
@@ -345,21 +387,32 @@
       <li><a href="./new_donate.html">Donate</a></li>
       <li><a href="./new_outreach.html">Outreach</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
-  <!-- ════════════════════════════════
-       PAGE HEADER
-  ════════════════════════════════ -->
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="./index.html"             onclick="closeMenu()">Home</a>
+    <a href="./new_meet_the_team.html" onclick="closeMenu()">Team</a>
+    <a href="./new_mentors.html"       onclick="closeMenu()">Mentors</a>
+    <a href="./new_history.html" class="active" onclick="closeMenu()">History</a>
+    <a href="./new_edu.html"           onclick="closeMenu()">Resources</a>
+    <a href="./new_donate.html"        onclick="closeMenu()">Donate</a>
+    <a href="./new_outreach.html"      onclick="closeMenu()">Outreach</a>
+  </div>
+
+  <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="textbox">
-    <div class="page-header-label">FLL Team #53463</div>
-    <h1 style="color: #0a0904;">Our <span>History</span></h1>
-    <p style="color: #0a0904;">From our first robot to our latest season — click each year to explore our journey.</p>
+      <div class="page-header-label">FLL Team #53463</div>
+      <h1 style="color: #0a0904;">Our <span>History</span></h1>
+      <p style="color: #0a0904;">From our first robot to our latest season — click each year to explore our journey.</p>
     </div>
   </div>
-  <!-- ════════════════════════════════
-       HISTORY CARDS
-  ════════════════════════════════ -->
+
+  <!-- HISTORY CARDS -->
   <div class="history-section">
 
     <!-- 2023 -->
@@ -435,17 +488,13 @@
 
   </div>
 
-  <!-- ════════════════════════════════
-       FOOTER
-  ════════════════════════════════ -->
+  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
-
       <div class="footer-brand">
         Steel Synapse
         <span>Forged in Steel. Connected by Code.</span>
       </div>
-
       <ul class="footer-links">
         <li><a href="./index.html">Home</a></li>
         <li><a href="./new_meet_the_team.html">Team</a></li>
@@ -455,61 +504,38 @@
         <li><a href="./new_donate.html">Donate</a></li>
         <li><a href="./new_outreach.html">Outreach</a></li>
       </ul>
-
       <div class="footer-social">
-
-        <!-- Email -->
         <a href="mailto:steelsynapse01@gmail.com" class="social-btn btn-email" title="Email">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect class="es" x="2" y="4" width="20" height="16" rx="3"
-                  stroke="#ffdd00" stroke-width="1.8" fill="none"/>
-            <path class="es" d="M2 8l10 6.5L22 8"
-                  stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round" fill="none"/>
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect class="es" x="2" y="4" width="20" height="16" rx="3" stroke="#ffdd00" stroke-width="1.8" fill="none"/>
+            <path class="es" d="M2 8l10 6.5L22 8" stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           </svg>
         </a>
-
-        <!-- YouTube -->
-        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt"
-           title="YouTube" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4
-                     s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12
-                     a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96
-                     C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0
-                     1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
-                  fill="#ff2222"/>
+        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt" title="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="#ff2222"/>
             <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="white"/>
           </svg>
         </a>
-
-        <!-- Instagram -->
-        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig"
-           title="Instagram" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig" title="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none">
             <defs>
               <linearGradient id="igG" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
-                <stop offset="0%"   stop-color="#f09433"/>
-                <stop offset="50%"  stop-color="#dc2743"/>
+                <stop offset="0%" stop-color="#f09433"/>
+                <stop offset="50%" stop-color="#dc2743"/>
                 <stop offset="100%" stop-color="#bc1888"/>
               </linearGradient>
             </defs>
-            <rect x="2" y="2" width="20" height="20" rx="5.5"
-                  stroke="url(#igG)" stroke-width="1.8" fill="none"/>
-            <circle cx="12" cy="12" r="4.5"
-                    stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="4.5" stroke="url(#igG)" stroke-width="1.8" fill="none"/>
             <circle cx="17.5" cy="6.5" r="1.4" fill="url(#igG)"/>
           </svg>
         </a>
-
       </div>
     </div>
     <div class="footer-copy">© 2025 Steel Synapse · All rights reserved</div>
   </footer>
 
-  <!-- ════════════════════════════════
-       SCRIPTS
-  ════════════════════════════════ -->
   <script>
     function toggleSeason(cardId) {
       const card = document.getElementById(cardId);
@@ -518,6 +544,22 @@
       card.classList.toggle('open', !isOpen);
       body.style.maxHeight = isOpen ? '0' : body.scrollHeight + 'px';
     }
+
+    function toggleMenu() {
+      const btn  = document.getElementById('hamburger');
+      const menu = document.getElementById('mobileMenu');
+      const open = menu.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenu();
+    });
   </script>
 
 </body>

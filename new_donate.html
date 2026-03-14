@@ -58,7 +58,7 @@
       border-bottom: 2px solid var(--border);
       display: flex; align-items: center;
       justify-content: space-between;
-      padding: 0 36px; height: 60px;
+      padding: 0 20px; height: 60px;
     }
     .nav-logo {
       font-family: 'Fredoka', sans-serif;
@@ -81,9 +81,45 @@
     .nav-links a:hover,
     .nav-links a.active { color: var(--black); background: var(--yellow); }
 
-    /* ════════════════════════════════
-       HERO DONATE SECTION
-    ════════════════════════════════ */
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(255,221,0,.08); border: 1.5px solid rgba(255,221,0,.25);
+      cursor: pointer; gap: 5px; flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--yellow); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0; top: 60px; z-index: 490;
+      background: rgba(0,0,0,.97);
+      backdrop-filter: blur(18px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 40px 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 14px 40px; border-radius: 20px; width: 100%; text-align: center;
+      border: 1.5px solid transparent;
+      transition: color .2s, background .2s, border-color .2s;
+    }
+    .mobile-menu a.active,
+    .mobile-menu a:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+    /* ════ HERO ════ */
     .donate-hero {
       position: relative; z-index: 1;
       text-align: center;
@@ -103,13 +139,13 @@
     }
     .donate-hero h1 {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-size: clamp(2.4rem, 7vw, 5rem);
       font-weight: 700; line-height: 1.05;
       color: var(--white); margin-bottom: 20px;
     }
     .donate-hero h1 span { color: var(--yellow); }
     .donate-hero p {
-      font-size: 1.1rem; color: var(--white);
+      font-size: 1.05rem; color: var(--white);
       max-width: 640px; margin: 0 auto 16px;
       line-height: 1.8;
     }
@@ -118,16 +154,15 @@
       font-size: 1rem; color: var(--yellow);
       margin-top: 8px;
     }
-      .textbox{
-      border:2px solid #100f0a00;
-      padding:20px;
-      border-radius:12px;
-      background:#00000051;
-      box-shadow:0 5px 12px rgba(0,0,0,0.25);
+    .textbox {
+      border: 2px solid #100f0a00;
+      padding: 20px;
+      border-radius: 12px;
+      background: #00000051;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
     }
-    /* ════════════════════════════════
-       IMPACT STATS
-    ════════════════════════════════ */
+
+    /* ════ IMPACT STATS ════ */
     .impact-section {
       position: relative; z-index: 1;
       background: var(--card);
@@ -157,9 +192,7 @@
       font-size: .88rem; color: var(--white); line-height: 1.65;
     }
 
-    /* ════════════════════════════════
-       WHAT YOUR MONEY DOES
-    ════════════════════════════════ */
+    /* ════ WHAT YOUR MONEY DOES ════ */
     .uses-section {
       position: relative; z-index: 1;
       padding: 70px 40px;
@@ -212,9 +245,7 @@
     }
     .use-text p { font-size: .85rem; color: var(--white); line-height: 1.6; }
 
-    /* ════════════════════════════════
-       DONATE FORM
-    ════════════════════════════════ */
+    /* ════ DONATE FORM ════ */
     .form-section {
       position: relative; z-index: 1;
       background: var(--card);
@@ -226,12 +257,12 @@
     }
     .form-inner h2 {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: clamp(1.8rem, 4vw, 3rem);
       font-weight: 700; color: var(--white);
       margin-bottom: 10px;
     }
     .form-inner h2 span { color: var(--yellow); }
-    .form-inner p {
+    .form-inner > p {
       font-size: .95rem; color: var(--white);
       margin-bottom: 36px; line-height: 1.7;
     }
@@ -257,17 +288,17 @@
       position: relative; z-index: 1;
       background: #0a0904;
       border-top: 2px solid rgba(255,221,0,.14);
-      padding: 52px 40px 28px;
+      padding: 52px 32px 28px;
     }
     .footer-inner {
       max-width: 1060px; margin: 0 auto;
       display: flex; align-items: flex-start;
       justify-content: space-between;
-      gap: 40px; flex-wrap: wrap;
+      gap: 32px; flex-wrap: wrap;
     }
     .footer-brand {
       font-family: 'Fredoka', sans-serif;
-      font-size: 2rem; font-weight: 700;
+      font-size: 1.8rem; font-weight: 700;
       color: var(--yellow); line-height: 1;
     }
     .footer-brand span {
@@ -313,13 +344,51 @@
       padding-top: 20px; border-top: 1px solid rgba(255,255,255,.05);
     }
 
-    @media (max-width: 700px) {
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+    @media (max-width: 800px) {
+      nav { padding: 0 16px; }
       .nav-links { display: none; }
-      .impact-inner { grid-template-columns: 1fr; }
-      .uses-grid { grid-template-columns: 1fr; }
-      .donate-hero, .uses-section, .form-section { padding: 50px 20px; }
-      .impact-section { padding: 50px 20px; }
-      footer { padding: 40px 20px 24px; }
+      .hamburger { display: flex; }
+
+      .donate-hero { padding: 52px 24px 44px; }
+      .donate-hero p { font-size: 1rem; }
+
+      .impact-section { padding: 48px 24px; }
+      .impact-inner { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+      .uses-section { padding: 52px 24px; }
+      .uses-grid { grid-template-columns: 1fr 1fr; }
+
+      .form-section { padding: 52px 24px 64px; }
+
+      footer { padding: 40px 24px 20px; }
+      .footer-links { display: none; }
+    }
+
+    @media (max-width: 540px) {
+      .donate-hero { padding: 44px 18px 36px; }
+      .textbox { padding: 16px; }
+      .donate-hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
+      .donate-hero p { font-size: .95rem; }
+
+      .impact-inner { grid-template-columns: 1fr; gap: 14px; }
+      .impact-section { padding: 40px 18px; }
+
+      .uses-grid { grid-template-columns: 1fr; gap: 14px; }
+      .uses-section { padding: 44px 18px; }
+
+      .form-section { padding: 44px 18px 56px; }
+      .form-wrap { padding: 6px; }
+      .form-wrap iframe { height: 560px; }
+
+      footer { padding: 36px 18px 18px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+    }
+
+    @media (max-width: 380px) {
+      .nav-logo { font-size: 1.15rem; }
     }
   </style>
 </head>
@@ -349,7 +418,21 @@
       <li><a href="./new_donate.html" class="active">Donate</a></li>
       <li><a href="./new_outreach.html">Outreach</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="./index.html"             onclick="closeMenu()">Home</a>
+    <a href="./new_meet_the_team.html" onclick="closeMenu()">Team</a>
+    <a href="./new_mentors.html"       onclick="closeMenu()">Mentors</a>
+    <a href="./new_history.html"       onclick="closeMenu()">History</a>
+    <a href="./new_edu.html"           onclick="closeMenu()">Resources</a>
+    <a href="./new_donate.html" class="active" onclick="closeMenu()">Donate</a>
+    <a href="./new_outreach.html"      onclick="closeMenu()">Outreach</a>
+  </div>
 
   <!-- ════ HERO ════ -->
   <div class="donate-hero">
@@ -361,76 +444,68 @@
       <div class="sig">— Team Steel Synapse</div>
     </div>
   </div>
+
   <!-- ════ IMPACT STATS ════ -->
   <div class="impact-section">
     <div class="impact-inner">
-
       <div class="impact-card">
         <div class="impact-emoji"></div>
         <div class="impact-title">3 Seasons Strong</div>
         <p class="impact-desc">From our first robot in 2023 to competing at the state level — we keep growing every year.</p>
       </div>
-
       <div class="impact-card">
         <div class="impact-emoji"></div>
         <div class="impact-title">Real Competitions</div>
         <p class="impact-desc">We travel to regional and state competitions, putting our robots and innovation projects to the test.</p>
       </div>
-
       <div class="impact-card">
         <div class="impact-emoji"></div>
         <div class="impact-title">Community Impact</div>
         <p class="impact-desc">We give back through outreach and educational resources, teaching younger kids about STEM.</p>
       </div>
-
     </div>
   </div>
 
   <!-- ════ WHAT YOUR MONEY DOES ════ -->
-   
   <div class="uses-section">
     <div class="textbox">
-    <div class="uses-inner">
-      <div class="section-label">Transparency</div>
-      <h2 class="section-title">Where Your <span>Money Goes</span></h2>
-      <div class="uses-grid">
-
-        <div class="use-item">
-          <div class="use-icon">🧱</div>
-          <div class="use-text">
-            <h4>Robot Parts</h4>
-            <p>Sensors, motors, and LEGO pieces that bring our robot designs to life each season.</p>
+      <div class="uses-inner">
+        <div class="section-label">Transparency</div>
+        <h2 class="section-title">Where Your <span>Money Goes</span></h2>
+        <div class="uses-grid">
+          <div class="use-item">
+            <div class="use-icon">🧱</div>
+            <div class="use-text">
+              <h4>Robot Parts</h4>
+              <p>Sensors, motors, and LEGO pieces that bring our robot designs to life each season.</p>
+            </div>
+          </div>
+          <div class="use-item">
+            <div class="use-icon">🚌</div>
+            <div class="use-text">
+              <h4>Travel & Competition Fees</h4>
+              <p>Getting our team to regional and state competitions takes real resources.</p>
+            </div>
+          </div>
+          <div class="use-item">
+            <div class="use-icon">📐</div>
+            <div class="use-text">
+              <h4>Prototyping Materials</h4>
+              <p>For our innovation projects, we build real prototypes that need supplies and tools.</p>
+            </div>
+          </div>
+          <div class="use-item">
+            <div class="use-icon">🎓</div>
+            <div class="use-text">
+              <h4>Learning & Outreach</h4>
+              <p>Resources to keep learning and to give back by teaching other kids about robotics.</p>
+            </div>
           </div>
         </div>
-
-        <div class="use-item">
-          <div class="use-icon">🚌</div>
-          <div class="use-text">
-            <h4>Travel & Competition Fees</h4>
-            <p>Getting our team to regional and state competitions takes real resources.</p>
-          </div>
-        </div>
-
-        <div class="use-item">
-          <div class="use-icon">📐</div>
-          <div class="use-text">
-            <h4>Prototyping Materials</h4>
-            <p>For our innovation projects, we build real prototypes that need supplies and tools.</p>
-          </div>
-        </div>
-
-        <div class="use-item">
-          <div class="use-icon">🎓</div>
-          <div class="use-text">
-            <h4>Learning & Outreach</h4>
-            <p>Resources to keep learning and to give back by teaching other kids about robotics.</p>
-          </div>
-        </div>
-
       </div>
     </div>
-   </div>
-  </div> 
+  </div>
+
   <!-- ════ DONATION FORM ════ -->
   <div class="form-section">
     <div class="form-inner">
@@ -493,6 +568,24 @@
     </div>
     <div class="footer-copy">© 2025 Steel Synapse · All rights reserved</div>
   </footer>
+
+  <script>
+    function toggleMenu() {
+      const btn  = document.getElementById('hamburger');
+      const menu = document.getElementById('mobileMenu');
+      const open = menu.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  </script>
 
 </body>
 </html>
