@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <title>Tower – Steel Synapse Robot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:  #100f0a;
+      --card:   #18170e;
+      --mid:    #242318;
+      --yellow: #ffdd00;
+      --yhot:   #ffe933;
+      --red:    #fe0000;
+      --white:  #f5f4ef;
+      --muted:  rgba(245,244,239,0.55);
+      --border: rgba(255,221,0,0.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--black);
+      background-image: url('./images/grounded/curcuts.svg');
+      background-size: 500px;
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* SPARKS */
+    .sparks { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .spark  { position: absolute; border-radius: 50%; opacity: 0; animation: floatSpark linear infinite; }
+    .spark:nth-child(1){ left:8%;  width:3px;height:3px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;   }
+    .spark:nth-child(2){ left:22%; width:4px;height:4px; background:var(--red);    animation-duration:13s; animation-delay:2s;   }
+    .spark:nth-child(3){ left:40%; width:5px;height:5px; background:var(--yellow); animation-duration:8s;  animation-delay:4s;   }
+    .spark:nth-child(4){ left:60%; width:3px;height:3px; background:var(--yhot);   animation-duration:15s; animation-delay:1s;   }
+    .spark:nth-child(5){ left:75%; width:4px;height:4px; background:var(--yellow); animation-duration:7s;  animation-delay:6s;   }
+    .spark:nth-child(6){ left:90%; width:2px;height:2px; background:var(--red);    animation-duration:11s; animation-delay:3s;   }
+    .spark:nth-child(7){ left:32%; width:3px;height:3px; background:var(--yellow); animation-duration:10s; animation-delay:5s;   }
+    .spark:nth-child(8){ left:53%; width:2px;height:2px; background:var(--red);    animation-duration:9s;  animation-delay:7.5s; }
+    @keyframes floatSpark {
+      0%  { transform:translateY(105vh); opacity:0; }
+      8%  { opacity:1; }
+      92% { opacity:0.7; }
+      100%{ transform:translateY(-8vh) rotate(360deg); opacity:0; }
+    }
+
+    /* GEAR LIBRARY */
+    .gear {
+      position: absolute; pointer-events: none; z-index: 0; overflow: visible;
+      --r:120; --teeth:16; --spd:80s; --dir:cw;
+      --fill:#0a0903; --stroke:#1f1e13; --sw:2; --op:0.95;
+    }
+    .gear svg { display: block; overflow: visible; }
+    @keyframes gear-cw  { to { transform: rotate(360deg);  } }
+    @keyframes gear-ccw { to { transform: rotate(-360deg); } }
+    .gear[style*="--dir: cw"]  .gear-rotor,
+    .gear[style*="--dir:cw"]   .gear-rotor { animation: gear-cw  var(--spd) linear infinite; }
+    .gear[style*="--dir: ccw"] .gear-rotor,
+    .gear[style*="--dir:ccw"]  .gear-rotor { animation: gear-ccw var(--spd) linear infinite; }
+    .gear .gear-rotor { animation: gear-cw var(--spd) linear infinite; }
+
+    /* BANNER */
+    .banner img { width: 100%; height: auto; display: block; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 500;
+      background: rgb(0,0,0); backdrop-filter: blur(14px);
+      border-bottom: 2px solid var(--border);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 20px; height: 60px;
+    }
+    .nav-logo {
+      font-family: 'Fredoka', sans-serif; font-size: 1.45rem; font-weight: 700;
+      color: var(--yellow); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .bolt { display: inline-block; animation: boltPulse 2.2s ease-in-out infinite; }
+    @keyframes boltPulse {
+      0%,100%{ transform:scale(1);   filter:drop-shadow(0 0 4px  var(--yellow)); }
+      50%    { transform:scale(1.3); filter:drop-shadow(0 0 14px var(--yellow)); }
+    }
+    .nav-links { display: flex; gap: 3px; list-style: none; }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em;
+      color: var(--muted); text-decoration: none;
+      padding: 7px 12px; border-radius: 20px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--black); background: var(--yellow); }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center; align-items: center;
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(255,221,0,.08); border: 1.5px solid rgba(255,221,0,.25);
+      cursor: pointer; gap: 5px; flex-shrink: 0;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--yellow); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; top: 60px; z-index: 490;
+      background: rgba(0,0,0,.97); backdrop-filter: blur(18px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; padding: 40px 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Fredoka', sans-serif; font-size: 2rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 14px 40px; border-radius: 20px; width: 100%; text-align: center;
+      border: 1.5px solid transparent;
+      transition: color .2s, background .2s, border-color .2s;
+    }
+    .mobile-menu a.active,
+    .mobile-menu a:hover { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+
+    /* PAGE HEADER — same as history */
+    .page-header {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 64px 40px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header-label {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-size: .78rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(255,221,0,.1);
+      border: 1px solid rgba(255,221,0,.25);
+      border-radius: 20px; padding: 4px 14px;
+      margin-bottom: 14px;
+    }
+    .page-header h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+    }
+    .page-header h1 span { color: var(--yellow); }
+    .page-header p {
+      font-size: .95rem; color: var(--white);
+      margin-top: 14px; max-width: 540px;
+      margin-left: auto; margin-right: auto;
+      line-height: 1.75;
+    }
+    .textbox {
+      border: 2px solid #100f0a00; padding: 20px;
+      border-radius: 12px; background: #00000051;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+    }
+
+    /* MAIN CONTENT WRAPPER */
+    .robot-section {
+      position: relative; z-index: 1;
+      padding: 60px 40px 80px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* SECTION BLOCK — each content chunk */
+    .block {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .block:hover {
+      border-color: rgba(255,221,0,.35);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    }
+
+    /* Block header row */
+    .block-header { margin-bottom: 20px; }
+    .block-label {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--yellow);
+      background: rgba(255,221,0,.1);
+      border: 1px solid rgba(255,221,0,.22);
+      border-radius: 20px; padding: 3px 12px;
+      margin-bottom: 8px;
+    }
+    .block-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--white); line-height: 1.15;
+    }
+    .block-title span { color: var(--yellow); }
+    .block-body {
+      font-size: .88rem; color: var(--muted);
+      line-height: 1.75;
+    }
+    .block-body strong { color: var(--white); }
+
+    /* Sticky note style callout */
+    .block-note {
+      margin-top: 14px;
+      font-size: .82rem; color: var(--muted);
+      background: rgba(255,221,0,.06);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 8px 8px 0;
+      padding: 9px 14px;
+      line-height: 1.6;
+    }
+    .block-note strong { color: var(--yellow); }
+
+    /* ── PAST DESIGNS: 4-tile grid ── */
+    .past-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .past-tile {
+      background: var(--mid);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .past-tile:hover { border-color: rgba(255,221,0,.4); transform: translateY(-3px); }
+    .past-tile-img {
+      width: 100%; aspect-ratio: 1;
+      background: var(--black); overflow: hidden;
+    }
+    .past-tile-img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform .3s;
+    }
+    .past-tile:hover .past-tile-img img { transform: scale(1.06); }
+    .ph {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 5px; color: var(--muted); font-size: .72rem;
+    }
+    .ph span { font-size: 1.3rem; opacity: .35; }
+    .past-tile-foot { padding: 8px 10px; }
+    .past-tile-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: .88rem; font-weight: 700; color: var(--white);
+    }
+    .past-tile-year {
+      font-size: .62rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--yellow);
+    }
+
+    /* ── FLIPPED SCRIPT: side-by-side ── */
+    .flipped-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 18px;
+      align-items: start;
+    }
+    .flipped-img {
+      border-radius: 12px; overflow: hidden;
+      border: 2px solid var(--border);
+      background: var(--mid);
+      aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .flipped-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .flipped-quote {
+      font-family: 'Fredoka', sans-serif;
+      font-size: .95rem; font-weight: 700;
+      color: var(--yellow); line-height: 1.55;
+      border-left: 3px solid var(--yellow);
+      padding-left: 13px;
+      margin-bottom: 12px;
+    }
+    .flipped-bullets { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+    .flipped-bullet {
+      display: flex; align-items: center; gap: 9px;
+      font-size: .85rem; color: var(--white); font-weight: 700;
+    }
+    .bdot { width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; }
+
+    /* ── TOWER: 2-photo row ── */
+    .tower-photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .tower-photo {
+      border-radius: 12px; overflow: hidden;
+      border: 2px solid var(--border);
+      background: var(--mid);
+      aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .25s, transform .25s;
+    }
+    .tower-photo:hover { border-color: rgba(255,221,0,.4); transform: translateY(-3px); }
+    .tower-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── COMPETITION ROWS ── */
+    .comp-rows { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .comp-row {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--mid); border: 2px solid var(--border);
+      border-radius: 14px; padding: 14px 18px;
+      transition: border-color .2s;
+    }
+    .comp-row:hover { border-color: rgba(255,221,0,.32); }
+    .comp-num {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--yellow); flex-shrink: 0; min-width: 48px; text-align: center;
+    }
+    .comp-num.dim { color: var(--muted); font-size: 1rem; }
+    .comp-vline { width: 1px; height: 38px; background: var(--border); flex-shrink: 0; }
+    .comp-info { flex: 1; }
+    .comp-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: .95rem; font-weight: 700; color: var(--white);
+    }
+    .comp-date {
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--yellow); margin-top: 1px;
+    }
+    .comp-date.dim { color: var(--muted); }
+    .comp-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+    .comp-tag {
+      font-family: 'Fredoka', sans-serif;
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: 4px 11px; border-radius: 20px; flex-shrink: 0;
+    }
+    .comp-tag.gold { background: rgba(255,221,0,.13); color: var(--yellow); border: 1px solid rgba(255,221,0,.26); }
+    .comp-tag.tbd  { background: rgba(245,244,239,.05); color: var(--muted); border: 1px solid rgba(245,244,239,.1); }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      background: #0a0904;
+      border-top: 2px solid rgba(255,221,0,.14);
+      padding: 48px 32px 24px;
+    }
+    .footer-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 32px; flex-wrap: wrap;
+    }
+    .footer-brand { font-family:'Fredoka',sans-serif; font-size:1.8rem; font-weight:700; color:var(--yellow); line-height:1; }
+    .footer-brand span { display:block; font-family:'Nunito',sans-serif; font-size:.75rem; font-weight:400; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-top:5px; }
+    .footer-links { display:flex; gap:4px; list-style:none; flex-wrap:wrap; }
+    .footer-links a { font-size:.78rem; font-weight:700; color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:4px; transition:color .2s; }
+    .footer-links a:hover { color:var(--yellow); }
+    .footer-social { display:flex; gap:10px; align-items:center; }
+    .social-btn { display:flex; align-items:center; justify-content:center; width:52px; height:52px; border-radius:16px; text-decoration:none; transition:all .28s cubic-bezier(.34,1.56,.64,1); border:2px solid transparent; }
+    .social-btn:hover { transform:translateY(-7px) scale(1.12); }
+    .social-btn svg { width:24px; height:24px; }
+    .social-btn.btn-email { background:linear-gradient(135deg,#1a1a12,#2a2a18); border-color:rgba(255,221,0,.32); }
+    .social-btn.btn-email svg { filter:drop-shadow(0 0 5px rgba(255,221,0,.55)); }
+    .social-btn.btn-email:hover { background:linear-gradient(135deg,#ffdd00,#ffc800); border-color:#ffdd00; box-shadow:0 10px 32px rgba(255,221,0,.5); }
+    .social-btn.btn-email:hover svg { filter:none; }
+    .social-btn.btn-email:hover .es { stroke:#100f0a !important; }
+    .social-btn.btn-yt { background:linear-gradient(135deg,#1a0808,#2e1010); border-color:rgba(255,40,40,.32); }
+    .social-btn.btn-yt svg { filter:drop-shadow(0 0 5px rgba(255,60,60,.45)); }
+    .social-btn.btn-yt:hover { background:linear-gradient(135deg,#ff2020,#c50000); border-color:#ff2222; box-shadow:0 10px 32px rgba(255,0,0,.55); }
+    .social-btn.btn-ig { background:linear-gradient(135deg,#130812,#1c0822); border-color:rgba(220,60,160,.32); }
+    .social-btn.btn-ig svg { filter:drop-shadow(0 0 5px rgba(200,70,180,.45)); }
+    .social-btn.btn-ig:hover { background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); border-color:#e6683c; box-shadow:0 10px 32px rgba(220,39,67,.55); }
+    .footer-copy { width:100%; text-align:center; font-size:.7rem; color:rgba(255,255,255,.18); letter-spacing:.06em; margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,.05); }
+
+    /* RESPONSIVE */
+    @media (max-width: 800px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-header { padding: 48px 24px 36px; }
+      .robot-section { padding: 44px 24px 60px; }
+      .past-grid { grid-template-columns: repeat(2, 1fr); }
+      .flipped-layout { grid-template-columns: 1fr; }
+      footer { padding: 40px 24px 20px; }
+      .footer-links { display: none; }
+    }
+    @media (max-width: 540px) {
+      .page-header { padding: 40px 18px 30px; }
+      .textbox { padding: 16px; }
+      .robot-section { padding: 36px 18px 52px; }
+      .block { padding: 20px; }
+      .block-title { font-size: 1.2rem; }
+      .tower-photos { grid-template-columns: 1fr; }
+      .comp-row { flex-wrap: wrap; }
+      .comp-vline { display: none; }
+      footer { padding: 36px 18px 18px; }
+      .footer-inner { flex-direction: column; gap: 20px; }
+    }
+    @media (max-width: 380px) {
+      .nav-logo { font-size: 1.15rem; }
+      .past-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sparks" aria-hidden="true">
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+  </div>
+
+  <div class="banner">
+    <img src="./images/grounded/topper.png" alt="Steel Synapse Banner">
+  </div>
+
+  <nav>
+    <a class="nav-logo" href="./index.html">
+      <span class="bolt"><img src="./images/madia/photoitem.svg" alt="Logo" width="50px" height="50px"></span>
+      Steel Synapse
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./FirstRobot.html" class="active">Robot</a></li>
+      <li><a href="./new_meet_the_team.html">Team</a></li>
+      <li><a href="./new_mentors.html">Mentors</a></li>
+      <li><a href="./new_history.html">History</a></li>
+      <li><a href="./new_edu.html">Resources</a></li>
+      <li><a href="./new_donate.html">Donate</a></li>
+      <li><a href="./new_outreach.html">Outreach</a></li>
+      
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="./index.html"             onclick="closeMenu()">Home</a>
+    <a href="./new_meet_the_team.html" onclick="closeMenu()">Team</a>
+    <a href="./new_mentors.html"       onclick="closeMenu()">Mentors</a>
+    <a href="./new_history.html"       onclick="closeMenu()">History</a>
+    <a href="./new_edu.html"           onclick="closeMenu()">Resources</a>
+    <a href="./new_donate.html"        onclick="closeMenu()">Donate</a>
+    <a href="./new_outreach.html"      onclick="closeMenu()">Outreach</a>
+    <a href="./FirstRobot.html" class="active" onclick="closeMenu()">Robot</a>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="textbox">
+      <div class="page-header-label">FLL Team #53463</div>
+      <h1 style="color:#0a0904;">Meet <span>Column Bot </span>and <span>Fortress</span></h1>
+      <p style="color:#0a0904;">Our robots. Built from scratch, iterated every week, and never seen before.</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="robot-section">
+
+    <!-- ── PAST DESIGNS ── -->
+    <div class="block">
+      <div class="block-header">
+        <div class="block-label">2023 – 2025</div>
+        <div class="block-title">Past <span>Designs</span></div>
+      </div>
+      <div class="block-body">
+        Before The Column Bot and Fortress, we built, tested, and scrapped a lot of robots. Each one taught us something new about what works — and what doesn't.
+      </div>
+
+      <div class="past-grid">
+        <!-- Slot 1 -->
+        <div class="past-tile">
+          <div class="past-tile-img">
+            <!-- Replace with: <img src="./images/robot/dump_truck.jpeg" alt="The Dump Truck"> -->
+            <div class="ph"><img src="./images/robot/past/Dump Truck.png" alt="The Dump Truck"></div>
+          </div>
+          <div class="past-tile-foot">
+            <div class="past-tile-name">The Dump Truck</div>
+            <div class="past-tile-year">2023</div>
+          </div>
+        </div>
+        <!-- Slot 2 -->
+        <div class="past-tile">
+          <div class="past-tile-img">
+            <!-- Replace with: <img src="./images/robot/yinzer.jpeg" alt="Yinzer"> -->
+            <div class="ph"><img src="./images/robot/past/Yinzer.png" alt="Yinzer"></div>
+          </div>
+          <div class="past-tile-foot">
+            <div class="past-tile-name">Yinzer</div>
+            <div class="past-tile-year">2024</div>
+          </div>
+        </div>
+        <!-- Slot 3 -->
+        <div class="past-tile">
+          <div class="past-tile-img">
+            <!-- Replace with: <img src="./images/robot/birdbox.jpeg" alt="The BirdBox"> -->
+            <div class="ph"><img src="./images/robot/past/BirdBox.png" alt="The BirdBox"></div>
+          </div>
+          <div class="past-tile-foot">
+            <div class="past-tile-name">The BirdBox</div>
+            <div class="past-tile-year">2024</div>
+          </div>
+        </div>
+        <!-- Slot 4 -->
+        <div class="past-tile">
+          <div class="past-tile-img">
+            <!-- Replace with: <img src="./images/robot/the_thing.jpeg" alt="The Thing"> -->
+            <div class="ph"><img src="./images/robot/past/ThingROBOT.png" alt="The Thing"></div>
+          </div>
+          <div class="past-tile-foot">
+            <div class="past-tile-name">The Thing</div>
+            <div class="past-tile-year">2024</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block-note">
+        <strong>Pro's:</strong> Easy to code · Easy to use · Easy to replicate &nbsp;&nbsp;
+        <strong>Con's:</strong> Slow arm changes · Not unique · Accuracy reduced
+      </div>
+    </div>
+
+    <!-- ── FLIPPED THE SCRIPT ── -->
+    <div class="block">
+      <div class="block-header">
+        <div class="block-label">Our Big Idea</div>
+        <div class="block-title">Flipped the <span>Script</span></div>
+      </div>
+
+      <div class="flipped-layout">
+        <!-- Image -->
+        <div class="flipped-img">
+          <!-- Replace with: <img src="./images/robot/flipped_script.jpeg" alt="Flipped the script"> -->
+          <div class="ph" style="width:100%;height:100%;"><img src="./images/robot/Fliped.png" alt="Flipped the script" style="width: 75%; height: auto;"></div>
+        </div>
+        <!-- Text -->
+        <div>
+          <div class="flipped-quote">"Instead of adding attachments to the robot, the robot gets added to the attachments."</div>
+          <div class="block-body">
+            We completely rethought how Tower interacts with its arms. By docking the robot into pre-positioned attachments instead of swapping arms onto the robot, we unlocked speed, precision, and creativity.
+          </div>
+          <div class="flipped-bullets">
+            <div class="flipped-bullet"><div class="bdot"></div>Quicker turnaround between missions</div>
+            <div class="flipped-bullet"><div class="bdot"></div>More personalised arms per task</div>
+            <div class="flipped-bullet"><div class="bdot"></div>Less room for error</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TOWER — CURRENT ROBOT ── -->
+    <div class="block">
+      <div class="block-header">
+        <div class="block-label">2025 Season</div>
+        <div class="block-title">Column Bot and Fortress — Our <span>Current Robot</span></div>
+      </div>
+      <div class="block-body">
+        Tower is our Column Bot — built to be fast, easy to code, and easy to troubleshoot, with unique personalised arms for every mission.
+      </div>
+
+      <div class="tower-photos">
+        <!-- Slot 1 -->
+        <div class="tower-photo">
+          <!-- Replace with: <img src="./images/robot/tower_front.jpeg" alt="Tower"> -->
+          <div class="ph" style="width:100%;height:100%;"><img src="./images/robot/Column.png" alt="Column Bot" style="width: 75%; height: auto;"></div>
+        </div>
+        <!-- Slot 2 -->
+        <div class="tower-photo">
+          <!-- Replace with: <img src="./images/robot/tower_comp.jpeg" alt="Tower at competition"> -->
+          <div class="ph" style="width:100%;height:100%;"><img src="./images/robot/Fortress.png" alt="Fortress" style="width: 75%; height: auto;"></div>
+        </div>
+      </div>
+
+      <div class="block-note" style="margin-top:16px;">
+        <strong>Pro's:</strong> Easy to code · Fast arm changes · Different kinds of arms · Easy to use · Very fast · Unique · Easy to troubleshoot · Easy to replicate
+      </div>
+    </div>
+
+    <!-- ── COMPETITION RESULTS ── -->
+    <div class="block">
+      <div class="block-header">
+        <div class="block-label">Track Record</div>
+        <div class="block-title">Competition <span>Results</span></div>
+      </div>
+
+      <div class="comp-rows">
+
+        <div class="comp-row">
+          <div class="comp-num dim">–</div>
+          <div class="comp-vline"></div>
+          <div class="comp-info">
+            <div class="comp-name">Regional Tournament</div>
+            <div class="comp-date dim">Date · Location · TBD</div>
+            <div class="comp-desc">Add your regional result, score, and any awards here.</div>
+          </div>
+          <div class="comp-tag tbd">TBD</div>
+        </div>
+
+        <div class="comp-row">
+          <div class="comp-num">6<sup style="font-size:.5em;vertical-align:super;">th</sup></div>
+          <div class="comp-vline"></div>
+          <div class="comp-info">
+            <div class="comp-name">State Championship — Hershey</div>
+            <div class="comp-date">2025 · Hershey, PA</div>
+            <div class="comp-desc">Placed 6th and qualified for the International Championship. Hard work, late nights, and a whole lot of chocolate.</div>
+          </div>
+          <div class="comp-tag gold">Internationals ✓</div>
+        </div>
+
+        <div class="comp-row">
+          <div class="comp-num dim">–</div>
+          <div class="comp-vline"></div>
+          <div class="comp-info">
+            <div class="comp-name">WPI Invitational</div>
+            <div class="comp-date dim">Worcester Polytechnic Institute · Upcoming</div>
+            <div class="comp-desc">Prep is in full swing — new robot, updated innovation project, ready to compete.</div>
+          </div>
+          <div class="comp-tag tbd">Upcoming</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">Steel Synapse<span>Forged in Steel. Connected by Code.</span></div>
+      <ul class="footer-links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./new_meet_the_team.html">Team</a></li>
+        <li><a href="./new_mentors.html">Mentors</a></li>
+        <li><a href="./new_history.html">History</a></li>
+        <li><a href="./new_edu.html">Resources</a></li>
+        <li><a href="./new_donate.html">Donate</a></li>
+        <li><a href="./new_outreach.html">Outreach</a></li>
+        <li><a href="./FirstRobot.html">Robot</a></li>
+      </ul>
+      <div class="footer-social">
+        <a href="mailto:steelsynapse01@gmail.com" class="social-btn btn-email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect class="es" x="2" y="4" width="20" height="16" rx="3" stroke="#ffdd00" stroke-width="1.8" fill="none"/>
+            <path class="es" d="M2 8l10 6.5L22 8" stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt" title="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="#ff2222"/>
+            <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="white"/>
+          </svg>
+        </a>
+        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig" title="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="igG" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f09433"/>
+                <stop offset="50%" stop-color="#dc2743"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="4.5" stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="6.5" r="1.4" fill="url(#igG)"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2025 Steel Synapse · All rights reserved</div>
+  </footer>
+
+  <script>
+  function toggleMenu() {
+    const btn=document.getElementById('hamburger'), menu=document.getElementById('mobileMenu');
+    const open=menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
+
+  /* GEAR BUILDER */
+  (function(){
+    const PI2=Math.PI*2;
+    function spurPath(cx,cy,r,t){const s=PI2/t,iR=r*.60,hR=r*.09,tH=r*.18,tW=s*.35;let d='';for(let i=0;i<t;i++){const a0=s*i-s/2,a1=a0+s*.25,a2=a1+tW,a3=a2+tW,a4=a3+tW,a5=a0+s,tip=r+tH;const p=(a,r2)=>[(cx+Math.cos(a)*r2).toFixed(2),(cy+Math.sin(a)*r2).toFixed(2)].join(',');d+=(i?'L':'M')+p(a0,r)+' L'+p(a1,r)+' L'+p(a2,tip)+' L'+p(a3,tip)+' L'+p(a4,r)+' L'+p(a5,r)+' ';}d+='Z ';d+=ring(cx,cy,iR,48,-1);d+=spokes(cx,cy,r,iR,5,r*.07);d+=hub(cx,cy,hR);return d;}
+    function escapePath(cx,cy,r,t){const s=PI2/t,iR=r*.50,hR=r*.12,tH=r*.24;let d='';for(let i=0;i<t;i++){const aB=s*i,aBk=aB-s*.06,aT=aB+s*.06,aF=aB+s*.40;const p=(a,r2)=>[(cx+Math.cos(a)*r2).toFixed(2),(cy+Math.sin(a)*r2).toFixed(2)].join(',');d+=(i?'L':'M')+p(aBk,iR)+' L'+p(aBk,r)+' L'+p(aT,r+tH)+' L'+p(aF,r*.96)+' L'+p(aF,iR)+' ';}d+='Z ';d+=hub(cx,cy,hR);return d;}
+    function ring(cx,cy,r,sg,dir){let d=`M${(cx+r).toFixed(2)},${cy.toFixed(2)} `;for(let i=1;i<=sg;i++){const a=(PI2/sg)*i*dir;d+=`L${(cx+Math.cos(a)*r).toFixed(2)},${(cy+Math.sin(a)*r).toFixed(2)} `;}return d+'Z ';}
+    function hub(cx,cy,h){let d=`M${(cx+h).toFixed(2)},${cy.toFixed(2)} `;for(let i=1;i<=24;i++){const a=(PI2/24)*i;d+=`L${(cx+Math.cos(a)*h).toFixed(2)},${(cy+Math.sin(a)*h).toFixed(2)} `;}return d+'Z ';}
+    function spokes(cx,cy,r,iR,n,sh){let d='';const mR=iR+(r-iR)*.52;for(let s=0;s<n;s++){const sa=(PI2/n)*s+Math.PI/n,sx=cx+Math.cos(sa)*mR,sy=cy+Math.sin(sa)*mR;d+=`M${(sx+sh).toFixed(2)},${sy.toFixed(2)} `;for(let i=1;i<=20;i++){const a=-(PI2/20)*i;d+=`L${(sx+Math.cos(a)*sh).toFixed(2)},${(sy+Math.sin(a)*sh).toFixed(2)} `;}d+='Z ';}return d;}
+    const gen={spur_gear:spurPath,escape_gear:escapePath};
+    document.querySelectorAll('.gear').forEach(div=>{
+      const type=Object.keys(gen).find(k=>div.classList.contains(k));if(!type)return;
+      const cs=getComputedStyle(div);
+      const r=parseFloat(cs.getPropertyValue('--r').trim())||120;
+      const teeth=parseInt(cs.getPropertyValue('--teeth').trim())||16;
+      const fill=cs.getPropertyValue('--fill').trim()||'#0a0903';
+      const stroke=cs.getPropertyValue('--stroke').trim()||'#1f1e13';
+      const sw=parseFloat(cs.getPropertyValue('--sw').trim())||2;
+      const op=parseFloat(cs.getPropertyValue('--op').trim())||0.95;
+      const dir=cs.getPropertyValue('--dir').trim()||'cw';
+      const pad=r*.30,size=(r+pad)*2,cx=size/2,cy=size/2;
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('width',size);svg.setAttribute('height',size);svg.setAttribute('overflow','visible');
+      const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.classList.add('gear-rotor');g.style.transformOrigin=`${cx}px ${cy}px`;
+      g.style.animationName=dir==='ccw'?'gear-ccw':'gear-cw';
+      g.style.animationDuration=cs.getPropertyValue('--spd').trim()||'80s';
+      g.style.animationTimingFunction='linear';g.style.animationIterationCount='infinite';
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d',gen[type](cx,cy,r,teeth));
+      path.setAttribute('fill',fill);path.setAttribute('stroke',stroke);
+      path.setAttribute('stroke-width',sw);path.setAttribute('fill-rule','evenodd');
+      path.setAttribute('opacity',op);
+      g.appendChild(path);svg.appendChild(g);div.appendChild(svg);
+    });
+  })();
+  </script>
+</body>
+</html>
