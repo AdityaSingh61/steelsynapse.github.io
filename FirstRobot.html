@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8"/>
-  <title>Tower – Steel Synapse Robot</title>
+  <title>bot – Steel Synapse Robot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -279,7 +279,7 @@
       aspect-ratio: 4/3;
       display: flex; align-items: center; justify-content: center;
     }
-    .flipped-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .flipped-img img { width: 75%; height:auto; object-fit: cover; display: block; }
     .flipped-quote {
       font-family: 'Fredoka', sans-serif;
       font-size: .95rem; font-weight: 700;
@@ -303,15 +303,18 @@
       margin-top: 18px;
     }
     .tower-photo {
-      border-radius: 12px; overflow: hidden;
+      border-radius: 12px; 
+      overflow: hidden;
       border: 2px solid var(--border);
       background: var(--mid);
       aspect-ratio: 4/3;
-      display: flex; align-items: center; justify-content: center;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
       transition: border-color .25s, transform .25s;
     }
     .tower-photo:hover { border-color: rgba(255,221,0,.4); transform: translateY(-3px); }
-    .tower-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tower-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
     /* ── COMPETITION ROWS ── */
     .comp-rows { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
