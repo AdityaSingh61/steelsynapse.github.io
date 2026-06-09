@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History Quiz Game</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #000000, #bfa234);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #fff;
+  }
+  #game {
+    background: #111;
+    width: 90%;
+    max-width: 650px;
+    padding: 25px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(255,215,0,0.3);
+    text-align: center;
+    position: relative;
+  }
+  #logo {
+    position: absolute;
+    top: -20px;
+    right: 5px;
+    width: 80px;
+    height: 110px;
+    object-fit: fill;
+  }
+  h1, h2 { color: #ffd700; margin: 5px 0; }
+  #scan-text, #info-text { font-family: monospace; font-size: 18px; color: #ffd700; margin: 20px 0; min-height: 40px; }
+  #scan-bar-container { width: 100%; height: 20px; background: #333; border-radius: 10px; overflow: hidden; margin-top: 20px; }
+  #scan-bar { height: 100%; width: 0%; background: #ffd700; transition: width 0.2s; }
+  #question-image { width: 200px; height: 150px; object-fit: cover; margin: 10px auto; border-radius: 10px; border: 2px solid #ffd700; display: none; }
+  .option-btn { display: block; width: 80%; margin: 10px auto; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-size: 16px; transition: 0.2s; background: #333; color: #ffd700; }
+  .option-btn:hover { transform: scale(1.05); background: #555; }
+  #progress { height: 15px; background: #333; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+  #progress-bar { height: 100%; width: 0%; background: #ffd700; transition: 0.3s; }
+  #feedback { margin-top: 10px; font-weight: bold; }
+  #score-display { font-size: 18px; font-weight: bold; margin-top: 15px; }
+  button { padding: 12px 25px; background: #ffd700; color: #111; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.2s; }
+  button:hover { background: #e6c200; }
+</style>
+</head>
+<body>
+
+<div id="game">
+  <!-- FIX: Removed git merge conflict markers; kept the correct src path and cleaned the alt attribute -->
+  <img id="logo" src="./images/new test.quiz/photoitem.svg" alt="Logo">
+
+  <div id="intro">
+    <h1>Archaeology Scanner</h1>
+    <div id="scan-text"></div>
+    <div id="info-text"></div>
+    <div id="scan-bar-container">
+      <div id="scan-bar"></div>
+    </div>
+  </div>
+
+  <!-- FIX: Added display:none so the quiz panel is hidden until the intro scan finishes -->
+  <div id="quiz" style="display:none;">
+    <img id="question-image" src="" alt="">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <div id="progress">
+      <div id="progress-bar"></div>
+    </div>
+    <p id="feedback"></p>
+    <p id="score-display"></p>
+    <button id="restart-btn" onclick="restartGame()" style="display:none;">Restart Quiz</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    What_about: "crocodile",
+    question: "Which God was associated with crocodiles in ancient Egypt?",
+    image: "./images/new test.quiz/Screenshot 2026-02-10 at 5.32.21 PM.png",
+    options: ["Sobek", "Horus", "Osiris", "Anubis"],
+    answer: 0,
+    fact: "Did you know? Crocodiles were sacred to Sobek, the Egyptian God of the Nile."
+  },
+  {
+    What_about: "coin",
+    question: "Why are ancient Roman coins important to archaeologists?",
+    image: "./images/new test.quiz/Marcus_Aurelius_Denarius2.jpg",
+    options: ["They reveal the emperor's likeness and reign dates", "They show which armies won battles", "They record the names of Roman senators", "They help date excavation sites"],
+    answer: 3,
+    fact: "Did you know? Roman coins show dates, trade routes, and political messages — making them reliable anchors for dating the layers around them."
+  },
+  {
+    What_about: "beetle",
+    question: "What part of the beetle was used in Mughal embroidery?",
+    image: "./images/new test.quiz/ground-beetle.jpg",
+    options: ["Antennae", "Elytra (wing covers)", "Thorax plates", "Mandibles"],
+    answer: 1,
+    fact: "Did you know? Shiny beetle wing covers called elytra were sewn onto clothing as an iridescent alternative to gems."
+  },
+  {
+    What_about: "pots",
+    question: "Archaeologists study changes in clay pot styles mainly to understand what?",
+    image: "./images/new test.quiz/download.jpg",
+    options: ["Shifts in trade networks and cultural contact", "The religious beliefs of potters", "How ancient people measured time", "The diets of ruling classes only"],
+    answer: 0,
+    fact: "Did you know? When a new pottery style spreads across regions, it often signals trade contact, migration, or cultural exchange between communities."
+  },
+  {
+    What_about: "coins",
+    question: "A Roman coin shifts from gold to bronze over a century. What does this most likely indicate?",
+    image: "./images/new test.quiz/images.jpg",
+    options: ["A change in artistic fashion", "Economic decline and currency debasement", "A new emperor's personal preference", "Improved bronze-smelting technology"],
+    answer: 1,
+    fact: "Did you know? Roman emperors gradually debased their coinage — mixing in cheaper metals — as a sign of fiscal stress, which archaeologists use to track economic decline."
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const intro = document.getElementById("intro");
+const quiz = document.getElementById("quiz");
+const scanText = document.getElementById("scan-text");
+const infoText = document.getElementById("info-text");
+const scanBar = document.getElementById("scan-bar");
+
+startScan(currentQuestion);
+
+function startScan(index) {
+  if (index >= questions.length) {
+    intro.style.display = "none";
+    quiz.style.display = "block";
+    showQuestion();
+    return;
+  }
+
+  const fact = questions[index].fact;
+  const topic = questions[index].What_about.split(" ")[0];
+
+  intro.style.display = "block";
+  quiz.style.display = "none";
+  scanText.textContent = `Scanning for ${topic}...`;
+  infoText.textContent = "";
+  scanBar.style.width = "0%";
+
+  let charIndex = 0;
+  let typeInterval = setInterval(() => {
+    if (charIndex < fact.length) {
+      infoText.textContent += fact[charIndex];
+      charIndex++;
+    }
+  }, 50);
+
+  let width = 0;
+  let scanInterval = setInterval(() => {
+    width++;
+    scanBar.style.width = width + "%";
+    if (width >= 100) {
+      clearInterval(scanInterval);
+      clearInterval(typeInterval);
+      setTimeout(() => {
+        intro.style.display = "none";
+        quiz.style.display = "block";
+        showQuestion();
+      }, 500);
+    }
+  }, 100);
+}
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  document.getElementById("question").textContent = q.question;
+  document.getElementById("question-image").src = q.image;
+  document.getElementById("question-image").style.display = "block";
+
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+  q.options.forEach((option, idx) => {
+    const btn = document.createElement("button");
+    btn.textContent = option;
+    btn.className = "option-btn";
+    btn.onclick = () => checkAnswer(idx);
+    optionsDiv.appendChild(btn);
+  });
+
+  document.getElementById("feedback").textContent = "";
+}
+
+function checkAnswer(selected) {
+  const q = questions[currentQuestion];
+  if (selected === q.answer) {
+    score++;
+    document.getElementById("feedback").textContent = "✅ Correct!";
+  } else {
+    document.getElementById("feedback").textContent = `❌ Wrong! Correct answer: ${q.options[q.answer]}`;
+  }
+  document.getElementById("feedback").style.color = "#ffd700";
+
+  currentQuestion++;
+  document.getElementById("progress-bar").style.width = (currentQuestion / questions.length * 100) + "%";
+
+  setTimeout(() => {
+    if (currentQuestion < questions.length) {
+      startScan(currentQuestion);
+    } else {
+      document.getElementById("question").textContent = "Quiz Finished!";
+      document.getElementById("options").innerHTML = "";
+      document.getElementById("question-image").style.display = "none";
+      document.getElementById("score-display").textContent = `Your score: ${score} / ${questions.length}`;
+      document.getElementById("restart-btn").style.display = "inline-block";
+    }
+  }, 1000);
+}
+
+function restartGame() {
+  currentQuestion = 0;
+  score = 0;
+  document.getElementById("restart-btn").style.display = "none";
+  document.getElementById("score-display").textContent = "";
+  startScan(currentQuestion);
+}
+</script>
+
+</body>
+</html>
