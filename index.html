@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8"/>
+  <title>Steel Synapse – FLL Team #53463</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:  #100f0a;
+      --card:   #18170e;
+      --mid:    #242318;
+      --yellow: #ffdd00;
+      --yhot:   #ffe933;
+      --red:    #fe0000;
+      --white:  #f5f4ef;
+      --muted:  rgba(245,244,239,0.55);
+      --border: rgba(255,221,0,0.14);
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Nunito',sans-serif;
+      background-color: var(--black);
+      background-image: url('./images/grounded/curcuts.svg');
+      background-size: 500px;
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── SPARKS ── */
+    .sparks { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .spark  { position:absolute; border-radius:50%; opacity:0; animation:floatSpark linear infinite; }
+    .spark:nth-child(1){ left:8%;  width:3px;height:3px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;   }
+    .spark:nth-child(2){ left:22%; width:4px;height:4px; background:var(--red);    animation-duration:13s; animation-delay:2s;   }
+    .spark:nth-child(3){ left:40%; width:5px;height:5px; background:var(--yellow); animation-duration:8s;  animation-delay:4s;   }
+    .spark:nth-child(4){ left:60%; width:3px;height:3px; background:var(--yhot);   animation-duration:15s; animation-delay:1s;   }
+    .spark:nth-child(5){ left:75%; width:4px;height:4px; background:var(--yellow); animation-duration:7s;  animation-delay:6s;   }
+    .spark:nth-child(6){ left:90%; width:2px;height:2px; background:var(--red);    animation-duration:11s; animation-delay:3s;   }
+    .spark:nth-child(7){ left:32%; width:3px;height:3px; background:var(--yellow); animation-duration:10s; animation-delay:5s;   }
+    .spark:nth-child(8){ left:53%; width:2px;height:2px; background:var(--red);    animation-duration:9s;  animation-delay:7.5s; }
+    @keyframes floatSpark {
+      0%  { transform:translateY(105vh); opacity:0; }
+      8%  { opacity:1; }
+      92% { opacity:0.7; }
+      100%{ transform:translateY(-8vh) rotate(360deg); opacity:0; }
+    }
+    
+    /* Top banner */
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position:sticky; top:0; z-index:500;
+      background:rgb(0, 0, 0);
+      backdrop-filter:blur(14px);
+      border-bottom:2px solid var(--border);
+      display:flex; align-items:center;
+      justify-content:space-between;
+      padding:0 20px; height:60px;
+    }
+    .nav-logo {
+      font-family:'Fredoka',sans-serif;
+      font-size:1.45rem; font-weight:700;
+      color:var(--yellow); text-decoration:none;
+      display:flex; align-items:center; gap:8px;
+    }
+    .bolt { display:inline-block; animation:boltPulse 2.2s ease-in-out infinite; }
+    @keyframes boltPulse {
+      0%,100%{ transform:scale(1);   filter:drop-shadow(0 0 4px var(--yellow)); }
+      50%    { transform:scale(1.3); filter:drop-shadow(0 0 14px var(--yellow)); }
+    }
+    .nav-links { display:flex; gap:3px; list-style:none; }
+    .nav-links a {
+      font-size:.9rem; font-weight:700; letter-spacing:0.05em;
+      color:var(--muted); text-decoration:none;
+      padding:7px 12px; border-radius:20px;
+      transition:color .2s,background .2s;
+    }
+    .nav-links a:hover { color:var(--black); background:var(--yellow); }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display:none;
+      flex-direction:column; justify-content:center; align-items:center;
+      width:44px; height:44px; border-radius:10px;
+      background:rgba(255,221,0,.08); border:1.5px solid rgba(255,221,0,.25);
+      cursor:pointer; gap:5px; flex-shrink:0;
+    }
+    .hamburger span {
+      display:block; width:22px; height:2px;
+      background:var(--yellow); border-radius:2px;
+      transition:transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+    /* ── MOBILE MENU OVERLAY ── */
+    .mobile-menu {
+      display:none;
+      position:fixed; inset:0; top:60px; z-index:490;
+      background:rgba(0,0,0,.97);
+      backdrop-filter:blur(18px);
+      flex-direction:column; align-items:center; justify-content:center;
+      gap:8px; padding:40px 20px;
+    }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a {
+      font-family:'Fredoka',sans-serif;
+      font-size:2rem; font-weight:700;
+      color:var(--muted); text-decoration:none;
+      padding:14px 40px; border-radius:20px; width:100%; text-align:center;
+      border:1.5px solid transparent;
+      transition:color .2s, background .2s, border-color .2s;
+    }
+    .mobile-menu a:hover { color:var(--black); background:var(--yellow); border-color:var(--yellow); }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative; width:100%; height:100vh;
+      min-height:620px; overflow:hidden;
+    }
+    .hero-city {
+      position:absolute; inset:0; z-index:0;
+      background:
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Pittsburgh_skyline_at_dusk_%28cropped%29.jpg/1280px-Pittsburgh_skyline_at_dusk_%28cropped%29.jpg')
+        center 65% / cover no-repeat;
+      filter:brightness(0.28) saturate(0.8);
+    }
+    .hero-slides { position:absolute; inset:0; z-index:1; }
+    .hero-slides img {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover; opacity:0;
+      animation:hFade 44s infinite;
+    }
+    .hero-slides img:nth-child(1) { animation-delay:0s;  }
+    .hero-slides img:nth-child(2) { animation-delay:4s;  }
+    .hero-slides img:nth-child(3) { animation-delay:8s;  }
+    .hero-slides img:nth-child(4) { animation-delay:12s; }
+    .hero-slides img:nth-child(5) { animation-delay:16s; }
+    .hero-slides img:nth-child(6) { animation-delay:20s; }
+    .hero-slides img:nth-child(7) { animation-delay:24s; }
+    .hero-slides img:nth-child(8) { animation-delay:28s; }
+    .hero-slides img:nth-child(9) { animation-delay:32s; }
+    .hero-slides img:nth-child(10){ animation-delay:36s; }
+    .hero-slides img:nth-child(11) { animation-delay:40s; }
+    .hero-slides img:nth-child(12) { animation-delay:44s; }
+    .hero-slides img:nth-child(13) { animation-delay:48s; }
+    .hero-slides img:nth-child(14) { animation-delay:52s; }
+    .hero-slides img:nth-child(15) { animation-delay:56s; }
+    .hero-slides img:nth-child(16) { animation-delay:60s; }
+    .hero-slides img:nth-child(17) { animation-delay:64s; }
+    .hero-slides img:nth-child(18) { animation-delay:68s; }
+    .hero-slides img:nth-child(19) { animation-delay:72s; }
+    .hero-slides img:nth-child(20){ animation-delay:76s; }
+    @keyframes hFade {
+      0%{opacity:0;} 8%{opacity:1;} 33%{opacity:1;} 41%{opacity:0;} 100%{opacity:0;}
+    }
+    .hero-overlay {
+      position:absolute; inset:0; z-index:2;
+      background:linear-gradient(to bottom,rgba(16,15,10,.4) 0%,rgba(16,15,10,.05) 40%,rgba(16,15,10,.9) 100%);
+    }
+    .hero-content {
+      position:absolute; inset:0; z-index:3;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:20px;
+    }
+    .hero-badge {
+      display:inline-block;
+      background:var(--yellow); color:var(--black);
+      font-family:'Fredoka',sans-serif;
+      font-size:1.1rem; font-weight:700;
+      letter-spacing:0.05em; padding:6px 18px;
+      border-radius:30px; margin-bottom:16px;
+      box-shadow:0 0 28px rgba(255,221,0,0.5);
+      animation:popIn .7s ease both;
+    }
+    @keyframes popIn {
+      0%{transform:scale(.6);opacity:0;} 70%{transform:scale(1.07);} 100%{transform:scale(1);opacity:1;}
+    }
+    .hero-title {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(3.5rem,13vw,10rem);
+      font-weight:700; line-height:.9;
+      color:var(--white);
+      text-shadow:0 4px 50px rgba(0,0,0,.6);
+      animation:slideUp .9s ease .15s both;
+    }
+    .hero-title .y { color:var(--yellow); }
+    .hero-title .r { color:var(--red); }
+    @keyframes slideUp {
+      from{transform:translateY(30px);opacity:0;}
+      to  {transform:translateY(0);   opacity:1;}
+    }
+    .hero-sub {
+      margin:16px auto 0;
+      font-size:1.2rem; font-weight:800;
+      color:rgba(245,244,239,.88);
+      max-width:500px; line-height:1.5;
+      animation:slideUp .9s ease .35s both;
+    }
+    .hero-btns {
+      display:flex; gap:12px; justify-content:center;
+      margin-top:24px; flex-wrap:wrap;
+      animation:slideUp .9s ease .55s both;
+    }
+    .btn-y {
+      display:inline-block; padding:13px 28px;
+      background:var(--yellow); color:var(--black);
+      font-family:'Fredoka',sans-serif;
+      font-size:1rem; font-weight:700;
+      border-radius:30px; text-decoration:none;
+      box-shadow:0 4px 24px rgba(255,221,0,.45);
+      transition:transform .2s,background .2s,box-shadow .2s;
+    }
+    .btn-y:hover { background:var(--yhot); transform:translateY(-3px) scale(1.04); box-shadow:0 8px 32px rgba(255,221,0,.55); }
+    .btn-outline {
+      display:inline-block; padding:13px 28px;
+      border:2px solid rgba(255,221,0,.5); color:var(--yellow);
+      font-family:'Fredoka',sans-serif;
+      font-size:1rem; font-weight:700;
+      border-radius:30px; text-decoration:none;
+      transition:transform .2s,border-color .2s,background .2s;
+    }
+    .btn-outline:hover { border-color:var(--yellow); background:rgba(255,221,0,.1); transform:translateY(-3px); }
+    .scroll-caret {
+      position:absolute; bottom:26px; left:50%; z-index:3;
+      width:22px; height:22px;
+      border-right:2.5px solid rgba(255,221,0,.6);
+      border-bottom:2.5px solid rgba(255,221,0,.6);
+      transform:translateX(-50%) rotate(45deg);
+      animation:caretBounce 1.6s ease-in-out infinite;
+    }
+    @keyframes caretBounce {
+      0%,100%{bottom:26px;opacity:.5;} 50%{bottom:18px;opacity:1;}
+    }
+
+    /* ── CHAMPIONSHIP ── */
+    .champ-section {
+      position:relative; width:100%;
+      height:72vh; min-height:380px; overflow:hidden;
+    }
+    .champ-section img {
+      width:45%; height:85%; object-fit:cover; display:block; float: right; max-width: 50%;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 15px;
+    }
+    .champ-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(105deg,rgba(16,15,10,.7) 0%,rgba(16,15,10,.3) 35%,rgba(16,15,10,-0.1) 80%);
+      display:flex; align-items:center; padding:0 8%;
+    }
+    .champ-eyebrow {
+      font-size:.72rem; font-weight:700;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--yellow); margin-bottom:14px;
+    }
+    .champ-title {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(2rem,5vw,5rem);
+      font-weight:700; line-height:1.05;
+      color:var(--white); margin-bottom:16px;
+    }
+    .champ-title span { color:var(--yellow); }
+    .champ-body {
+      font-size:.95rem; color:var(--muted);
+      max-width:380px; line-height:1.65;
+    }
+
+    /* ── TEAM NUMBER ── */
+    .team-num-section {
+      position:relative; width:100%;
+      height:75vh; min-height:450px; overflow:hidden;
+    }
+    .team-num-section img {
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+    .team-num-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to top,rgba(16,15,10,.92) 0%,rgba(16,15,10,.25) 55%,transparent 100%);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:flex-end;
+      padding-bottom:52px; text-align:center;
+    }
+    .team-num-big {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(4rem,14vw,10rem);
+      font-weight:700; color:var(--yellow); line-height:1;
+      text-shadow:0 0 80px rgba(255,221,0,.55);
+    }
+    .team-num-label {
+      font-size:.85rem; font-weight:700;
+      letter-spacing:.22em; text-transform:uppercase;
+      color:rgba(245,244,239,.6); margin-top:8px;
+    }
+
+    /* ── SHARED SECTION LAYOUT ── */
+    .section { padding:72px 32px; position:relative; z-index:1; }
+    .section-inner { max-width:1060px; margin:0 auto; }
+    .section-label {
+      display:inline-block;
+      font-family:'Fredoka',sans-serif;
+      font-size:.78rem; font-weight:600;
+      letter-spacing:.16em; text-transform:uppercase;
+      color:var(--yellow);
+      background:rgba(255,221,0,.1);
+      border:1px solid rgba(255,221,0,.25);
+      border-radius:20px; padding:4px 14px;
+      margin-bottom:14px;
+    }
+    .section-title {
+      font-family:'Fredoka',sans-serif;
+      font-size:clamp(1.8rem,4vw,3rem);
+      font-weight:700; line-height:1.1;
+      color:var(--white); margin-bottom:16px;
+    }
+    .section-title .y { color:var(--yellow); }
+    .section-divider {
+      border:none; border-top:1px solid var(--border);
+      margin:0 32px;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display:grid; grid-template-columns:1.1fr 1fr;
+      gap:56px; align-items:center;
+    }
+    .about-text p {
+      font-size:.97rem; color:var(--muted);
+      line-height:1.8; margin-bottom:14px;
+    }
+    .stats-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    }
+    .stat-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px; padding:24px 16px;
+      text-align:center;
+      transition:transform .25s,border-color .25s,box-shadow .25s;
+    }
+    .stat-card:hover {
+      transform:translateY(-5px);
+      border-color:rgba(255,221,0,.4);
+      box-shadow:0 10px 30px rgba(255,221,0,.08);
+    }
+    .stat-num {
+      font-family:'Fredoka',sans-serif;
+      font-size:2.4rem; font-weight:700;
+      color:var(--yellow); line-height:1;
+    }
+    .stat-lbl {
+      font-size:.75rem; font-weight:700;
+      color:var(--muted); text-transform:uppercase;
+      letter-spacing:.08em; margin-top:6px;
+    }
+    .curved-box {
+      border-radius: 15px;
+      padding: 10px 10px;
+      background-color: #00000068;
+      display: inline-block;
+    }
+
+    /* ── CORE VALUES — circular ── */
+    .values-section { background: var(--card); }
+    .values-intro { font-size: .97rem; color: var(--muted); line-height: 1.7; margin-bottom: 40px; max-width: 540px; }
+    .values-circle-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; }
+    .value-circle-btn { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; background: none; border: none; transition: transform .25s; }
+    .value-circle-btn:hover { transform: translateY(-6px); }
+    .value-circle { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--border); overflow: hidden; background: var(--mid); transition: border-color .25s, box-shadow .25s; }
+    .value-circle-btn:hover .value-circle { border-color: var(--yellow); box-shadow: 0 0 28px rgba(255,221,0,.35); }
+    .value-circle img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
+    .value-circle-btn:hover .value-circle img { transform: scale(1.08); }
+    .value-circle-label { font-family: 'Fredoka', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); text-align: center; }
+    .value-circle-btn:hover .value-circle-label { color: var(--yellow); }
+    .values-note { font-size: .72rem; color: rgba(255,221,0,.3); letter-spacing: .12em; text-transform: uppercase; margin-top: 36px; text-align: center; }
+
+    /* VALUE SLIDESHOW MODAL */
+    .val-modal-backdrop { display: flex; visibility: hidden; opacity: 0; pointer-events: none; position: fixed; inset: 0; z-index: 1000; background: rgba(10,9,6,.92); backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 16px; transition: opacity .25s, visibility .25s; }
+    .val-modal-backdrop.open { visibility: visible; opacity: 1; pointer-events: all; }
+    .val-modal { background: var(--card); border: 2px solid rgba(255,221,0,.3); border-radius: 20px; width: 100%; max-width: 560px; position: relative; animation: modalPop .3s ease both; overflow: hidden; max-height:90vh; overflow-y:auto; }
+    .val-modal-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
+    .val-modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .val-modal-body { padding: 18px 20px 24px; }
+    .val-modal-title { font-family: 'Fredoka', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--yellow); margin-bottom: 6px; }
+    .val-modal-caption { font-size: .9rem; color: var(--white); line-height: 1.7; }
+    .val-modal-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 8px; }
+    .val-nav-btn { background: rgba(255,221,0,.08); border: 1px solid rgba(255,221,0,.25); color: var(--yellow); font-family: 'Fredoka', sans-serif; font-size: .95rem; font-weight: 700; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: background .2s; flex: 1; text-align:center; }
+    .val-nav-btn:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+    .val-modal-counter { font-size: .8rem; color: var(--muted); font-family: 'Fredoka', sans-serif; white-space:nowrap; }
+    .val-modal-close { position: absolute; top: 12px; right: 12px; background: rgba(16,15,10,.7); border: 2px solid rgba(255,221,0,.3); color: var(--yellow); font-family: 'Fredoka', sans-serif; font-size: 1.1rem; font-weight: 700; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; z-index: 2; }
+    .val-modal-close:hover { background: var(--yellow); color: var(--black); }
+
+    /* ── NEWS GRID ── */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1060px;
+      margin: 36px auto 0;
+    }
+    .news-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .news-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,221,0,.45);
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+    }
+    .news-card-img {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .news-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .35s;
+    }
+    .news-card:hover .news-card-img img { transform: scale(1.07); }
+    .read-hint {
+      position: absolute; inset: 0;
+      background: rgba(16,15,10,.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .25s;
+    }
+    .news-card:hover .read-hint { opacity: 1; }
+    .read-hint span {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--yellow);
+      border: 2px solid var(--yellow);
+      border-radius: 30px;
+      padding: 8px 20px;
+    }
+    .news-card-body { padding: 16px 16px 20px; }
+    .news-date {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 8px;
+    }
+    .news-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--white); line-height: 1.3; margin-bottom: 8px;
+    }
+    .news-blurb {
+      font-size: .85rem; color: var(--muted); line-height: 1.6;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(10,9,6,.82);
+      backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 2px solid rgba(255,221,0,.3);
+      border-radius: 20px;
+      width: 100%; max-width: 620px;
+      max-height: 90vh; overflow-y: auto;
+      animation: modalPop .3s ease both;
+      position: relative;
+    }
+    @keyframes modalPop {
+      from { transform: scale(.9) translateY(20px); opacity: 0; }
+      to   { transform: scale(1)  translateY(0);    opacity: 1; }
+    }
+    .modal-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 18px 18px 0 0; }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .modal-body { padding: 24px 24px 28px; }
+    .modal-date {
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 10px;
+    }
+    .modal-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--white); line-height: 1.15; margin-bottom: 14px;
+    }
+    .modal-text { font-size: .93rem; color: var(--muted); line-height: 1.8; }
+    .modal-text p { margin-bottom: 12px; }
+    .modal-text p:last-child { margin-bottom: 0; }
+    .modal-close {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(16,15,10,.7);
+      border: 2px solid rgba(255,221,0,.3);
+      color: var(--yellow);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      width: 38px; height: 38px;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s;
+    }
+    .modal-close:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:1;
+      background:#0a0904;
+      border-top:2px solid rgba(255,221,0,.14);
+      padding:48px 32px 24px;
+    }
+    .footer-inner {
+      max-width:1060px; margin:0 auto;
+      display:flex; align-items:flex-start;
+      justify-content:space-between;
+      gap:32px; flex-wrap:wrap;
+    }
+    .footer-brand {
+      font-family:'Fredoka',sans-serif;
+      font-size:1.8rem; font-weight:700;
+      color:var(--yellow); line-height:1;
+    }
+    .footer-brand span {
+      display:block;
+      font-family:'Nunito',sans-serif;
+      font-size:.75rem; font-weight:400;
+      color:var(--muted); letter-spacing:.1em;
+      text-transform:uppercase; margin-top:5px;
+    }
+    .footer-links { display:flex; gap:4px; list-style:none; flex-wrap:wrap; }
+    .footer-links a {
+      font-size:.78rem; font-weight:700;
+      color:var(--muted); text-decoration:none;
+      padding:6px 10px; border-radius:4px;
+      transition:color .2s;
+    }
+    .footer-links a:hover { color:var(--yellow); }
+
+    /* ── SOCIAL BUTTONS ── */
+    .footer-social { display:flex; gap:10px; align-items:center; }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      text-decoration: none;
+      transition: all .28s cubic-bezier(.34, 1.56, .64, 1);
+      position: relative;
+      border: 2px solid transparent;
+    }
+    .social-btn:hover { transform: translateY(-7px) scale(1.12); }
+    .social-btn svg { width: 24px; height: 24px; transition: all .25s; }
+
+    /* Email */
+    .social-btn.btn-email {
+      background: linear-gradient(135deg, #1a1a12, #2a2a18);
+      border-color: rgba(255, 221, 0, .32);
+    }
+    .social-btn.btn-email svg { filter: drop-shadow(0 0 5px rgba(255, 221, 0, .55)); }
+    .social-btn.btn-email:hover {
+      background: linear-gradient(135deg, #ffdd00, #ffc800);
+      border-color: #ffdd00;
+      box-shadow: 0 10px 32px rgba(255, 221, 0, .5);
+    }
+    .social-btn.btn-email:hover svg { filter: none; }
+    .social-btn.btn-email:hover .es { stroke: #100f0a !important; }
+
+    /* YouTube */
+    .social-btn.btn-yt {
+      background: linear-gradient(135deg, #1a0808, #2e1010);
+      border-color: rgba(255, 40, 40, .32);
+    }
+    .social-btn.btn-yt svg { filter: drop-shadow(0 0 5px rgba(255, 60, 60, .45)); }
+    .social-btn.btn-yt:hover {
+      background: linear-gradient(135deg, #ff2020, #c50000);
+      border-color: #ff2222;
+      box-shadow: 0 10px 32px rgba(255, 0, 0, .55);
+    }
+    .social-btn.btn-yt:hover svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+
+    /* Instagram */
+    .social-btn.btn-ig {
+      background: linear-gradient(135deg, #130812, #1c0822);
+      border-color: rgba(220, 60, 160, .32);
+    }
+    .social-btn.btn-ig svg { filter: drop-shadow(0 0 5px rgba(200, 70, 180, .45)); }
+    .social-btn.btn-ig:hover {
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      border-color: #e6683c;
+      box-shadow: 0 10px 32px rgba(220, 39, 67, .55);
+    }
+    .social-btn.btn-ig:hover svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,.4)); }
+
+    .footer-copy {
+      width:100%; text-align:center;
+      font-size:.7rem; color:rgba(255,255,255,.18);
+      letter-spacing:.06em; margin-top:28px;
+      padding-top:20px; border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    /* ── SUPPORTERS ── */
+    .supporters-section {
+      background: var(--card);
+      padding: 50px 32px;
+      position: relative;
+      z-index: 1;
+    }
+    .supporters-inner { max-width: 1060px; margin: 0 auto; }
+    .supporters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .supporter-card {
+      background: var(--mid);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .supporter-logo {
+      width: 82px; height: 82px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .supporter-logo img { width: 195px; height: 195px; object-fit: contain; }
+    .supporter-logo .logo-placeholder { font-size: 2rem; line-height: 1; }
+    .supporter-name {
+      font-family: 'Fredoka', sans-serif;
+      font-size: .95rem; font-weight: 700;
+      color: var(--white); line-height: 1.2;
+    }
+    .supporter-type {
+      font-size: .65rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--yellow);
+    }
+    .supporters-note {
+      margin-top: 24px;
+      font-size: .82rem; color: var(--muted); font-style: italic;
+    }
+    .supporters-note a { color: var(--yellow); font-weight: 700; font-style: normal; text-decoration: none; }
+    .supporters-note a:hover { text-decoration: underline; }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ════════════════════════════════════════ */
+
+    /* Tablet: 800px */
+    @media(max-width:800px){
+      nav { padding:0 16px; }
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+
+      .hero-badge { font-size:.95rem; padding:5px 14px; }
+      .hero-sub { font-size:1.1rem; }
+
+      /* Championship: stack on tablet */
+      .champ-section { height:auto; min-height:unset; }
+      .champ-section img {
+        position:relative; right:auto; top:auto;
+        transform:none; width:100%; max-width:100%;
+        height:240px; border-radius:0;
+        float:none; display:block;
+      }
+      .champ-overlay {
+        position:relative; inset:auto;
+        background:rgba(16,15,10,.88);
+        padding:28px 24px 32px;
+      }
+
+      .about-grid { grid-template-columns:1fr; gap:32px; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+
+      .news-grid { grid-template-columns:1fr 1fr; }
+
+      .supporters-grid { grid-template-columns:1fr 1fr; }
+
+      .section { padding:56px 24px; }
+      .section-divider { margin:0 24px; }
+
+      footer { padding:40px 24px 20px; }
+      .footer-links { display:none; }
+    }
+
+    /* Mobile: 540px */
+    @media(max-width:540px){
+      .hero { min-height:100svh; }
+      .hero-badge { font-size:.85rem; padding:5px 13px; }
+      .hero-sub { font-size:1rem; margin-top:12px; }
+      .hero-btns { gap:10px; margin-top:20px; }
+      .btn-y, .btn-outline { padding:12px 22px; font-size:.9rem; }
+
+      /* Championship full-stack on mobile */
+      .champ-section img { height:200px; }
+      .champ-overlay { padding:22px 20px 28px; }
+      .champ-body { font-size:.88rem; max-width:100%; }
+
+      .values-circle-grid { gap:20px; }
+      .value-circle { width:88px; height:88px; }
+      .value-circle-label { font-size:.85rem; }
+
+      .news-grid { grid-template-columns:1fr; }
+
+      .supporters-grid { grid-template-columns:1fr; }
+      .supporters-section { padding:40px 18px; }
+
+      .stats-grid { grid-template-columns:1fr 1fr; gap:10px; }
+      .stat-num { font-size:2rem; }
+
+      .section { padding:48px 18px; }
+      .section-divider { margin:0 18px; }
+
+      .val-modal-nav { flex-wrap:wrap; }
+      .val-modal-counter { width:100%; text-align:center; order:-1; margin-bottom:8px; }
+
+      footer { padding:36px 18px 18px; }
+      .footer-inner { flex-direction:column; align-items:flex-start; gap:20px; }
+      .footer-social { margin-top:4px; }
+
+      /* Champ floating number smaller */
+      div[style*="font-size: 5rem"] { font-size:2.8rem !important; top:12px !important; right:16px !important; }
+    }
+
+    /* Very small phones: 380px */
+    @media(max-width:380px){
+      .nav-logo { font-size:1.15rem; }
+      .hero-badge { font-size:.78rem; }
+      .value-circle { width:76px; height:76px; }
+      .value-circle-label { font-size:.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SPARKS -->
+  <div class="sparks" aria-hidden="false">
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+    <div class="spark"></div><div class="spark"></div>
+  </div>
+  <div class="banner">
+    <img src="./images/grounded/topper.png" alt="Banner">
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="./index.html">
+      <span class="bolt"><img src="./images/madia/photoitem.svg" alt="item" width="70px" height="70px"></span> Steel Synapse
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./FirstRobot.html">Robot</a></li>
+      <li><a href="./new_meet_the_team.html">Team</a></li>
+      <li><a href="./new_mentors.html">Mentors</a></li>
+      <li><a href="./new_history.html">History</a></li>
+      <li><a href="./new_edu.html">Resources</a></li>
+      <li><a href="./new_donate.html">Donate</a></li>
+      <li><a href="./new_outreach.html">Outreach</a></li>
+    </ul>
+    <!-- Hamburger for mobile -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="./index.html"              onclick="closeMenu()">Home</a>
+    <a href="./new_meet_the_team.html"  onclick="closeMenu()">Team</a>
+    <a href="./new_mentors.html"        onclick="closeMenu()">Mentors</a>
+    <a href="./new_history.html"        onclick="closeMenu()">History</a>
+    <a href="./new_edu.html"            onclick="closeMenu()">Resources</a>
+    <a href="./new_donate.html"         onclick="closeMenu()">Donate</a>
+    <a href="./new_outreach.html"       onclick="closeMenu()">Outreach</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-city"></div>
+    <div class="hero-slides">
+      <img src="./images/Banner/homebanner.svg"   alt="" loading="lazy">
+      <img src="./images/home pager/Photo1.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo2.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo3.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo11.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo5.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo6.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo7.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo8.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo9.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo10.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo4.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo12.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo13.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo14.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo15.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo16.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo17.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo18.jpeg" alt="" loading="lazy">
+      <img src="./images/home pager/Photo19.jpeg" alt="" loading="lazy">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><b>FLL Team #53463 · Pittsburgh, PA</b></div>
+      <h1 class="hero-title"><span class="y">Steel </span><span class="y">Syn</span><span class="y">apse</span></h1>
+      <p class="hero-sub">Forged in Steel. Connected by Code.</p>
+      <div class="hero-btns">
+        <a href="./FirstRobot.html" class="btn-y">Meet Our Robot</a>
+        <a href="./new_donate.html"        class="btn-outline">Support Us</a>
+      </div>
+    </div>
+    <div class="scroll-caret"></div>
+  </section>
+
+  <!-- CHAMPIONSHIP -->
+  <section class="champ-section">
+    <img src="images/home pager/champs.jpeg" alt="Championship">
+    <div style="
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      z-index: 10;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(255, 251, 0, 0.6), 0 2px 8px rgba(0,0,0,0.8);
+    ">6<sup style="font-size: 0.35em; vertical-align: super;">th</sup></div>
+    <div class="champ-overlay">
+      <div>
+        <div class="section-label">Achievement Unlocked</div>
+        <h2 class="champ-title">We Made It to<br><span>Internationals!</span></h2>
+        <p class="champ-body">Hard work, late nights, and a whole lot of chocolate. At the State Championship Tournament (in Hershey), Steel Synapse made it to the Internationals - and loved every second!</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ABOUT -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div>
+          <div class="curved-box" style="margin-bottom:18px;">
+          <div class="section-label">Who We Are</div>
+          <h2 class="section-title">Forged in <span class="y">Steel.</span><br>Connected by<span class="y"> Code.</span></h2>
+          <p class="about-text" style="font-size:.97rem;color:var(--muted);line-height:1.8;margin-bottom:14px;">
+            Steel Synapse is a group of enthusiastic students exploring science, technology, engineering, and math through the First Lego League program.
+          </p>
+          <p class="about-text" style="font-size:.97rem;color:var(--muted);line-height:1.8;margin-bottom:24px;">
+            Seven members, unique skills, and one shared drive — guided by great coaches to build robots, solve real-world problems, and grow together every season.
+          </p>
+          <a href="./new_meet_the_team.html" class="btn-y" style="font-size:.9rem;padding:11px 26px;">Meet the Team →</a>
+        </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-num">7</div><div class="stat-lbl">Team Members</div></div>
+          <div class="stat-card"><div class="stat-num">FLL</div><div class="stat-lbl">Program</div></div>
+          <div class="stat-card"><div class="stat-num">#53463</div><div class="stat-lbl">Team Number</div></div>
+          <div class="stat-card"><div class="stat-num">PGH</div><div class="stat-lbl">Pittsburgh, PA</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- CORE VALUES -->
+  <section class="section values-section">
+    <div class="section-inner">
+      <div class="section-label">What Drives Us</div>
+      <h2 class="section-title">Our Core <span class="y">Values</span></h2>
+      <p class="values-intro">Click any value to see it in action!</p>
+
+      <div class="values-circle-grid">
+        <button class="value-circle-btn" onclick="openValModal('teamwork')">
+          <div class="value-circle"><img src="images/core/teamwork.svg" alt="Teamwork"></div>
+          <div class="value-circle-label">Teamwork</div>
+        </button>
+        <button class="value-circle-btn" onclick="openValModal('learning')">
+          <div class="value-circle"><img src="images/core/learning.svg" alt="Learning"></div>
+          <div class="value-circle-label">Learning</div>
+        </button>
+        <button class="value-circle-btn" onclick="openValModal('impact')">
+          <div class="value-circle"><img src="images/core/impact.svg" alt="Impact"></div>
+          <div class="value-circle-label">Impact</div>
+        </button>
+        <button class="value-circle-btn" onclick="openValModal('innovation')">
+          <div class="value-circle"><img src="images/core/innovation.svg" alt="Innovation"></div>
+          <div class="value-circle-label">Innovation</div>
+        </button>
+        <button class="value-circle-btn" onclick="openValModal('discovery')">
+          <div class="value-circle"><img src="images/core/discovery.svg" alt="Discovery"></div>
+          <div class="value-circle-label">Discovery</div>
+        </button>
+        <button class="value-circle-btn" onclick="openValModal('fun')">
+          <div class="value-circle"><img src="images/core/fun.svg" alt="Fun"></div>
+          <div class="value-circle-label">Fun</div>
+        </button>
+      </div>
+      <p class="values-note">Adapted from FLL Core Values</p>
+    </div>
+  </section>
+
+  <!-- TEAM UPDATES -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="curved-box" style="margin-bottom:18px;">
+        <div class="section-label">Latest</div>
+        <h2 class="section-title">Team <span class="y">Updates</span></h2>
+      
+
+      <div class="news-grid">
+
+        <div class="news-card" onclick="openModal('modal1')">
+          <div class="news-card-img">
+            <img src="./images/Team updates/Snuggle_up.jpeg" alt="">
+            <div class="read-hint"><span>See More →</span></div>
+          </div>
+          <div class="news-card-body">
+            <div class="news-date">March 6, 2026</div>
+            <div class="news-title">Streams Snuggle up and read</div>
+            <p class="news-blurb">Inspiring Elementary kids to experiment with Legos. Our message to them: All you have to do is imagine. If you can imagine it, you can build it. </p>
+          </div>
+        </div>
+
+        <div class="news-card" onclick="openModal('modal2')">
+          <div class="news-card-img">
+            <img src="./images/Team updates/Dasi-carnival.jpeg" alt="">
+            <div class="read-hint"><span>Read More →</span></div>
+          </div>
+          <div class="news-card-body">
+            <div class="news-date">April 16, 2026</div>
+            <div class="news-title">Dasi-carnival</div>
+            <p class="news-blurb">Teach old and new generations about the importance of community involvement in robotics, Without you we won't be here.</p>
+          </div>
+        </div>
+
+        <div class="news-card" onclick="openModal('modal3')">
+          <div class="news-card-img">
+            <img src="./images/Team updates/Qimage.jpeg" alt="">
+            <div class="read-hint"><span>Read More →</span></div>
+          </div>
+          <div class="news-card-body">
+            <div class="news-date">March 28, 2026</div>
+            <div class="news-title">New Chassis — Under Wraps???</div>
+            <p class="news-blurb">Something big is being built in the Steel Synapse workshop. We can't say much yet — but our new chassis might just change everything.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- MODALS -->
+  <div class="modal-backdrop" id="modal1" onclick="closeOnBackdrop(event,'modal1')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal1')">✕</button>
+      <div class="modal-img"><img src="./images/Team updates/Snuggle_up.jpeg" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-date">March 6, 2026</div>
+        <div class="modal-title">Streams Snuggle up and read</div>
+        <div class="modal-text">
+          <p>Inspiring Elementary kids to experiment with Legos. Our message to them: All you have to do is imagine.</p>
+          <p>If you can imagine it, you can build it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal2" onclick="closeOnBackdrop(event,'modal2')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal2')">✕</button>
+      <div class="modal-img"><img src="./images/Team updates/Dasi-carnival.jpeg" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-date">April 16, 2026</div>
+        <div class="modal-title">Dasi-carnival</div>
+        <div class="modal-text">
+          <p>Teach old and new generations about the importance of community involvement in robotics, Without you we won't be here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal3" onclick="closeOnBackdrop(event,'modal3')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal3')">✕</button>
+      <div class="modal-img"><img src="./images/Team updates/Qimage.jpeg" alt="" style="object-fit: contain;"></div>
+      <div class="modal-body">
+        <div class="modal-date">March 28, 2026</div>
+        <div class="modal-title">New Chassis — Under Wraps???</div>
+        <div class="modal-text">
+          <p>Something big is being built in the Steel Synapse workshop. We can't say much yet — but our new chassis might just change everything.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALUES MODAL -->
+  <div class="val-modal-backdrop" id="valModal" onclick="closeValOnBackdrop(event)">
+    <div class="val-modal">
+      <button class="val-modal-close" onclick="closeValModal()">✕</button>
+      <div class="val-modal-img"><img id="valModalImg" src="" alt=""></div>
+      <div class="val-modal-body">
+        <div class="val-modal-title" id="valModalTitle"></div>
+        <div class="val-modal-caption" id="valModalCaption"></div>
+        <div class="val-modal-nav">
+          <button class="val-nav-btn" onclick="shiftVal(-1)">← Prev</button>
+          <span class="val-modal-counter" id="valModalCounter"></span>
+          <button class="val-nav-btn" onclick="shiftVal(1)">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPPORTERS -->
+  <section class="supporters-section">
+    <div class="supporters-inner">
+      <div class="section-label">Thank You</div>
+      <h2 class="section-title">Our <span class="y">Supporters</span></h2>
+      <div class="supporters-grid">
+        
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/Usc.svg" alt="USC"></span></div>
+          <div><div class="supporter-name">Upper St. Clair</div><div class="supporter-type">School</div></div>
+        </div>
+        
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/lebo.svg" alt="Mt Lebo"></span></div>
+          <div><div class="supporter-name">Mt Lebanon Library</div><div class="supporter-type">Community</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/makers.svg" alt="Makers"></span></div>
+          <div><div class="supporter-name">Makers Asylum</div><div class="supporter-type">Mentor</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/Keff.svg" alt="KEF"></span></div>
+          <div><div class="supporter-name">KEF Robotics</div><div class="supporter-type">Mentor</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/Cmu.svg" alt="CMU"></span></div>
+          <div><div class="supporter-name">CMU Robotics</div><div class="supporter-type">School Mentor</div></div>
+        </div>
+
+        <div class="supporter-card">
+          <div class="supporter-logo"><span class="logo-placeholder"><img src="./images/supporters/pitt.svg" alt="Pitt"></span></div>
+          <div><div class="supporter-name">PITT Robotics</div><div class="supporter-type">School Mentor</div></div>
+        </div>
+
+      </div>
+      <p class="supporters-note">
+        Want to support us? <a href="./new_donate.html">Donate here →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        Steel Synapse
+        <span>Forged in Steel. Connected by Code.</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./FirstRobot.html">Robot</a></li>
+        <li><a href="./new_meet_the_team.html">Team</a></li>
+        <li><a href="./new_mentors.html">Mentors</a></li>
+        <li><a href="./new_history.html">History</a></li>
+        <li><a href="./new_edu.html">Resources</a></li>
+        <li><a href="./new_donate.html">Donate</a></li>
+        <li><a href="./new_outreach.html">Outreach</a></li>
+      </ul>
+      <div class="footer-social">
+        <!-- Email -->
+        <a href="mailto:steelsynapse01@gmail.com" class="social-btn btn-email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect class="es" x="2" y="4" width="20" height="16" rx="3"
+                  stroke="#ffdd00" stroke-width="1.8" fill="none"/>
+            <path class="es" d="M2 8l10 6.5L22 8"
+                  stroke="#ffdd00" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" fill="none"/>
+          </svg>
+        </a>
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@steelsynapse01" class="social-btn btn-yt"
+           title="YouTube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.96-1.96C18.88 4 12 4 12 4
+                     s-6.88 0-8.58.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12
+                     a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.96 1.96
+                     C5.12 20 12 20 12 20s6.88 0 8.58-.46a2.78 2.78 0 0 0
+                     1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
+                  fill="#ff2222"/>
+            <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="white"/>
+          </svg>
+        </a>
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/steel_synapse/" class="social-btn btn-ig"
+           title="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="igG" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="#f09433"/>
+                <stop offset="50%"  stop-color="#dc2743"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5.5"
+                  stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="12" cy="12" r="4.5"
+                    stroke="url(#igG)" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="6.5" r="1.4" fill="url(#igG)"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2026 Steel Synapse · All rights reserved</div>
+  </footer>
+
+  <script>
+  /* ── Hamburger menu ── */
+  function toggleMenu() {
+    const btn  = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileMenu');
+    const open = menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── News modals ── */
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeOnBackdrop(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+
+  /* ── Values modal ── */
+  const valData = {
+    teamwork:  { title:'Teamwork',  slides:[
+      {img:'images/core/teamwork.svg',  caption:'We are as strong as steel when we work together.'},
+      {img:'./images/core/Teamwork/Teamwork1.jpeg',  caption:'Every build starts with all hands on deck.'},
+      {img:'./images/core/Teamwork/Teamwork2.jpeg',  caption:'Helping other USC FLL teams: Lift Everyone!'},
+      {img:'./images/core/Teamwork/Teamwork3.jpeg',  caption:'Working together is the best way to think of creative solutions.'},
+      {img:'./images/core/Teamwork/Teamwork4.jpeg',  caption:'Side by side, circuit by circuit.'},
+    ]},
+    learning:  { title:'Learning',  slides:[
+      {img:'images/core/learning.svg',  caption:'Curiosity helps connect synapses.'},
+      {img:'./images/core/Learning/Learning1.jpeg',  caption:'From Scratch to Python — we never stop learning to code.'},
+      {img:'./images/core/Learning/Learning2.jpeg',  caption:'Think tanks help us organize our thoughts and communicate our ideas.'},
+      {img:'./images/core/Learning/Learning3.jpeg',  caption:'We learn and grow as a TEAM.'},
+      {img:'./images/core/Learning/Learning4.jpeg',  caption:'Measure, Remeasure, measure..learn every minute!'},
+    ]},
+    impact:    { title:'Impact',    slides:[
+      {img:'images/core/impact.svg',    caption:'We apply what we learn to make the world a little stronger.'},
+      {img:'./images/core/Impact/Impact1.jpeg',  caption:'Teaching Elementary kids how to build with LEGO.'},
+      {img:'./images/core/Impact/Impact2.jpeg', caption:'Snuggle up- and read with our local elementary school\'s Storytime.'},
+      {img:'./images/core/Impact/Impact3.jpeg', caption:'Community building-- we\'re stronger together.'},
+      {img:'./images/core/Impact/Impact4.jpeg', caption:'Sharing with other USC FLL Robotics teams- learning from shared experiences'},
+    ]},
+    innovation:{ title:'Innovation', slides:[
+      {img:'images/core/innovation.svg',caption:'Creativity is our spark. Persistence is our fuel.'},
+      {img:'./images/core/Innovation/Innovation1.jpeg', caption:'Prototyping new ideas, learning from failure, and trying again.'},
+      {img:'./images/core/Innovation/Innovation2.jpeg', caption:'When the first idea doesn\'t work, we invent a better one.'},
+      {img:'./images/core/Innovation/Innovation3.jpeg', caption:'Our robot is never finished — just improved.'},
+      {img:'./images/core/Innovation/Innovation4.jpeg', caption:'Innovation lives at the intersection of fun and determination.'},
+    ]},
+    discovery: { title:'Discovery', slides:[
+      {img:'images/core/discovery.svg', caption:'We explore with grit, forging ideas into tools for change.'},
+      {img:'./images/core/Discovery/Discovery1.jpeg', caption:'Discovering our past... and building our future.'},
+      {img:'./images/core/Discovery/Discovery2.jpeg', caption:'We learn from our heroes- learn from other robots'},
+      {img:'./images/core/Discovery/Discovery3.jpeg', caption:'Discovery is all about asking questions and finding new paths.'},
+      {img:'./images/core/Discovery/Discovery4.jpeg',   caption:'Steel Synapse — always exploring what\'s next.'},
+    ]},
+    fun:       { title:'Fun',       slides:[
+      {img:'images/core/fun.svg',       caption:'We forge with passion and celebrate every spark we create.'},
+      {img:'./images/core/Fun/Fun1.jpeg',  caption:'Singing squad- bestie goals'},
+      {img:'./images/core/Fun/Fun2.jpeg',  caption:'Win or lose, always have some sugary fun together.'},
+      {img:'./images/core/Fun/Fun3.jpeg',  caption:'Best friends- in fact chosen family- celebrating every moment together.'},
+      {img:'./images/core/Fun/Fun4.jpeg', caption:'Steel Synapse — serious about STEM, serious about fun.'},
+    ]},
+  };
+
+  let activeVal = null, activeValIdx = 0;
+  function openValModal(key) {
+    activeVal = key; activeValIdx = 0;
+    renderVal();
+    document.getElementById('valModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function renderVal() {
+    const d = valData[activeVal], s = d.slides[activeValIdx];
+    document.getElementById('valModalImg').src = s.img;
+    document.getElementById('valModalTitle').textContent = d.title;
+    document.getElementById('valModalCaption').textContent = s.caption;
+    document.getElementById('valModalCounter').textContent = (activeValIdx+1) + ' / ' + d.slides.length;
+  }
+  function shiftVal(dir) {
+    activeValIdx = (activeValIdx + dir + valData[activeVal].slides.length) % valData[activeVal].slides.length;
+    renderVal();
+  }
+  function closeValModal() {
+    document.getElementById('valModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeValOnBackdrop(e) {
+    if (e.target === document.getElementById('valModal')) closeValModal();
+  }
+
+  /* ── Keyboard shortcuts ── */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop.open')
+        .forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+      closeValModal();
+      closeMenu();
+    }
+    if (document.getElementById('valModal').classList.contains('open')) {
+      if (e.key === 'ArrowRight') shiftVal(1);
+      if (e.key === 'ArrowLeft')  shiftVal(-1);
+    }
+  });
+
+  /* ── Swipe support for values modal on touch devices ── */
+  let touchStartX = 0;
+  document.getElementById('valModal').addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  document.getElementById('valModal').addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) shiftVal(dx < 0 ? 1 : -1);
+  }, { passive: true });
+  </script>
+
+</body>
+</html>
