@@ -31,7 +31,7 @@
     right: 5px;
     width: 80px;
     height: 110px;
-    object-fit:fill;
+    object-fit: fill;
   }
   h1, h2 { color: #ffd700; margin: 5px 0; }
   #scan-text, #info-text { font-family: monospace; font-size: 18px; color: #ffd700; margin: 20px 0; min-height: 40px; }
@@ -51,11 +51,8 @@
 <body>
 
 <div id="game">
-<<<<<<< HEAD>>>>>>
+  <!-- FIX: Removed git merge conflict markers; kept the correct src path and cleaned the alt attribute -->
   <img id="logo" src="./images/new test.quiz/photoitem.svg" alt="Logo">
-=======
-  <img id="logo" src="./images/new test.quiz/photoitem.svg" alt="Logo",s>
->>>>>>> aa98975dc769612ca560d2a61c47240b33376164
 
   <div id="intro">
     <h1>Archaeology Scanner</h1>
@@ -66,7 +63,8 @@
     </div>
   </div>
 
-  <div id="quiz">
+  <!-- FIX: Added display:none so the quiz panel is hidden until the intro scan finishes -->
+  <div id="quiz" style="display:none;">
     <img id="question-image" src="" alt="">
     <h2 id="question"></h2>
     <div id="options"></div>
@@ -82,45 +80,44 @@
 <script>
 const questions = [
   {
-    What_about:"crocodile",
+    What_about: "crocodile",
     question: "Which God was associated with crocodiles in ancient Egypt?",
     image: "./images/new test.quiz/Screenshot 2026-02-10 at 5.32.21 PM.png",
-    options: ["Sobek","Ra","Osiris","Anubis"],
+    options: ["Sobek", "Horus", "Osiris", "Anubis"],
     answer: 0,
     fact: "Did you know? Crocodiles were sacred to Sobek, the Egyptian God of the Nile."
   },
   {
-    What_about:"coin",
+    What_about: "coin",
     question: "Why are ancient Roman coins important to archaeologists?",
     image: "./images/new test.quiz/Marcus_Aurelius_Denarius2.jpg",
-    options: ["They make you rich","They are shiny","They can be used as toys","They help date excavation sites"],
+    options: ["They reveal the emperor's likeness and reign dates", "They show which armies won battles", "They record the names of Roman senators", "They help date excavation sites"],
     answer: 3,
-    fact: "Did you know? Roman coins show dates, trade routes, and political messages."
+    fact: "Did you know? Roman coins show dates, trade routes, and political messages — making them reliable anchors for dating the layers around them."
   },
   {
-    What_about:"beetle",
+    What_about: "beetle",
     question: "What part of the beetle was used in Mughal embroidery?",
     image: "./images/new test.quiz/ground-beetle.jpg",
-    options: ["Antennae","Elytra (wing covers)","Legs","Eyes"],
+    options: ["Antennae", "Elytra (wing covers)", "Thorax plates", "Mandibles"],
     answer: 1,
-    fact: "Did you know? Shiny beetle wing covers called elytra were sewn onto clothing."
+    fact: "Did you know? Shiny beetle wing covers called elytra were sewn onto clothing as an iridescent alternative to gems."
   },
   {
-    What_about:"pots",
-    question: "What can clay pots tell archaeologists about?",
+    What_about: "pots",
+    question: "Archaeologists study changes in clay pot styles mainly to understand what?",
     image: "./images/new test.quiz/download.jpg",
-    options: ["Daily life and trade","Modern art","Weather patterns today","Space travel"],
+    options: ["Shifts in trade networks and cultural contact", "The religious beliefs of potters", "How ancient people measured time", "The diets of ruling classes only"],
     answer: 0,
-    fact: "Did you know? Clay pots reveal daily life, cooking, and trade in ancient times."
+    fact: "Did you know? When a new pottery style spreads across regions, it often signals trade contact, migration, or cultural exchange between communities."
   },
   {
-    What_about:"coins",
-    question: "What metal in Roman coins shows economic strength?",
+    What_about: "coins",
+    question: "A Roman coin shifts from gold to bronze over a century. What does this most likely indicate?",
     image: "./images/new test.quiz/images.jpg",
-    options: ["Gold or bronze","Plastic","Copper wire","Iron nails"],
-    options: ["Plastic","Gold or bronze","Copper wire","Iron nails"],
+    options: ["A change in artistic fashion", "Economic decline and currency debasement", "A new emperor's personal preference", "Improved bronze-smelting technology"],
     answer: 1,
-    fact: "Did you know? Gold and bronze coins indicate economic stability and wealth."
+    fact: "Did you know? Roman emperors gradually debased their coinage — mixing in cheaper metals — as a sign of fiscal stress, which archaeologists use to track economic decline."
   }
 ];
 
@@ -132,12 +129,11 @@ const quiz = document.getElementById("quiz");
 const scanText = document.getElementById("scan-text");
 const infoText = document.getElementById("info-text");
 const scanBar = document.getElementById("scan-bar");
-const questionImage = document.getElementById("question-image");
 
 startScan(currentQuestion);
 
-function startScan(index){
-  if(index >= questions.length){
+function startScan(index) {
+  if (index >= questions.length) {
     intro.style.display = "none";
     quiz.style.display = "block";
     showQuestion();
@@ -153,10 +149,9 @@ function startScan(index){
   infoText.textContent = "";
   scanBar.style.width = "0%";
 
-  // Type out fact during scan
   let charIndex = 0;
   let typeInterval = setInterval(() => {
-    if(charIndex < fact.length){
+    if (charIndex < fact.length) {
       infoText.textContent += fact[charIndex];
       charIndex++;
     }
@@ -166,19 +161,19 @@ function startScan(index){
   let scanInterval = setInterval(() => {
     width++;
     scanBar.style.width = width + "%";
-    if(width >= 100){
+    if (width >= 100) {
       clearInterval(scanInterval);
       clearInterval(typeInterval);
-      setTimeout(()=>{
+      setTimeout(() => {
         intro.style.display = "none";
         quiz.style.display = "block";
         showQuestion();
       }, 500);
     }
-  }, 100); // 10s scan
+  }, 100);
 }
 
-function showQuestion(){
+function showQuestion() {
   const q = questions[currentQuestion];
   document.getElementById("question").textContent = q.question;
   document.getElementById("question-image").src = q.image;
@@ -186,36 +181,32 @@ function showQuestion(){
 
   const optionsDiv = document.getElementById("options");
   optionsDiv.innerHTML = "";
-  q.options.forEach((option, idx)=>{
+  q.options.forEach((option, idx) => {
     const btn = document.createElement("button");
     btn.textContent = option;
     btn.className = "option-btn";
-    btn.onclick = ()=>checkAnswer(idx);
+    btn.onclick = () => checkAnswer(idx);
     optionsDiv.appendChild(btn);
   });
 
   document.getElementById("feedback").textContent = "";
-  // **Do not update progress here**, wait until after answering
 }
 
-function checkAnswer(selected){
+function checkAnswer(selected) {
   const q = questions[currentQuestion];
-  if(selected === q.answer){
+  if (selected === q.answer) {
     score++;
     document.getElementById("feedback").textContent = "✅ Correct!";
-    document.getElementById("feedback").style.color = "#ffd700";
   } else {
     document.getElementById("feedback").textContent = `❌ Wrong! Correct answer: ${q.options[q.answer]}`;
-    document.getElementById("feedback").style.color = "#ffd700";
   }
+  document.getElementById("feedback").style.color = "#ffd700";
 
   currentQuestion++;
-
-  // Update the progress bar after answering
   document.getElementById("progress-bar").style.width = (currentQuestion / questions.length * 100) + "%";
 
-  setTimeout(()=> {
-    if(currentQuestion < questions.length){
+  setTimeout(() => {
+    if (currentQuestion < questions.length) {
       startScan(currentQuestion);
     } else {
       document.getElementById("question").textContent = "Quiz Finished!";
@@ -227,7 +218,7 @@ function checkAnswer(selected){
   }, 1000);
 }
 
-function restartGame(){
+function restartGame() {
   currentQuestion = 0;
   score = 0;
   document.getElementById("restart-btn").style.display = "none";
