@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steel Synapse — Season Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+<style>
+  :root{
+    --paper:#f2efe0;
+    --paper-dk:#e4ddc0;
+    --ink:#0d0d0d;
+    --ink-soft:#4a4636;
+    --rule:#c9c2a0;
+    --rule-dk:#aca380;
+
+    --navy:#0d0d0d;
+    --navy-2:#161616;
+    --navy-3:#202020;
+    --grid:#3d3d3d;
+    --grid-soft:#282828;
+    --cyan:#ffd400;
+    --cyan-dim:#b8960a;
+
+    --game:#ff4d6d;
+    --design:#3fa9f5;
+    --innov:#ffd400;
+    --core:#2ee6a6;
+    --today:#ff2d55;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--paper);
+    background-image: radial-gradient(circle, var(--paper-dk) 1.4px, transparent 1.4px);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding:34px 4vw 70px;
+    overflow-x:hidden;
+  }
+
+  header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    flex-wrap:wrap; gap:16px;
+    margin-bottom:22px; padding-bottom:16px;
+    border-bottom:3px solid var(--ink);
+  }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .badge{ width:52px; height:52px; flex-shrink:0; background:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow: 0 0 0 3px var(--paper), 0 0 14px 0 rgba(255,212,0,0.55); }
+  .badge span{ font-family:'Big Shoulders Display', sans-serif; font-weight:800; font-size:22px; color:var(--cyan); letter-spacing:-0.02em; }
+  .brand h1{ font-family:'Big Shoulders Display', sans-serif; font-size:40px; font-weight:800; letter-spacing:0.01em; line-height:0.9; text-transform:uppercase; }
+  .brand p{ font-family:'Space Mono', monospace; font-size:11px; color:var(--ink-soft); letter-spacing:0.08em; text-transform:uppercase; margin-top:5px; }
+  .meta-block{ font-family:'Space Mono', monospace; font-size:11px; color:var(--ink-soft); text-align:right; line-height:1.8; }
+  .meta-block b{ color:var(--ink); }
+
+  .legend{ display:flex; gap:0; flex-wrap:wrap; margin-bottom:16px; border:2px solid var(--ink); }
+  .legend span{ font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase; padding:6px 12px; border-right:2px solid var(--ink); display:flex; align-items:center; gap:7px; }
+  .legend span:last-child{ border-right:none; margin-left:auto; }
+  .legend .sw{ width:11px; height:11px; }
+
+  .toolbar{ display:flex; justify-content:flex-end; margin-bottom:16px; }
+  .export-btn{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+    padding:10px 16px; border:2px solid var(--ink); background:var(--ink); color:var(--cyan); cursor:pointer;
+  }
+  .export-btn:hover{ background:#1b2734; }
+  .export-btn:active{ background:var(--ink); }
+  .export-btn svg{ width:13px; height:13px; flex-shrink:0; }
+
+  /* ---------- Accordion shell ---------- */
+  .accordion{ border:3px solid var(--ink); background:var(--navy); }
+
+  .cat-section{ border-bottom:2px solid var(--ink); }
+  .cat-section:last-child{ border-bottom:none; }
+
+  .cat-toggle{
+    width:100%; display:flex; align-items:center; gap:12px;
+    background:var(--navy-2); border:0; border-left:7px solid var(--cat-color, var(--cyan));
+    color:var(--paper); padding:16px 18px; cursor:pointer; text-align:left;
+    font-family:'Big Shoulders Display', sans-serif; font-size:20px; font-weight:700; text-transform:uppercase; letter-spacing:0.02em;
+  }
+  .cat-toggle:hover{ background:var(--navy-3); }
+  .cat-toggle:focus-visible{ outline:2px solid var(--cyan); outline-offset:-2px; }
+  .cat-toggle .swatch{ width:12px; height:12px; background:var(--cat-color, var(--cyan)); flex-shrink:0; }
+  .cat-toggle .hint{
+    font-family:'Space Mono', monospace; font-weight:400; font-size:11px; color:var(--cyan-dim);
+    text-transform:none; letter-spacing:0; margin-right:auto; margin-left:6px;
+  }
+  .cat-toggle .chev{ width:15px; height:15px; color:var(--cyan); transition:transform 0.2s ease; flex-shrink:0; }
+  .cat-toggle[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+
+  /* Collapse technique: grid-template-rows 0fr -> 1fr. Avoids the max-height/large-value
+     rendering glitch that shows up with sticky columns inside a scroll container. */
+  .cat-drawer{
+    display:grid;
+    grid-template-rows: 0fr;
+    grid-template-columns: minmax(0, 1fr);
+    transition: grid-template-rows 0.3s ease;
+  }
+  .cat-drawer.open{ grid-template-rows: 1fr; }
+  .cat-drawer-inner{ overflow:hidden; min-height:0; min-width:0; }
+
+  /* -- inner gantt (only built/shown once a category is opened) --
+     Layout: data-col sits OUTSIDE the scrolling area entirely (flex, fixed width) —
+     it is structurally pinned, not "stuck" via position:sticky, so it can never be
+     dragged along by horizontal scrolling of the chart. */
+  .gantt-row-wrap{ display:flex; align-items:stretch; }
+  .data-col{ flex:0 0 380px; width:380px; border-right:2px solid var(--grid); background:var(--paper); display:flex; flex-direction:column; }
+  .data-head{
+    display:grid; grid-template-columns: 34px 1fr 64px 42px; padding:0 14px; gap:8px;
+    font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--paper); background:var(--ink); height:50px; align-items:center;
+  }
+  .data-row{
+    display:grid; grid-template-columns: 34px 1fr 64px 42px; align-items:center; gap:8px;
+    padding:6px 14px; min-height:52px; border-bottom:1px solid var(--rule);
+    transition: background-color 0.15s ease;
+  }
+  .data-row:nth-child(odd){ background:var(--paper-dk); }
+  .data-row.drag-source{ opacity:0.35; }
+  .data-row.drag-over-top{ box-shadow: inset 0 3px 0 0 var(--ink); }
+  .data-row.drag-over-bottom{ box-shadow: inset 0 -3px 0 0 var(--ink); }
+  .data-row .task-name{ font-size:12px; font-weight:500; white-space:normal; line-height:1.25; overflow-wrap:break-word; }
+  .data-row .task-name.untitled{ color:var(--ink-soft); font-style:italic; font-weight:400; }
+  .data-row .assignee{ font-family:'Space Mono', monospace; font-size:9.5px; color:var(--ink-soft); white-space:normal; line-height:1.25; align-self:center; }
+  .data-row .pct{ font-family:'Space Mono', monospace; font-weight:700; font-size:11px; text-align:right; align-self:center; }
+  .data-row .pct.zero{ color:var(--ink-soft); font-weight:400; }
+
+  /* -- row menu: a single six-dot button per row opens a small menu with
+     move-up / move-down / remove, instead of separate always-visible controls.
+     Dragging the dot icon itself still reorders directly. -- */
+  .row-menu{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    align-self:stretch; opacity:0.32; transition:opacity 0.15s ease;
+  }
+  .data-row:hover .row-menu,
+  .row-menu.menu-open{ opacity:1; }
+  .dots-btn{
+    width:100%; height:100%; min-height:22px; border:none; background:transparent; cursor:grab;
+    color:var(--ink-soft); font-size:13px; line-height:1; display:flex; align-items:center; justify-content:center;
+  }
+  .dots-btn:active{ cursor:grabbing; }
+  .dots-btn:hover{ color:var(--ink); }
+  .dots-menu{
+    display:none; position:absolute; top:100%; left:0; z-index:20; min-width:118px;
+    background:var(--paper); border:2px solid var(--ink); box-shadow:3px 3px 0 0 var(--ink);
+  }
+  .dots-menu.open{ display:block; }
+  .dots-menu button{
+    width:100%; text-align:left; padding:7px 10px; border:none; background:transparent; cursor:pointer;
+    font-family:'Space Mono', monospace; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.03em;
+    color:var(--ink); border-bottom:1px solid var(--rule);
+  }
+  .dots-menu button:last-child{ border-bottom:none; }
+  .dots-menu button:hover:not(:disabled){ background:var(--cyan); }
+  .dots-menu button:disabled{ opacity:0.35; cursor:default; }
+  .dots-menu button.remove:hover:not(:disabled){ background:var(--today); color:var(--paper); }
+
+  .pct-input{
+    font-family:'Space Mono', monospace; font-weight:700; font-size:11px; text-align:right;
+    width:26px; border:none; border-bottom:1px solid transparent; background:transparent; color:var(--ink-soft);
+    padding:2px 0; -moz-appearance:textfield;
+  }
+  .pct-input::-webkit-outer-spin-button, .pct-input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .pct-input:hover{ border-bottom-color:var(--rule-dk); }
+  .pct-input:focus{ outline:none; border-bottom-color:var(--ink); }
+  .pct-wrap{ display:flex; align-items:center; justify-content:flex-end; gap:1px; }
+  .pct-wrap .pct-sign{ font-family:'Space Mono', monospace; font-weight:700; font-size:11px; color:var(--ink-soft); }
+
+  /* -- add-task trigger + inline form (bottom of each data column) -- */
+  .add-task-trigger{
+    display:block; width:100%; text-align:center;
+    font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--ink-soft); background:transparent; border:none; border-top:2px dashed var(--rule-dk);
+    padding:11px 14px; cursor:pointer; margin-top:auto;
+  }
+  .add-task-trigger:hover{ background:var(--paper-dk); color:var(--ink); }
+  .add-task-trigger:focus-visible{ outline:2px solid var(--ink-soft); outline-offset:-2px; }
+
+  .add-task-form{
+    padding:12px 14px 14px; border-top:2px solid var(--ink); background:var(--paper-dk);
+    display:flex; flex-direction:column; gap:7px; margin-top:auto;
+  }
+  .add-task-form .f-label{ font-family:'Space Mono', monospace; font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  .add-task-form input{
+    font-family:'Work Sans', sans-serif; font-size:12px; padding:6px 8px; width:100%;
+    border:1px solid var(--rule-dk); background:var(--paper); color:var(--ink);
+  }
+  .add-task-form input:focus{ outline:2px solid var(--ink); outline-offset:-1px; }
+  .add-task-form input.err{ border-color:var(--today); }
+  .add-task-form .row2{ display:flex; gap:7px; }
+  .add-task-form .row2 > div{ flex:1; min-width:0; }
+  .add-task-form .actions{ display:flex; gap:7px; margin-top:3px; }
+  .add-task-form button{
+    flex:1; font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase;
+    padding:8px; border:2px solid var(--ink); cursor:pointer; background:var(--paper); color:var(--ink);
+  }
+  .add-task-form button.save{ background:var(--ink); color:var(--paper); }
+  .add-task-form button.save:hover{ background:#1b2734; }
+  .add-task-form button.cancel:hover{ background:var(--paper); }
+
+  .gantt-scroll{ flex:1 1 auto; min-width:0; overflow-x:auto; overflow-y:hidden; background:var(--navy); }
+  .chart-head{ position:relative; height:50px; background:var(--navy-2); border-bottom:2px solid var(--grid); }
+  .chart-body{ position:relative; }
+  .day-col{ position:absolute; top:0; bottom:0; border-right:1px solid var(--grid-soft); }
+  .day-col.weekend{ background:rgba(143,216,232,0.035); }
+  .week-label{
+    position:absolute; top:0; height:26px; display:flex; align-items:center;
+    font-family:'Space Mono', monospace; font-size:10px; color:var(--cyan); padding-left:6px;
+    border-right:1px solid var(--grid-soft);
+  }
+  .day-tick{
+    position:absolute; top:26px; height:24px; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono', monospace; font-size:9.5px; color:var(--cyan-dim);
+    border-right:1px solid var(--grid-soft); border-top:1px solid var(--grid-soft);
+  }
+  .chart-row{ position:relative; height:52px; border-bottom:1px solid var(--grid-soft); }
+
+  .bar{
+    position:absolute; top:15px; height:22px;
+    border:2px solid var(--bar-color, var(--cyan));
+    background:repeating-linear-gradient(45deg, var(--bar-color) 0px, var(--bar-color) 1px, transparent 1px, transparent 7px);
+    background-color: rgba(0,0,0,0.15);
+  }
+  .bar .fill{ position:absolute; left:0; top:0; bottom:0; background:var(--bar-color, var(--cyan)); }
+  .bar-label{
+    position:absolute; right:6px; top:0; bottom:0; display:flex; align-items:center;
+    font-family:'Space Mono', monospace; font-weight:700; font-size:9.5px; color:var(--navy); white-space:nowrap;
+  }
+  .bar-label.outside{ left:calc(100% + 6px); right:auto; color:var(--cyan); }
+
+  .today-line{ position:absolute; top:0; bottom:0; width:2px; background:var(--today); z-index:2; }
+  .today-tag{
+    position:absolute; top:2px; left:5px;
+    font-family:'Space Mono', monospace; font-size:9px; font-weight:700; letter-spacing:0.08em;
+    color:var(--today); text-transform:uppercase; white-space:nowrap; background:var(--navy-2); padding:0 3px;
+  }
+  .today-flag{
+    position:absolute; left:-4px; top:32px; width:0; height:0;
+    border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:9px solid var(--today);
+  }
+
+  /* ---------- Team roles drawer (same collapse technique) ---------- */
+  .roles-section{ margin-top:22px; }
+  .roles-toggle{
+    width:100%; display:flex; align-items:center; gap:12px;
+    background:var(--ink); border:3px solid var(--ink); color:var(--paper);
+    padding:14px 18px; cursor:pointer;
+    font-family:'Big Shoulders Display', sans-serif; font-size:19px; font-weight:700; text-transform:uppercase; letter-spacing:0.02em;
+  }
+  .roles-toggle:hover{ background:#1b2734; }
+  .roles-toggle:focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; }
+  .roles-toggle .hint{ font-family:'Space Mono', monospace; font-weight:400; font-size:11px; color:var(--rule); text-transform:none; margin-right:auto; margin-left:4px; }
+  .roles-toggle .chev{ width:15px; height:15px; transition:transform 0.2s ease; color:var(--cyan); flex-shrink:0; }
+  .roles-toggle[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+
+  .roles-drawer{ display:grid; grid-template-rows:0fr; grid-template-columns: minmax(0,1fr); transition:grid-template-rows 0.3s ease; border:0 solid var(--ink); border-width:0 3px; }
+  .roles-drawer.open{ grid-template-rows:1fr; border-bottom-width:3px; }
+  .roles-drawer-inner{ overflow:hidden; min-height:0; min-width:0; }
+  .roles-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:0; background:var(--ink); }
+  .role-card{ background:var(--paper); padding:14px 16px; border-top:5px solid var(--role-color, var(--ink)); position:relative; }
+  .role-card .num{ position:absolute; top:10px; right:12px; font-family:'Big Shoulders Display', sans-serif; font-size:26px; font-weight:800; color:var(--paper-dk); line-height:1; }
+  .role-card .name{ font-family:'Big Shoulders Display', sans-serif; font-size:18px; font-weight:700; margin-bottom:9px; text-transform:uppercase; }
+  .role-card .role-tag{ display:block; font-family:'Space Mono', monospace; font-size:10px; color:var(--ink-soft); padding:3px 0; border-top:1px dashed var(--rule-dk); }
+  .role-card .role-tag:first-of-type{ border-top:none; }
+
+  footer{ margin-top:22px; font-family:'Space Mono', monospace; font-size:10px; color:var(--ink-soft); }
+
+  @media (max-width:640px){
+    body{ padding:22px 4vw 50px; }
+    .brand h1{ font-size:30px; }
+    .data-col{ flex:0 0 220px; width:220px; }
+    .data-head, .data-row{ grid-template-columns: 30px 1fr 0px 38px; }
+    .data-row .assignee{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="badge"><span>SS</span></div>
+    <div>
+      <h1>Steel Synapse</h1>
+      <p>Season Plan · FLL 2026</p>
+    </div>
+  </div>
+  <div class="meta-block">
+    Project start: <b>Tue Aug 8, 2026</b><br>
+    Roster: Adi · Ayan · Benny · Tarun · Siddh · Porter · Rayansh
+  </div>
+</header>
+
+<div class="legend">
+  <span><span class="sw" style="background:var(--game)"></span>Robot Game</span>
+  <span><span class="sw" style="background:var(--design)"></span>Robot Design</span>
+  <span><span class="sw" style="background:var(--innov)"></span>Innovation</span>
+  <span><span class="sw" style="background:var(--core)"></span>Core Values</span>
+  <span><span class="sw" style="background:var(--today)"></span>Today</span>
+</div>
+
+<div class="toolbar">
+  <button class="export-btn" id="exportBtn" type="button">
+    <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5v9M8 10.5L4.5 7M8 10.5L11.5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Export to Excel
+  </button>
+</div>
+
+<div class="accordion" id="accordion"></div>
+
+<section class="roles-section">
+  <button class="roles-toggle" id="rolesToggle" aria-expanded="false" aria-controls="rolesDrawer">
+    <span>Team Roster</span>
+    <span class="hint">7 members / assignments</span>
+    <svg class="chev" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="roles-drawer" id="rolesDrawer">
+    <div class="roles-drawer-inner">
+      <div class="roles-grid" id="rolesGrid"></div>
+    </div>
+  </div>
+</section>
+
+<footer>Source: Steel Synapse Timeline PDF · adityasingh61.github.io/steelsynapse.github.io</footer>
+
+<script>
+/* ---------------- DATA ---------------- */
+const categories = [
+  { name:"Robot Game", color:"var(--game)", tasks:[
+    { name:"Define Goals", owner:"Full Team", pct:100, start:"2026-08-09", end:"2026-08-10" },
+    { name:"Review mission to inform strategy", owner:"Full Team", pct:90, start:"2026-08-10", end:"2026-08-12" },
+    { name:"Finalize mission strategy", owner:"Full Team", pct:70, start:"2026-08-10", end:"2026-08-28" },
+    { name:"Make Chassis 1 and 2", owner:"Rayansh", pct:50, start:"2026-08-10", end:"2026-08-25" },
+    { name:"Add gear switching mechanism", owner:"Adi and Rayansh", pct:70, start:"2026-08-10", end:"2026-08-25" },
+    { name:"Design arms to add to the Robot", owner:"Full Team", pct:70, start:"2026-08-11", end:"2026-08-18" },
+    { name:"Test all arms and improve on design", owner:"Full Team", pct:30, start:"2026-08-13", end:"2026-08-24" },
+    { name:"Add all arms to the Robot", owner:"Build Team", pct:10, start:"2026-08-14", end:"2026-08-23" },
+    { name:"Test wheels for straight/turn correction", owner:"Both Code Teams", pct:33, start:"2026-08-24", end:"2026-08-28" },
+    { name:"Make a Repo with everyone", owner:"Full Team", pct:100, start:"2026-08-26", end:"2026-08-29" },
+    { name:"Make a final Init and UI", owner:"Both Code Teams", pct:100, start:"2026-08-28", end:"2026-08-29" },
+    { name:"Make Run 1", owner:"Benny", pct:0, start:"2026-08-30", end:"2026-09-14" },
+    { name:"Review Run 1", owner:"Siddh", pct:0, start:"2026-09-14", end:"2026-09-15" },
+    { name:"Make Run 2", owner:"tarun", pct:0, start:"2026-09-15", end:"2026-09-30" },
+    { name:"Review Run 2", owner:"Siddh", pct:0, start:"2026-09-30", end:"2026-10-01" },
+    { name:"Make Run 3", owner:"Adi", pct:0, start:"2026-10-01", end:"2026-10-16" },
+    { name:"Review Run 3", owner:"Rayansh", pct:0, start:"2026-10-16", end:"2026-10-17" },
+    { name:"Make Run 4", owner:"Tarun", pct:0, start:"2026-10-17", end:"2026-11-01" },
+    { name:"Review Run 4", owner:"Rayansh", pct:0, start:"2026-11-01", end:"2026-11-02" },
+    { name:"Make Run 5", owner:"Porter", pct:0, start:"2026-8-30", end:"2026-9-14" },
+    { name:"Review Run 5", owner:"Siddh", pct:0, start:"2026-9-14", end:"2026-9-15" },
+    { name:"Make Run 6", owner:"Ayan", pct:0, start:"2026-9-15", end:"2026-9-30" },
+    { name:"Review Run 6", owner:"Siddh", pct:0, start:"2026-9-30", end:"2026-10-1" },
+    { name:"Make Run 7", owner:"Rayansh", pct:0, start:"2026-10-01", end:"2026-10-16" },
+    { name:"Near-100% accuracy on every run", owner:"Full Team", pct:0, start:"2026-08-11", end:"2026-08-13" },
+    { name:"All materials prepared, printed, memorized", owner:"Full Team", pct:0, start:"2026-08-16", end:"2026-08-19" },
+  ]},
+  { name:"Robot Design", color:"var(--design)", tasks:[
+    { name:"Define Goals", owner:"Full Team", pct:100, start:"2026-08-09", end:"2026-08-10" },
+    { name:"Meeting with Scenitics", owner:"Full Team", pct:0, start:"2026-08-27", end:"2026-08-27", untitled:true },
+    { name:"(untitled task)", owner:"—", pct:0, start:"2026-08-16", end:"2026-08-19", untitled:true },
+    { name:"(untitled task)", owner:"—", pct:0, start:"2026-08-16", end:"2026-08-18", untitled:true },
+    { name:"All materials prepared, printed, memorized", owner:"Full Team", pct:0, start:"2026-08-16", end:"2026-08-19" },
+  ]},
+  { name:"Innovation", color:"var(--innov)", tasks:[
+    { name:"Define Goals", owner:"Full Team", pct:100, start:"2026-08-09", end:"2026-08-10" },
+    { name:"Innovation timeline", owner:"innovation Team", pct:0, start:"2026-08-16", end:"2026-08-17", untitled:true },
+    { name:"(untitled task)", owner:"—", pct:0, start:"2026-08-16", end:"2026-08-21", untitled:true },
+    { name:"(untitled task)", owner:"—", pct:0, start:"2026-08-22", end:"2026-08-26", untitled:true },
+    { name:"All materials prepared, printed, memorized", owner:"Full Team", pct:0, start:"2026-08-16", end:"2026-08-20" },
+  ]},
+  { name:"Core Values", color:"var(--core)", tasks:[
+    { name:"Define Goals", owner:"Full Team", pct:100, start:"2026-08-09", end:"2026-08-10" },
+    { name:"Find what we want for outreach", owner:"Porter", pct:0, start:"2026-08-16", end:"2026-08-17", untitled:true },
+    { name:"outreach events with steel city", owner:"Porter", pct:0, start:"2026-08-29", end:"2026-08-30", untitled:true },
+    { name:"(untitled task)", owner:"—", pct:0, start:"2026-08-15", end:"2026-08-18", untitled:true },
+    { name:"(untitled task)", owner:"—", pct:0, start:"2026-08-14", end:"2026-08-17", untitled:true },
+    { name:"Document all outreach events for presentation", owner:"Full Team", pct:0, start:"2026-08-16", end:"2026-08-21" },
+  ]},
+];
+
+const roles = [
+  { name:"Adi", color:"var(--game)", num:"01", tags:["Project Overseer", "Red Base Coder 2", "Build Team", "Marketing Team"] },
+  { name:"Ayan", color:"var(--design)", num:"02", tags:["Blue Base Coder 1"] },
+  { name:"Benny", color:"var(--innov)", num:"03", tags:["Red Base Coder 1","Build Team"] },
+  { name:"Tarun", color:"var(--core)", num:"04", tags:["Both Base Code Helper","Build Team"] },
+  { name:"Siddh", color:"var(--game)", num:"05", tags:["Tech/CAD Team","Innovation Team"] },
+  { name:"Porter", color:"var(--design)", num:"06", tags:["Blue Base Coder 2","Marketing Team"] },
+  { name:"Rayansh", color:"var(--innov)", num:"07", tags:["Tech/CAD Team","Innovation Team","Marketing Team"] },
+];
+
+const TIMELINE_START = new Date(Date.UTC(2026, 7, 3));
+const TIMELINE_END   = new Date(Date.UTC(2027, 0, 1));
+const _now = new Date();
+const TODAY = new Date(Date.UTC(_now.getFullYear(), _now.getMonth(), _now.getDate()));
+const DAY_WIDTH = 34;
+
+/* ---------------- PERSISTENCE ---------------- */
+/*
+  SHARED SYNC SETUP (do this once so everyone who opens the page sees the same live plan):
+  1. Go to https://console.firebase.google.com and create a free project (no credit card required).
+  2. In the left sidebar: Build > Realtime Database > Create Database > start in test mode.
+  3. Project settings (gear icon) > General > "Your apps" > add a Web app > copy the firebaseConfig object.
+  4. Paste your values into FIREBASE_CONFIG below, replacing every "YOUR_..." placeholder.
+  5. In Realtime Database > Rules, use:
+       { "rules": { ".read": true, ".write": true } }
+     This lets anyone with the page link read and write the plan — fine for an internal team tool,
+     but don't reuse this project/database for anything that needs real access control.
+  6. Commit and push this file to GitHub Pages.
+
+  Until FIREBASE_CONFIG is filled in, the page quietly falls back to saving only in your own
+  browser (localStorage), same as before — so nothing breaks if you skip this.
+*/
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAByRwpzesJTUBjmO3e97i05OpPbLPVp6k",
+  authDomain: "ssgantt-3f555.firebaseapp.com",
+  databaseURL: "https://ssgantt-3f555-default-rtdb.firebaseio.com",
+  projectId: "ssgantt-3f555",
+};
+
+const STORAGE_KEY = "steelSynapseSeasonPlan_v1";
+const SHARED_SYNC_ENABLED = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY" && !!FIREBASE_CONFIG.databaseURL && typeof firebase !== "undefined";
+
+let fbRef = null;
+let applyingRemoteUpdate = false; // true while incoming remote data is being applied, so we don't echo it straight back
+
+if(SHARED_SYNC_ENABLED){
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    fbRef = firebase.database().ref("steelSynapseSeasonPlan");
+  }catch(e){
+    fbRef = null; // bad config — silently fall back to localStorage-only
+  }
+}
+
+function stateFromCategories(){
+  const data = {};
+  categories.forEach(cat => { data[cat.name] = cat.tasks; });
+  return data;
+}
+
+function applyState(data){
+  categories.forEach(cat => {
+    if(Array.isArray(data[cat.name])) cat.tasks = data[cat.name];
+  });
+}
+
+function saveState(){
+  const data = stateFromCategories();
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){
+    // storage unavailable (private browsing, sandboxed preview, etc.) — fail silently
+  }
+  if(fbRef && !applyingRemoteUpdate){
+    fbRef.set(data).catch(() => { /* offline, or rules not set up yet — local copy is still saved */ });
+  }
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) applyState(JSON.parse(raw));
+  }catch(e){
+    // ignore corrupt/unavailable storage and fall back to the built-in defaults
+  }
+}
+
+loadState();
+
+function dayIndex(d){ return Math.round((d - TIMELINE_START) / 86400000); }
+const totalDays = dayIndex(TIMELINE_END) + 1;
+const chartWidth = totalDays * DAY_WIDTH;
+const todayIdx = dayIndex(TODAY);
+
+function todayISO(){
+  return new Date().toISOString().slice(0,10);
+}
+
+function addBgGrid(container, heightPx){
+  for(let i=0;i<totalDays;i++){
+    const d = new Date(TIMELINE_START.getTime() + i*86400000);
+    const isWeekend = d.getDay()===0 || d.getDay()===6;
+    const col = document.createElement("div");
+    col.className = "day-col" + (isWeekend ? " weekend" : "");
+    col.style.left=(i*DAY_WIDTH)+"px"; col.style.width=DAY_WIDTH+"px"; col.style.height=heightPx+"px";
+    container.appendChild(col);
+  }
+}
+
+function buildChartHead(){
+  const head = document.createElement("div");
+  head.className = "chart-head";
+  head.style.width = chartWidth + "px";
+  for(let i=0;i<totalDays;i++){
+    const d = new Date(TIMELINE_START.getTime() + i*86400000);
+    const isWeekend = d.getDay()===0 || d.getDay()===6;
+    const col = document.createElement("div");
+    col.className = "day-col" + (isWeekend ? " weekend" : "");
+    col.style.left = (i*DAY_WIDTH)+"px";
+    col.style.width = DAY_WIDTH+"px";
+    head.appendChild(col);
+    if(i===0 || d.getDay()===1){
+      const lbl = document.createElement("div");
+      lbl.className = "week-label";
+      lbl.style.left = (i*DAY_WIDTH)+"px";
+      lbl.style.width = (DAY_WIDTH*7)+"px";
+      lbl.textContent = d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+      head.appendChild(lbl);
+    }
+    const tick = document.createElement("div");
+    tick.className = "day-tick";
+    tick.style.left = (i*DAY_WIDTH)+"px";
+    tick.style.width = DAY_WIDTH+"px";
+    tick.textContent = d.getDate();
+    head.appendChild(tick);
+  }
+  return head;
+}
+
+/* -- inline "+ Add Task" trigger/form, appended to the bottom of a category's data column -- */
+function buildAddTaskUI(cat, onAdded){
+  const holder = document.createElement("div");
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "add-task-trigger";
+  trigger.textContent = "+ Add Task";
+
+  const form = document.createElement("div");
+  form.className = "add-task-form";
+  form.style.display = "none";
+  form.innerHTML = `
+    <div>
+      <span class="f-label">Task name</span>
+      <input type="text" class="f-name" placeholder="e.g. Wire the motor controller">
+    </div>
+    <div>
+      <span class="f-label">Owner</span>
+      <input type="text" class="f-owner" placeholder="e.g. Full Team">
+    </div>
+    <div class="row2">
+      <div>
+        <span class="f-label">Start</span>
+        <input type="date" class="f-start" value="${todayISO()}">
+      </div>
+      <div>
+        <span class="f-label">End</span>
+        <input type="date" class="f-end" value="${todayISO()}">
+      </div>
+    </div>
+    <div>
+      <span class="f-label">% complete</span>
+      <input type="number" class="f-pct" min="0" max="100" value="0">
+    </div>
+    <div class="actions">
+      <button type="button" class="cancel">Cancel</button>
+      <button type="button" class="save">Add Task</button>
+    </div>
+  `;
+
+  function openForm(){
+    trigger.style.display = "none";
+    form.style.display = "flex";
+    form.querySelector(".f-name").focus();
+  }
+  function closeForm(){
+    form.style.display = "none";
+    trigger.style.display = "block";
+    form.querySelectorAll("input").forEach(i => i.classList.remove("err"));
+  }
+
+  trigger.addEventListener("click", openForm);
+  form.querySelector(".cancel").addEventListener("click", closeForm);
+
+  form.querySelector(".save").addEventListener("click", () => {
+    const nameEl = form.querySelector(".f-name");
+    const ownerEl = form.querySelector(".f-owner");
+    const startEl = form.querySelector(".f-start");
+    const endEl = form.querySelector(".f-end");
+    const pctEl = form.querySelector(".f-pct");
+
+    const name = nameEl.value.trim();
+    const owner = ownerEl.value.trim() || "—";
+    const start = startEl.value;
+    const end = endEl.value;
+    const pct = Math.max(0, Math.min(100, parseInt(pctEl.value, 10) || 0));
+
+    let ok = true;
+    [nameEl, startEl, endEl].forEach(el => {
+      if(!el.value){ el.classList.add("err"); ok = false; }
+      else{ el.classList.remove("err"); }
+    });
+    if(start && end && new Date(end) < new Date(start)){
+      endEl.classList.add("err");
+      ok = false;
+    }
+    if(!ok) return;
+
+    cat.tasks.push({ name, owner, pct, start, end });
+    onAdded();
+  });
+
+  holder.appendChild(trigger);
+  holder.appendChild(form);
+  return holder;
+}
+
+function buildCategoryGantt(cat, onAdded){
+  const wrap = document.createElement("div");
+  wrap.className = "gantt-row-wrap";
+
+  // left: data column — lives OUTSIDE the scroll container, so it never moves
+  const dataCol = document.createElement("div");
+  dataCol.className = "data-col";
+  const dataHead = document.createElement("div");
+  dataHead.className = "data-head";
+  dataHead.innerHTML = `<span></span><span>Task</span><span style="text-align:right;">Owner</span><span style="text-align:right;">%</span>`;
+  dataCol.appendChild(dataHead);
+
+  let dragFromIdx = null;
+
+  function moveTask(fromIdx, toIdx){
+    if(toIdx < 0 || toIdx >= cat.tasks.length || fromIdx === toIdx) return;
+    const [moved] = cat.tasks.splice(fromIdx, 1);
+    cat.tasks.splice(toIdx, 0, moved);
+    onAdded();
+  }
+
+  cat.tasks.forEach((t, idx) => {
+    const row = document.createElement("div");
+    row.className = "data-row";
+    row.draggable = true;
+    row.dataset.index = idx;
+
+    const reorderCell = document.createElement("div");
+    reorderCell.className = "row-menu";
+    reorderCell.innerHTML = `
+      <button type="button" class="dots-btn" title="Task options">⠿</button>
+      <div class="dots-menu">
+        <button type="button" class="up" ${idx===0 ? "disabled" : ""}>▲ Move Up</button>
+        <button type="button" class="down" ${idx===cat.tasks.length-1 ? "disabled" : ""}>▼ Move Down</button>
+        <button type="button" class="remove">− Remove</button>
+      </div>`;
+    const dotsMenu = reorderCell.querySelector(".dots-menu");
+    reorderCell.querySelector(".dots-btn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const alreadyOpen = dotsMenu.classList.contains("open");
+      document.querySelectorAll(".dots-menu.open").forEach(m => m.classList.remove("open"));
+      document.querySelectorAll(".row-menu.menu-open").forEach(c => c.classList.remove("menu-open"));
+      if(!alreadyOpen){
+        dotsMenu.classList.add("open");
+        reorderCell.classList.add("menu-open");
+      }
+    });
+    reorderCell.querySelector(".up").addEventListener("click", () => moveTask(idx, idx-1));
+    reorderCell.querySelector(".down").addEventListener("click", () => moveTask(idx, idx+1));
+    reorderCell.querySelector(".remove").addEventListener("click", () => {
+      cat.tasks.splice(idx, 1);
+      onAdded();
+    });
+    row.appendChild(reorderCell);
+
+    const nameSpan = document.createElement("span");
+    nameSpan.className = `task-name ${t.untitled ? 'untitled':''}`;
+    nameSpan.title = t.name;
+    nameSpan.textContent = t.name;
+    row.appendChild(nameSpan);
+
+    const ownerSpan = document.createElement("span");
+    ownerSpan.className = "assignee";
+    ownerSpan.textContent = t.owner;
+    row.appendChild(ownerSpan);
+
+    const pctWrap = document.createElement("div");
+    pctWrap.className = "pct-wrap";
+    const pctInput = document.createElement("input");
+    pctInput.type = "number";
+    pctInput.className = "pct-input";
+    pctInput.min = "0";
+    pctInput.max = "100";
+    pctInput.value = t.pct;
+    if(t.pct > 0) pctInput.style.color = cat.color;
+    pctInput.addEventListener("change", () => {
+      let v = parseInt(pctInput.value, 10);
+      if(isNaN(v)) v = 0;
+      t.pct = Math.max(0, Math.min(100, v));
+      onAdded();
+    });
+    const pctSign = document.createElement("span");
+    pctSign.className = "pct-sign";
+    pctSign.textContent = "%";
+    pctWrap.appendChild(pctInput);
+    pctWrap.appendChild(pctSign);
+    row.appendChild(pctWrap);
+
+    row.addEventListener("dragstart", (e) => {
+      dragFromIdx = idx;
+      row.classList.add("drag-source");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", String(idx));
+    });
+    row.addEventListener("dragend", () => {
+      row.classList.remove("drag-source");
+      dataCol.querySelectorAll(".data-row").forEach(r => r.classList.remove("drag-over-top","drag-over-bottom"));
+    });
+    row.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      if(dragFromIdx === null || dragFromIdx === idx) return;
+      const rect = row.getBoundingClientRect();
+      const before = (e.clientY - rect.top) < rect.height / 2;
+      row.classList.toggle("drag-over-top", before);
+      row.classList.toggle("drag-over-bottom", !before);
+    });
+    row.addEventListener("dragleave", () => {
+      row.classList.remove("drag-over-top","drag-over-bottom");
+    });
+    row.addEventListener("drop", (e) => {
+      e.preventDefault();
+      row.classList.remove("drag-over-top","drag-over-bottom");
+      if(dragFromIdx === null || dragFromIdx === idx) return;
+      const rect = row.getBoundingClientRect();
+      const before = (e.clientY - rect.top) < rect.height / 2;
+      let toIdx = before ? idx : idx + 1;
+      if(dragFromIdx < toIdx) toIdx -= 1;
+      moveTask(dragFromIdx, toIdx);
+      dragFromIdx = null;
+    });
+
+    dataCol.appendChild(row);
+  });
+  dataCol.appendChild(buildAddTaskUI(cat, onAdded));
+  wrap.appendChild(dataCol);
+
+  // right: the ONLY thing that scrolls horizontally
+  const scroll = document.createElement("div");
+  scroll.className = "gantt-scroll";
+  scroll.appendChild(buildChartHead());
+
+  const chartBody = document.createElement("div");
+  chartBody.className = "chart-body";
+  chartBody.style.width = chartWidth+"px";
+
+  cat.tasks.forEach(t => {
+    const row = document.createElement("div");
+    row.className = "chart-row";
+    row.style.width = chartWidth+"px";
+    addBgGrid(row, 52);
+
+    const s = dayIndex(new Date(t.start));
+    const e = dayIndex(new Date(t.end)) + 1;
+    const left = s*DAY_WIDTH;
+    const width = Math.max((e-s)*DAY_WIDTH - 4, 20);
+
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.setProperty("--bar-color", cat.color);
+    bar.style.left = left+"px";
+    bar.style.width = width+"px";
+    const fillWidth = Math.max(t.pct,0);
+    const labelInside = width > 40;
+    bar.innerHTML = `<div class="fill" style="width:${fillWidth}%"></div><span class="bar-label ${labelInside ? '' : 'outside'}">${t.pct}%</span>`;
+    row.appendChild(bar);
+    chartBody.appendChild(row);
+  });
+
+  if(todayIdx >= 0 && todayIdx < totalDays){
+    const rowsHeight = cat.tasks.length * 52;
+    const todayLine = document.createElement("div");
+    todayLine.className = "today-line";
+    todayLine.style.left = (todayIdx*DAY_WIDTH)+"px";
+    todayLine.style.height = rowsHeight+"px";
+    todayLine.innerHTML = `<span class="today-tag">Today · ${TODAY.toLocaleDateString('en-US',{timeZone:'UTC', month:'short', day:'numeric'})}</span><span class="today-flag"></span>`;
+    chartBody.appendChild(todayLine);
+  }
+
+  scroll.appendChild(chartBody);
+  wrap.appendChild(scroll);
+  return wrap;
+}
+
+/* re-render a category's whole gantt in place (used on open, and after a task is added/reordered) */
+function renderCategory(cat, inner){
+  saveState();
+  const scrollLeft = inner.scrollLeft || 0;
+  inner.innerHTML = "";
+  inner.appendChild(buildCategoryGantt(cat, () => renderCategory(cat, inner)));
+  const scrollEl = inner.querySelector(".gantt-scroll");
+  if(scrollEl) scrollEl.scrollLeft = scrollLeft;
+  if(typeof cat._refreshHint === "function") cat._refreshHint();
+}
+
+/* ---------------- BUILD THE 4 ACCORDION SECTIONS ---------------- */
+const accordion = document.getElementById("accordion");
+const categoryUIState = []; // lets the remote-sync listener re-render whatever is currently open
+
+categories.forEach((cat) => {
+  const section = document.createElement("div");
+  section.className = "cat-section";
+
+  const toggle = document.createElement("button");
+  toggle.className = "cat-toggle";
+  toggle.style.setProperty("--cat-color", cat.color);
+  toggle.setAttribute("aria-expanded", "false");
+
+  const hint = document.createElement("span");
+  hint.className = "hint";
+  function refreshHint(){
+    const avgPct = Math.round(cat.tasks.reduce((s,t)=>s+t.pct,0) / cat.tasks.length);
+    hint.textContent = `${cat.tasks.length} tasks · avg ${avgPct}%`;
+  }
+  refreshHint();
+  cat._refreshHint = refreshHint;
+
+  toggle.innerHTML = `
+    <span class="swatch"></span>
+    <span>${cat.name}</span>
+    <svg class="chev" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  toggle.insertBefore(hint, toggle.querySelector(".chev"));
+
+  const drawer = document.createElement("div");
+  drawer.className = "cat-drawer";
+  const inner = document.createElement("div");
+  inner.className = "cat-drawer-inner";
+  drawer.appendChild(inner);
+
+  const state = { cat, inner, built:false }; // "built" flips once the drawer's chart is first rendered
+  categoryUIState.push(state);
+
+  toggle.addEventListener("click", () => {
+    if(!state.built){
+      renderCategory(cat, inner);
+      state.built = true;
+    }
+    const opening = toggle.getAttribute("aria-expanded") !== "true";
+    toggle.setAttribute("aria-expanded", opening ? "true" : "false");
+    drawer.classList.toggle("open", opening);
+  });
+
+  section.appendChild(toggle);
+  section.appendChild(drawer);
+  accordion.appendChild(section);
+});
+
+/* Live sync: whenever the shared database changes (someone else added/reordered/edited a
+   task), pull the new data in and re-render whatever categories are currently open. */
+if(fbRef){
+  fbRef.on("value", (snapshot) => {
+    const data = snapshot.val();
+    if(!data) return; // nothing written to the shared DB yet — keep local/default data as-is
+    applyingRemoteUpdate = true;
+    applyState(data);
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){}
+    categoryUIState.forEach(state => {
+      if(state.built) renderCategory(state.cat, state.inner);
+      else if(typeof state.cat._refreshHint === "function") state.cat._refreshHint();
+    });
+    applyingRemoteUpdate = false;
+  });
+}
+
+/* ---------------- ROLES DRAWER ---------------- */
+const rolesGrid = document.getElementById("rolesGrid");
+roles.forEach(r => {
+  const card = document.createElement("div");
+  card.className = "role-card";
+  card.style.setProperty("--role-color", r.color);
+  card.innerHTML = `<span class="num">${r.num}</span>
+    <div class="name">${r.name}</div>
+    ${r.tags.map(t=>`<span class="role-tag">${t}</span>`).join("")}`;
+  rolesGrid.appendChild(card);
+});
+
+const rolesToggle = document.getElementById("rolesToggle");
+const rolesDrawer = document.getElementById("rolesDrawer");
+rolesToggle.addEventListener("click", () => {
+  const opening = rolesToggle.getAttribute("aria-expanded") !== "true";
+  rolesToggle.setAttribute("aria-expanded", opening ? "true" : "false");
+  rolesDrawer.classList.toggle("open", opening);
+});
+
+/* ---------------- EXPORT TO EXCEL ---------------- */
+function formatDateForExport(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(isNaN(d)) return iso;
+  return d.toLocaleDateString('en-US', { timeZone:'UTC', month:'short', day:'numeric', year:'numeric' });
+}
+
+function exportToExcel(){
+  const wb = XLSX.utils.book_new();
+
+  // First sheet: everything in one place, so it's visible immediately no matter
+  // which sheet a viewer defaults to.
+  const allRows = [];
+  categories.forEach(cat => {
+    cat.tasks.forEach(t => {
+      allRows.push({
+        "Category": cat.name,
+        "Task": t.name,
+        "Owner": t.owner,
+        "Start": formatDateForExport(t.start),
+        "End": formatDateForExport(t.end),
+        "% Complete": t.pct
+      });
+    });
+  });
+  const wsAll = XLSX.utils.json_to_sheet(allRows);
+  wsAll['!cols'] = [{ wch:16 }, { wch:42 }, { wch:22 }, { wch:14 }, { wch:14 }, { wch:12 }];
+  XLSX.utils.book_append_sheet(wb, wsAll, "All Tasks");
+
+  // One sheet per category as well, for anyone who wants them separated.
+  categories.forEach(cat => {
+    const rows = cat.tasks.map(t => ({
+      "Task": t.name,
+      "Owner": t.owner,
+      "Start": formatDateForExport(t.start),
+      "End": formatDateForExport(t.end),
+      "% Complete": t.pct
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = [{ wch:42 }, { wch:22 }, { wch:14 }, { wch:14 }, { wch:12 }];
+    XLSX.utils.book_append_sheet(wb, ws, cat.name.substring(0,31));
+  });
+
+  const rosterRows = roles.map(r => ({ "Name": r.name, "Roles": r.tags.join(", ") }));
+  const wsRoster = XLSX.utils.json_to_sheet(rosterRows);
+  wsRoster['!cols'] = [{ wch:14 }, { wch:60 }];
+  XLSX.utils.book_append_sheet(wb, wsRoster, "Team Roster");
+
+  XLSX.writeFile(wb, "SteelSynapse_SeasonPlan.xlsx");
+}
+
+document.getElementById("exportBtn").addEventListener("click", exportToExcel);
+
+/* close any open row action-menu when clicking elsewhere on the page */
+document.addEventListener("click", () => {
+  document.querySelectorAll(".dots-menu.open").forEach(m => m.classList.remove("open"));
+  document.querySelectorAll(".row-menu.menu-open").forEach(c => c.classList.remove("menu-open"));
+});
+</script>
+</body>
+</html>
