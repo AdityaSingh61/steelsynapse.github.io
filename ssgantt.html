@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
 <style>
   :root{
     --paper:#e7dfc7;
@@ -378,6 +380,77 @@ const _now = new Date();
 const TODAY = new Date(Date.UTC(_now.getFullYear(), _now.getMonth(), _now.getDate()));
 const DAY_WIDTH = 34;
 
+/* ---------------- PERSISTENCE ---------------- */
+/*
+  SHARED SYNC SETUP (do this once so everyone who opens the page sees the same live plan):
+  1. Go to https://console.firebase.google.com and create a free project (no credit card required).
+  2. In the left sidebar: Build > Realtime Database > Create Database > start in test mode.
+  3. Project settings (gear icon) > General > "Your apps" > add a Web app > copy the firebaseConfig object.
+  4. Paste your values into FIREBASE_CONFIG below, replacing every "YOUR_..." placeholder.
+  5. In Realtime Database > Rules, use:
+       { "rules": { ".read": true, ".write": true } }
+     This lets anyone with the page link read and write the plan — fine for an internal team tool,
+     but don't reuse this project/database for anything that needs real access control.
+  6. Commit and push this file to GitHub Pages.
+
+  Until FIREBASE_CONFIG is filled in, the page quietly falls back to saving only in your own
+  browser (localStorage), same as before — so nothing breaks if you skip this.
+*/
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAByRwpzesJTUBjmO3e97i05OpPbLPVp6k",
+  authDomain: "ssgantt-3f555.firebaseapp.com",
+  databaseURL: "https://ssgantt-3f555-default-rtdb.firebaseio.com",
+  projectId: "ssgantt-3f555",
+};
+
+const STORAGE_KEY = "steelSynapseSeasonPlan_v1";
+const SHARED_SYNC_ENABLED = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY" && !!FIREBASE_CONFIG.databaseURL && typeof firebase !== "undefined";
+
+let fbRef = null;
+let applyingRemoteUpdate = false; // true while incoming remote data is being applied, so we don't echo it straight back
+
+if(SHARED_SYNC_ENABLED){
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    fbRef = firebase.database().ref("steelSynapseSeasonPlan");
+  }catch(e){
+    fbRef = null; // bad config — silently fall back to localStorage-only
+  }
+}
+
+function stateFromCategories(){
+  const data = {};
+  categories.forEach(cat => { data[cat.name] = cat.tasks; });
+  return data;
+}
+
+function applyState(data){
+  categories.forEach(cat => {
+    if(Array.isArray(data[cat.name])) cat.tasks = data[cat.name];
+  });
+}
+
+function saveState(){
+  const data = stateFromCategories();
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){
+    // storage unavailable (private browsing, sandboxed preview, etc.) — fail silently
+  }
+  if(fbRef && !applyingRemoteUpdate){
+    fbRef.set(data).catch(() => { /* offline, or rules not set up yet — local copy is still saved */ });
+  }
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) applyState(JSON.parse(raw));
+  }catch(e){
+    // ignore corrupt/unavailable storage and fall back to the built-in defaults
+  }
+}
+
+loadState();
+
 function dayIndex(d){ return Math.round((d - TIMELINE_START) / 86400000); }
 const totalDays = dayIndex(TIMELINE_END) + 1;
 const chartWidth = totalDays * DAY_WIDTH;
@@ -657,17 +730,20 @@ function buildCategoryGantt(cat, onAdded){
   return wrap;
 }
 
-/* re-render a category's whole gantt in place (used on open, and after a task is added) */
+/* re-render a category's whole gantt in place (used on open, and after a task is added/reordered) */
 function renderCategory(cat, inner){
+  saveState();
   const scrollLeft = inner.scrollLeft || 0;
   inner.innerHTML = "";
   inner.appendChild(buildCategoryGantt(cat, () => renderCategory(cat, inner)));
   const scrollEl = inner.querySelector(".gantt-scroll");
   if(scrollEl) scrollEl.scrollLeft = scrollLeft;
+  if(typeof cat._refreshHint === "function") cat._refreshHint();
 }
 
 /* ---------------- BUILD THE 4 ACCORDION SECTIONS ---------------- */
 const accordion = document.getElementById("accordion");
+const categoryUIState = []; // lets the remote-sync listener re-render whatever is currently open
 
 categories.forEach((cat) => {
   const section = document.createElement("div");
@@ -685,6 +761,7 @@ categories.forEach((cat) => {
     hint.textContent = `${cat.tasks.length} tasks · avg ${avgPct}%`;
   }
   refreshHint();
+  cat._refreshHint = refreshHint;
 
   toggle.innerHTML = `
     <span class="swatch"></span>
@@ -698,40 +775,40 @@ categories.forEach((cat) => {
   inner.className = "cat-drawer-inner";
   drawer.appendChild(inner);
 
-  let built = false; // lazy-build the chart only when first opened
-
-  function fullRender(){
-    renderCategory(cat, inner);
-    refreshHint();
-  }
+  const state = { cat, inner, built:false }; // "built" flips once the drawer's chart is first rendered
+  categoryUIState.push(state);
 
   toggle.addEventListener("click", () => {
-    if(!built){
+    if(!state.built){
       renderCategory(cat, inner);
-      built = true;
+      state.built = true;
     }
     const opening = toggle.getAttribute("aria-expanded") !== "true";
     toggle.setAttribute("aria-expanded", opening ? "true" : "false");
     drawer.classList.toggle("open", opening);
   });
 
-  // wrap onAdded so the header's task-count/avg hint stays in sync too
-  const origRenderCategory = renderCategory;
-
   section.appendChild(toggle);
   section.appendChild(drawer);
   accordion.appendChild(section);
-
-  // patch: re-render triggers should also refresh the hint text
-  cat._refreshHint = refreshHint;
 });
 
-// Patch renderCategory globally to also refresh the owning category's hint, if present.
-const _origRenderCategory = renderCategory;
-renderCategory = function(cat, inner){
-  _origRenderCategory(cat, inner);
-  if(typeof cat._refreshHint === "function") cat._refreshHint();
-};
+/* Live sync: whenever the shared database changes (someone else added/reordered/edited a
+   task), pull the new data in and re-render whatever categories are currently open. */
+if(fbRef){
+  fbRef.on("value", (snapshot) => {
+    const data = snapshot.val();
+    if(!data) return; // nothing written to the shared DB yet — keep local/default data as-is
+    applyingRemoteUpdate = true;
+    applyState(data);
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }catch(e){}
+    categoryUIState.forEach(state => {
+      if(state.built) renderCategory(state.cat, state.inner);
+      else if(typeof state.cat._refreshHint === "function") state.cat._refreshHint();
+    });
+    applyingRemoteUpdate = false;
+  });
+}
 
 /* ---------------- ROLES DRAWER ---------------- */
 const rolesGrid = document.getElementById("rolesGrid");
