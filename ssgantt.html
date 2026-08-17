@@ -126,7 +126,20 @@
   .data-row.drag-source{ opacity:0.35; }
   .data-row.drag-over-top{ box-shadow: inset 0 3px 0 0 var(--ink); }
   .data-row.drag-over-bottom{ box-shadow: inset 0 -3px 0 0 var(--ink); }
-  .data-row .task-name{ font-size:12px; font-weight:500; white-space:normal; line-height:1.25; overflow-wrap:break-word; }
+  .data-row .task-name{
+    font-size:12px; font-weight:500; display:block; position:relative;
+    overflow:hidden; white-space:nowrap;
+  }
+  .data-row .task-name .tn-inner{ display:inline-block; white-space:nowrap; will-change:transform; }
+  .data-row .task-name.marquee:hover .tn-inner{
+    animation: tn-marquee var(--tn-duration, 6s) ease-in-out infinite alternate;
+  }
+  @keyframes tn-marquee{
+    0%{ transform:translateX(0); }
+    15%{ transform:translateX(0); }
+    85%{ transform:translateX(var(--tn-shift, 0px)); }
+    100%{ transform:translateX(var(--tn-shift, 0px)); }
+  }
   .data-row .task-name.untitled{ color:var(--ink-soft); font-style:italic; font-weight:400; }
   .data-row .assignee{ font-family:'Space Mono', monospace; font-size:9.5px; color:var(--ink-soft); white-space:normal; line-height:1.25; align-self:center; }
   .data-row .pct{ font-family:'Space Mono', monospace; font-weight:700; font-size:11px; text-align:right; align-self:center; }
@@ -667,7 +680,10 @@ function buildCategoryGantt(cat, onAdded){
     const nameSpan = document.createElement("span");
     nameSpan.className = `task-name ${t.untitled ? 'untitled':''}`;
     nameSpan.title = t.name;
-    nameSpan.textContent = t.name;
+    const nameInner = document.createElement("span");
+    nameInner.className = "tn-inner";
+    nameInner.textContent = t.name;
+    nameSpan.appendChild(nameInner);
     row.appendChild(nameSpan);
 
     const ownerSpan = document.createElement("span");
@@ -782,6 +798,26 @@ function buildCategoryGantt(cat, onAdded){
   return wrap;
 }
 
+/* Measures each task-name cell against its full text and, if it's cut off, sets up a
+   slow hover-scroll (marquee) so the full name is reachable without wrapping the row —
+   wrapping would change row height and throw off the Gantt bar alignment. */
+function setupMarquee(container){
+  container.querySelectorAll(".task-name").forEach(el => {
+    const inner = el.querySelector(".tn-inner");
+    if(!inner) return;
+    const overflow = inner.scrollWidth - el.clientWidth;
+    if(overflow > 4){
+      el.classList.add("marquee");
+      const duration = Math.min(14, Math.max(4, overflow / 20)); // slower for longer overflow
+      el.style.setProperty("--tn-shift", `-${overflow}px`);
+      el.style.setProperty("--tn-duration", `${duration}s`);
+    }else{
+      el.classList.remove("marquee");
+      el.style.removeProperty("--tn-shift");
+    }
+  });
+}
+
 /* re-render a category's whole gantt in place (used on open, and after a task is added/reordered) */
 function renderCategory(cat, inner){
   saveState();
@@ -791,6 +827,7 @@ function renderCategory(cat, inner){
   const scrollEl = inner.querySelector(".gantt-scroll");
   if(scrollEl) scrollEl.scrollLeft = scrollLeft;
   if(typeof cat._refreshHint === "function") cat._refreshHint();
+  setupMarquee(inner);
 }
 
 /* ---------------- BUILD THE 4 ACCORDION SECTIONS ---------------- */
