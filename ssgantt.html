@@ -6,7 +6,7 @@
 <title>Steel Synapse — Season Plan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
 <style>
@@ -128,7 +128,7 @@
   .data-row.drag-over-bottom{ box-shadow: inset 0 -3px 0 0 var(--ink); }
   .data-row .task-name{
     font-size:12px; font-weight:500; display:block; position:relative;
-    overflow:hidden; white-space:nowrap;
+    overflow:hidden; white-space:nowrap; cursor:pointer;
   }
   .data-row .task-name .tn-inner{ display:inline-block; white-space:nowrap; will-change:transform; }
   .data-row .task-name.marquee:hover .tn-inner{
@@ -186,7 +186,7 @@
   .pct-wrap{ display:flex; align-items:center; justify-content:flex-end; gap:1px; }
   .pct-wrap .pct-sign{ font-family:'Space Mono', monospace; font-weight:700; font-size:11px; color:var(--ink-soft); }
 
-  /* -- add-task trigger + inline form (bottom of each data column) -- */
+  /* -- add-task trigger: opens the centered Add Task modal (see .modal-overlay below) -- */
   .add-task-trigger{
     display:block; width:100%; text-align:center;
     font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
@@ -196,27 +196,61 @@
   .add-task-trigger:hover{ background:var(--paper-dk); color:var(--ink); }
   .add-task-trigger:focus-visible{ outline:2px solid var(--ink-soft); outline-offset:-2px; }
 
-  .add-task-form{
-    padding:12px 14px 14px; border-top:2px solid var(--ink); background:var(--paper-dk);
-    display:flex; flex-direction:column; gap:7px; margin-top:auto;
+  /* -- Add Task modal: centered overlay dialog -- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(13,13,13,0.6); z-index:1000;
+    display:none; align-items:center; justify-content:center; padding:20px;
   }
-  .add-task-form .f-label{ font-family:'Space Mono', monospace; font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
-  .add-task-form input{
-    font-family:'Work Sans', sans-serif; font-size:12px; padding:6px 8px; width:100%;
-    border:1px solid var(--rule-dk); background:var(--paper); color:var(--ink);
+  .modal-overlay.open{ display:flex; }
+  .task-modal{
+    width:100%; max-width:460px; max-height:90vh; overflow-y:auto;
+    background:var(--paper); border:3px solid var(--ink); box-shadow:7px 7px 0 0 var(--ink);
+    display:flex; flex-direction:column;
   }
-  .add-task-form input:focus{ outline:2px solid var(--ink); outline-offset:-1px; }
-  .add-task-form input.err{ border-color:var(--today); }
-  .add-task-form .row2{ display:flex; gap:7px; }
-  .add-task-form .row2 > div{ flex:1; min-width:0; }
-  .add-task-form .actions{ display:flex; gap:7px; margin-top:3px; }
-  .add-task-form button{
-    flex:1; font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase;
-    padding:8px; border:2px solid var(--ink); cursor:pointer; background:var(--paper); color:var(--ink);
+  .task-modal-header{
+    display:flex; align-items:center; gap:12px; background:var(--ink); color:var(--paper);
+    padding:16px 18px; position:sticky; top:0;
   }
-  .add-task-form button.save{ background:var(--ink); color:var(--paper); }
-  .add-task-form button.save:hover{ background:#1b2734; }
-  .add-task-form button.cancel:hover{ background:var(--paper); }
+  .task-modal-header .modal-swatch{ width:16px; height:16px; flex-shrink:0; background:var(--cyan); }
+  .task-modal-header h2{
+    font-family:'Big Shoulders Display', sans-serif; font-size:19px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.02em; flex:1; line-height:1.15;
+  }
+  .task-modal-header .modal-close{
+    background:none; border:none; color:var(--paper); font-size:22px; line-height:1; cursor:pointer; padding:0 2px;
+  }
+  .task-modal-header .modal-close:hover{ color:var(--cyan); }
+
+  .task-modal-body{ padding:20px 18px; display:flex; flex-direction:column; gap:14px; }
+  .task-modal-body label{
+    display:block; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:5px;
+  }
+  .task-modal-body input, .task-modal-body select{
+    width:100%; font-family:'Work Sans', sans-serif; font-size:14px; padding:10px 12px;
+    border:2px solid var(--ink); background:var(--paper); color:var(--ink);
+  }
+  .task-modal-body input:focus, .task-modal-body select:focus{ outline:2px solid var(--cyan-dim); outline-offset:-2px; }
+  .task-modal-body input.err{ border-color:var(--today); }
+  .tm-row2{ display:flex; gap:14px; }
+  .tm-row2 > div{ flex:1; min-width:0; }
+  .tm-tip{ font-family:'Space Mono', monospace; font-size:10.5px; color:var(--ink-soft); line-height:1.5; }
+
+  .task-modal-footer{
+    display:flex; align-items:center; gap:10px; padding:16px 18px; border-top:2px solid var(--ink);
+  }
+  .task-modal-footer button{
+    font-family:'Space Mono', monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+    padding:10px 20px; border:2px solid var(--ink); cursor:pointer; background:var(--paper); color:var(--ink);
+  }
+  .task-modal-footer .tm-save{ background:var(--ink); color:var(--paper); }
+  .task-modal-footer .tm-save:hover{ background:#1b2734; }
+  .task-modal-footer .tm-cancel:hover{ background:var(--paper-dk); }
+  .task-modal-footer .tm-delete{
+    border-color:var(--today); color:var(--today); background:transparent;
+  }
+  .task-modal-footer .tm-delete:hover{ background:var(--today); color:var(--paper); }
+  .tm-footer-right{ display:flex; gap:10px; margin-left:auto; }
 
   .gantt-scroll{ flex:1 1 auto; min-width:0; overflow-x:auto; overflow-y:hidden; background:var(--navy); }
   .chart-head{ position:relative; height:50px; background:var(--navy-2); border-bottom:2px solid var(--grid); }
@@ -339,6 +373,55 @@
     </div>
   </div>
 </section>
+
+<!-- Add/Edit Task modal: centered dialog shared by every category's "+ Add Task" trigger and by clicking a task name to edit it -->
+<div class="modal-overlay" id="taskModalOverlay">
+  <div class="task-modal">
+    <div class="task-modal-header">
+      <span class="modal-swatch" id="modalSwatch"></span>
+      <h2><span id="modalAction">Add</span> Task · <span id="modalCatName"></span></h2>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="task-modal-body">
+      <div>
+        <label for="tmName">Task Name</label>
+        <input type="text" id="tmName" placeholder="e.g. Make Run 1">
+      </div>
+      <div>
+        <label for="tmOwner">Owner</label>
+        <input type="text" id="tmOwner" placeholder="e.g. Benny, Full Team, Build Team">
+      </div>
+      <div class="tm-row2">
+        <div>
+          <label for="tmStart">Start Date</label>
+          <input type="date" id="tmStart">
+        </div>
+        <div>
+          <label for="tmEnd">End Date</label>
+          <input type="date" id="tmEnd">
+        </div>
+      </div>
+      <div class="tm-row2">
+        <div>
+          <label for="tmPct">Progress %</label>
+          <input type="number" id="tmPct" min="0" max="100" value="0">
+        </div>
+        <div>
+          <label for="tmCategory">Category</label>
+          <select id="tmCategory"></select>
+        </div>
+      </div>
+      <p class="tm-tip">Tip: end date should be on or after start date. Progress is 0–100.</p>
+    </div>
+    <div class="task-modal-footer">
+      <button type="button" class="tm-delete" id="tmDelete" style="display:none;">Delete Task</button>
+      <div class="tm-footer-right">
+        <button type="button" class="tm-cancel" id="tmCancel">Cancel</button>
+        <button type="button" class="tm-save" id="tmSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <footer>Source: Steel Synapse Timeline PDF · adityasingh61.github.io/steelsynapse.github.io</footer>
 
@@ -534,92 +617,15 @@ function buildChartHead(){
   return head;
 }
 
-/* -- inline "+ Add Task" trigger/form, appended to the bottom of a category's data column -- */
-function buildAddTaskUI(cat, onAdded){
-  const holder = document.createElement("div");
-
+/* -- "+ Add Task" trigger, appended to the bottom of a category's data column.
+   Opens the shared centered Add Task modal (see #taskModalOverlay) pre-set to this category. -- */
+function buildAddTaskUI(cat){
   const trigger = document.createElement("button");
   trigger.type = "button";
   trigger.className = "add-task-trigger";
   trigger.textContent = "+ Add Task";
-
-  const form = document.createElement("div");
-  form.className = "add-task-form";
-  form.style.display = "none";
-  form.innerHTML = `
-    <div>
-      <span class="f-label">Task name</span>
-      <input type="text" class="f-name" placeholder="e.g. Wire the motor controller">
-    </div>
-    <div>
-      <span class="f-label">Owner</span>
-      <input type="text" class="f-owner" placeholder="e.g. Full Team">
-    </div>
-    <div class="row2">
-      <div>
-        <span class="f-label">Start</span>
-        <input type="date" class="f-start" value="${todayISO()}">
-      </div>
-      <div>
-        <span class="f-label">End</span>
-        <input type="date" class="f-end" value="${todayISO()}">
-      </div>
-    </div>
-    <div>
-      <span class="f-label">% complete</span>
-      <input type="number" class="f-pct" min="0" max="100" value="0">
-    </div>
-    <div class="actions">
-      <button type="button" class="cancel">Cancel</button>
-      <button type="button" class="save">Add Task</button>
-    </div>
-  `;
-
-  function openForm(){
-    trigger.style.display = "none";
-    form.style.display = "flex";
-    form.querySelector(".f-name").focus();
-  }
-  function closeForm(){
-    form.style.display = "none";
-    trigger.style.display = "block";
-    form.querySelectorAll("input").forEach(i => i.classList.remove("err"));
-  }
-
-  trigger.addEventListener("click", openForm);
-  form.querySelector(".cancel").addEventListener("click", closeForm);
-
-  form.querySelector(".save").addEventListener("click", () => {
-    const nameEl = form.querySelector(".f-name");
-    const ownerEl = form.querySelector(".f-owner");
-    const startEl = form.querySelector(".f-start");
-    const endEl = form.querySelector(".f-end");
-    const pctEl = form.querySelector(".f-pct");
-
-    const name = nameEl.value.trim();
-    const owner = ownerEl.value.trim() || "—";
-    const start = startEl.value;
-    const end = endEl.value;
-    const pct = Math.max(0, Math.min(100, parseInt(pctEl.value, 10) || 0));
-
-    let ok = true;
-    [nameEl, startEl, endEl].forEach(el => {
-      if(!el.value){ el.classList.add("err"); ok = false; }
-      else{ el.classList.remove("err"); }
-    });
-    if(start && end && new Date(end) < new Date(start)){
-      endEl.classList.add("err");
-      ok = false;
-    }
-    if(!ok) return;
-
-    cat.tasks.push({ name, owner, pct, start, end });
-    onAdded();
-  });
-
-  holder.appendChild(trigger);
-  holder.appendChild(form);
-  return holder;
+  trigger.addEventListener("click", () => openAddTaskModal(cat.name));
+  return trigger;
 }
 
 function buildCategoryGantt(cat, onAdded){
@@ -679,11 +685,12 @@ function buildCategoryGantt(cat, onAdded){
 
     const nameSpan = document.createElement("span");
     nameSpan.className = `task-name ${t.untitled ? 'untitled':''}`;
-    nameSpan.title = t.name;
+    nameSpan.title = `${t.name} (click to edit)`;
     const nameInner = document.createElement("span");
     nameInner.className = "tn-inner";
     nameInner.textContent = t.name;
     nameSpan.appendChild(nameInner);
+    nameSpan.addEventListener("click", () => openEditTaskModal(cat, idx));
     row.appendChild(nameSpan);
 
     const ownerSpan = document.createElement("span");
@@ -748,7 +755,7 @@ function buildCategoryGantt(cat, onAdded){
 
     dataCol.appendChild(row);
   });
-  dataCol.appendChild(buildAddTaskUI(cat, onAdded));
+  dataCol.appendChild(buildAddTaskUI(cat));
   wrap.appendChild(dataCol);
 
   // right: the ONLY thing that scrolls horizontally
@@ -919,7 +926,7 @@ rolesToggle.addEventListener("click", () => {
   rolesDrawer.classList.toggle("open", opening);
 });
 
-/* ---------------- EXPORT TO EXCEL ---------------- */
+/* ---------------- EXPORT TO EXCEL (visual Gantt chart) ---------------- */
 function formatDateForExport(iso){
   if(!iso) return "";
   const d = new Date(iso);
@@ -927,48 +934,192 @@ function formatDateForExport(iso){
   return d.toLocaleDateString('en-US', { timeZone:'UTC', month:'short', day:'numeric', year:'numeric' });
 }
 
-function exportToExcel(){
-  const wb = XLSX.utils.book_new();
+const CATEGORY_HEX = {
+  "Robot Game": "FF4D6D",
+  "Robot Design": "3FA9F5",
+  "Innovation": "FFD400",
+  "Core Values": "2EE6A6",
+};
+const TODAY_HEX = "FF2D55";
 
-  // First sheet: everything in one place, so it's visible immediately no matter
-  // which sheet a viewer defaults to.
-  const allRows = [];
-  categories.forEach(cat => {
-    cat.tasks.forEach(t => {
-      allRows.push({
-        "Category": cat.name,
-        "Task": t.name,
-        "Owner": t.owner,
-        "Start": formatDateForExport(t.start),
-        "End": formatDateForExport(t.end),
-        "% Complete": t.pct
+function lightenHex(hex, factor){
+  const r = parseInt(hex.substr(0,2),16);
+  const g = parseInt(hex.substr(2,2),16);
+  const b = parseInt(hex.substr(4,2),16);
+  const mix = (c) => Math.round(c + (255-c)*factor);
+  const toHex = (c) => c.toString(16).padStart(2,'0').toUpperCase();
+  return toHex(mix(r)) + toHex(mix(g)) + toHex(mix(b));
+}
+
+async function exportToExcel(){
+  const exportBtn = document.getElementById("exportBtn");
+  const originalLabel = exportBtn.innerHTML;
+  exportBtn.disabled = true;
+  exportBtn.style.opacity = "0.6";
+
+  try{
+    const wb = new ExcelJS.Workbook();
+
+    /* ---- Sheet 1: visual Gantt chart, laid out like the on-screen timeline ---- */
+    const ws = wb.addWorksheet("Timeline", {
+      views: [{ state:'frozen', xSplit:5, ySplit:2 }]
+    });
+
+    const FIXED_COLS = 5; // Task, Owner, Progress, Start, End
+    const DAY_COL_START = FIXED_COLS + 1;
+    const HEADER_ROW = 1;
+    const DAYNUM_ROW = 2;
+
+    ws.getColumn(1).width = 34;
+    ws.getColumn(2).width = 18;
+    ws.getColumn(3).width = 10;
+    ws.getColumn(4).width = 11;
+    ws.getColumn(5).width = 11;
+    for(let i=0;i<totalDays;i++){ ws.getColumn(DAY_COL_START+i).width = 2.6; }
+
+    // fixed column headers (merged across the two header rows)
+    const fixedHeaders = ["Task","Owner","Progress","Start","End"];
+    fixedHeaders.forEach((label, i) => {
+      const col = i+1;
+      ws.mergeCells(HEADER_ROW, col, DAYNUM_ROW, col);
+      const cell = ws.getCell(HEADER_ROW, col);
+      cell.value = label;
+      cell.font = { bold:true, color:{argb:'FFFFFFFF'} };
+      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF0D0D0D'} };
+      cell.alignment = { vertical:'middle' };
+    });
+
+    // day headers: week-label row (merged Monday-to-Monday segments) + day-of-month row
+    let segStart = 0;
+    for(let i=1;i<=totalDays;i++){
+      const atEnd = i === totalDays;
+      const d = atEnd ? null : new Date(TIMELINE_START.getTime() + i*86400000);
+      const isMonday = d && d.getUTCDay() === 1;
+      if(isMonday || atEnd){
+        const segDate = new Date(TIMELINE_START.getTime() + segStart*86400000);
+        const label = segDate.toLocaleDateString('en-US', { timeZone:'UTC', month:'short', day:'numeric' });
+        const startCol = DAY_COL_START + segStart;
+        const endCol = DAY_COL_START + i - 1;
+        if(endCol > startCol) ws.mergeCells(HEADER_ROW, startCol, HEADER_ROW, endCol);
+        const cell = ws.getCell(HEADER_ROW, startCol);
+        cell.value = label;
+        cell.font = { bold:true, size:8, color:{argb:'FFFFFFFF'} };
+        cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF202020'} };
+        cell.alignment = { horizontal:'left', vertical:'middle' };
+        segStart = i;
+      }
+    }
+    for(let i=0;i<totalDays;i++){
+      const d = new Date(TIMELINE_START.getTime() + i*86400000);
+      const col = DAY_COL_START + i;
+      const isWeekend = d.getUTCDay()===0 || d.getUTCDay()===6;
+      const cell = ws.getCell(DAYNUM_ROW, col);
+      cell.value = d.getUTCDate();
+      cell.font = { size:7, color:{argb:'FFFFFFFF'} };
+      cell.alignment = { horizontal:'center' };
+      cell.fill = { type:'pattern', pattern:'solid', fgColor:{argb: isWeekend ? 'FF3D3D3D' : 'FF161616'} };
+    }
+
+    // category bands + task rows
+    let rowPtr = DAYNUM_ROW + 1;
+    const lastDayCol = DAY_COL_START + totalDays - 1;
+
+    categories.forEach(cat => {
+      const hex = CATEGORY_HEX[cat.name] || 'FF888888';
+      const lightHex = lightenHex(hex, 0.62);
+
+      const catRow = rowPtr++;
+      ws.mergeCells(catRow, 1, catRow, lastDayCol);
+      const catCell = ws.getCell(catRow, 1);
+      catCell.value = cat.name;
+      catCell.font = { bold:true, size:12, color:{argb:'FFFFFFFF'} };
+      catCell.fill = { type:'pattern', pattern:'solid', fgColor:{argb:hex} };
+      catCell.alignment = { vertical:'middle', indent:1 };
+
+      cat.tasks.forEach(t => {
+        const r = rowPtr++;
+        ws.getCell(r,1).value = t.name;
+        ws.getCell(r,2).value = t.owner;
+        const pctCell = ws.getCell(r,3);
+        pctCell.value = t.pct/100;
+        pctCell.numFmt = '0%';
+        ws.getCell(r,4).value = formatDateForExport(t.start);
+        ws.getCell(r,5).value = formatDateForExport(t.end);
+        [1,2,3,4,5].forEach(c => { ws.getCell(r,c).font = { size:9 }; });
+
+        const sIdx = dayIndex(new Date(t.start));
+        const eIdxExclusive = dayIndex(new Date(t.end)) + 1;
+        const taskDays = Math.max(1, eIdxExclusive - sIdx);
+        const completedDays = Math.round((t.pct/100) * taskDays);
+
+        for(let d=sIdx; d<eIdxExclusive; d++){
+          if(d<0 || d>=totalDays) continue;
+          const filled = (d - sIdx) < completedDays;
+          ws.getCell(r, DAY_COL_START+d).fill = {
+            type:'pattern', pattern:'solid', fgColor:{argb: filled ? hex : lightHex}
+          };
+        }
       });
     });
-  });
-  const wsAll = XLSX.utils.json_to_sheet(allRows);
-  wsAll['!cols'] = [{ wch:16 }, { wch:42 }, { wch:22 }, { wch:14 }, { wch:14 }, { wch:12 }];
-  XLSX.utils.book_append_sheet(wb, wsAll, "All Tasks");
 
-  // One sheet per category as well, for anyone who wants them separated.
-  categories.forEach(cat => {
-    const rows = cat.tasks.map(t => ({
-      "Task": t.name,
-      "Owner": t.owner,
-      "Start": formatDateForExport(t.start),
-      "End": formatDateForExport(t.end),
-      "% Complete": t.pct
-    }));
-    const ws = XLSX.utils.json_to_sheet(rows);
-    ws['!cols'] = [{ wch:42 }, { wch:22 }, { wch:14 }, { wch:14 }, { wch:12 }];
-    XLSX.utils.book_append_sheet(wb, ws, cat.name.substring(0,31));
-  });
+    // today marker: a colored left border running down the whole sheet
+    if(todayIdx >= 0 && todayIdx < totalDays){
+      const todayCol = DAY_COL_START + todayIdx;
+      for(let r=HEADER_ROW; r<rowPtr; r++){
+        const cell = ws.getCell(r, todayCol);
+        cell.border = { left: { style:'medium', color:{argb:TODAY_HEX} } };
+      }
+    }
 
-  const rosterRows = roles.map(r => ({ "Name": r.name, "Roles": r.tags.join(", ") }));
-  const wsRoster = XLSX.utils.json_to_sheet(rosterRows);
-  wsRoster['!cols'] = [{ wch:14 }, { wch:60 }];
-  XLSX.utils.book_append_sheet(wb, wsRoster, "Team Roster");
+    /* ---- Sheet 2: flat "All Tasks" data, handy for sorting/filtering ---- */
+    const wsAll = wb.addWorksheet("All Tasks");
+    wsAll.columns = [
+      { header:"Category", key:"category", width:16 },
+      { header:"Task", key:"task", width:42 },
+      { header:"Owner", key:"owner", width:22 },
+      { header:"Start", key:"start", width:14 },
+      { header:"End", key:"end", width:14 },
+      { header:"% Complete", key:"pct", width:12 },
+    ];
+    wsAll.getRow(1).font = { bold:true, color:{argb:'FFFFFFFF'} };
+    wsAll.getRow(1).eachCell(c => { c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF0D0D0D'} }; });
+    categories.forEach(cat => {
+      cat.tasks.forEach(t => {
+        wsAll.addRow({
+          category: cat.name, task: t.name, owner: t.owner,
+          start: formatDateForExport(t.start), end: formatDateForExport(t.end), pct: t.pct/100
+        });
+      });
+    });
+    wsAll.getColumn('pct').numFmt = '0%';
 
-  XLSX.writeFile(wb, "SteelSynapse_SeasonPlan.xlsx");
+    /* ---- Sheet 3: Team Roster ---- */
+    const wsRoster = wb.addWorksheet("Team Roster");
+    wsRoster.columns = [
+      { header:"Name", key:"name", width:14 },
+      { header:"Roles", key:"roles", width:60 },
+    ];
+    wsRoster.getRow(1).font = { bold:true, color:{argb:'FFFFFFFF'} };
+    wsRoster.getRow(1).eachCell(c => { c.fill = { type:'pattern', pattern:'solid', fgColor:{argb:'FF0D0D0D'} }; });
+    roles.forEach(r => { wsRoster.addRow({ name:r.name, roles:r.tags.join(", ") }); });
+
+    const buffer = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "SteelSynapse_SeasonPlan.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }catch(err){
+    alert("Export failed: " + err.message);
+  }finally{
+    exportBtn.disabled = false;
+    exportBtn.style.opacity = "";
+    exportBtn.innerHTML = originalLabel;
+  }
 }
 
 document.getElementById("exportBtn").addEventListener("click", exportToExcel);
@@ -977,6 +1128,143 @@ document.getElementById("exportBtn").addEventListener("click", exportToExcel);
 document.addEventListener("click", () => {
   document.querySelectorAll(".dots-menu.open").forEach(m => m.classList.remove("open"));
   document.querySelectorAll(".row-menu.menu-open").forEach(c => c.classList.remove("menu-open"));
+});
+
+/* ---------------- ADD / EDIT TASK MODAL (centered dialog, shared by every category) ---------------- */
+const taskModalOverlay = document.getElementById("taskModalOverlay");
+const modalSwatch = document.getElementById("modalSwatch");
+const modalAction = document.getElementById("modalAction");
+const modalCatName = document.getElementById("modalCatName");
+const tmName = document.getElementById("tmName");
+const tmOwner = document.getElementById("tmOwner");
+const tmStart = document.getElementById("tmStart");
+const tmEnd = document.getElementById("tmEnd");
+const tmPct = document.getElementById("tmPct");
+const tmCategory = document.getElementById("tmCategory");
+const tmDelete = document.getElementById("tmDelete");
+
+// while editing an existing task, this holds { catName, idx } — null means "adding a new task"
+let editingContext = null;
+
+categories.forEach(cat => {
+  const opt = document.createElement("option");
+  opt.value = cat.name;
+  opt.textContent = cat.name;
+  tmCategory.appendChild(opt);
+});
+
+function updateModalHeader(catName){
+  const cat = categories.find(c => c.name === catName);
+  modalCatName.textContent = catName;
+  modalSwatch.style.background = cat ? cat.color : "var(--cyan)";
+}
+tmCategory.addEventListener("change", () => updateModalHeader(tmCategory.value));
+
+function openAddTaskModal(defaultCatName){
+  editingContext = null;
+  modalAction.textContent = "Add";
+  tmDelete.style.display = "none";
+  tmName.value = "";
+  tmOwner.value = "";
+  tmStart.value = todayISO();
+  tmEnd.value = todayISO();
+  tmPct.value = 0;
+  tmCategory.value = defaultCatName;
+  updateModalHeader(defaultCatName);
+  [tmName, tmStart, tmEnd].forEach(el => el.classList.remove("err"));
+  taskModalOverlay.classList.add("open");
+  setTimeout(() => tmName.focus(), 0);
+}
+
+/* opened by clicking a task's name in any category's data column */
+function openEditTaskModal(cat, idx){
+  const t = cat.tasks[idx];
+  if(!t) return;
+  editingContext = { catName: cat.name, idx };
+  modalAction.textContent = "Edit";
+  tmDelete.style.display = "inline-block";
+  tmName.value = t.name;
+  tmOwner.value = t.owner;
+  tmStart.value = t.start;
+  tmEnd.value = t.end;
+  tmPct.value = t.pct;
+  tmCategory.value = cat.name;
+  updateModalHeader(cat.name);
+  [tmName, tmStart, tmEnd].forEach(el => el.classList.remove("err"));
+  taskModalOverlay.classList.add("open");
+  setTimeout(() => tmName.focus(), 0);
+}
+
+function closeTaskModal(){
+  taskModalOverlay.classList.remove("open");
+  editingContext = null;
+}
+document.getElementById("modalClose").addEventListener("click", closeTaskModal);
+document.getElementById("tmCancel").addEventListener("click", closeTaskModal);
+taskModalOverlay.addEventListener("click", (e) => {
+  if(e.target === taskModalOverlay) closeTaskModal();
+});
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && taskModalOverlay.classList.contains("open")) closeTaskModal();
+});
+
+/* re-renders whatever category UI needs to reflect a change (used by save + delete) */
+function refreshCategoryUI(catName){
+  const state = categoryUIState.find(s => s.cat.name === catName);
+  if(state && state.built){
+    renderCategory(state.cat, state.inner);
+  }else{
+    if(state && typeof state.cat._refreshHint === "function") state.cat._refreshHint();
+    saveState();
+  }
+}
+
+document.getElementById("tmSave").addEventListener("click", () => {
+  const name = tmName.value.trim();
+  const owner = tmOwner.value.trim() || "—";
+  const start = tmStart.value;
+  const end = tmEnd.value;
+  const pct = Math.max(0, Math.min(100, parseInt(tmPct.value, 10) || 0));
+  const catName = tmCategory.value;
+
+  let ok = true;
+  [tmName, tmStart, tmEnd].forEach(el => {
+    if(!el.value){ el.classList.add("err"); ok = false; }
+    else{ el.classList.remove("err"); }
+  });
+  if(start && end && new Date(end) < new Date(start)){
+    tmEnd.classList.add("err");
+    ok = false;
+  }
+  if(!ok) return;
+
+  const touchedCategories = new Set([catName]);
+
+  if(editingContext){
+    // remove the task from wherever it currently lives (its category may have changed)
+    const oldCat = categories.find(c => c.name === editingContext.catName);
+    if(oldCat && oldCat.tasks[editingContext.idx]){
+      oldCat.tasks.splice(editingContext.idx, 1);
+    }
+    touchedCategories.add(editingContext.catName);
+  }
+
+  const targetCat = categories.find(c => c.name === catName);
+  if(!targetCat) return;
+  targetCat.tasks.push({ name, owner, pct, start, end });
+
+  touchedCategories.forEach(refreshCategoryUI);
+  closeTaskModal();
+});
+
+tmDelete.addEventListener("click", () => {
+  if(!editingContext) return;
+  const cat = categories.find(c => c.name === editingContext.catName);
+  if(cat && cat.tasks[editingContext.idx]){
+    cat.tasks.splice(editingContext.idx, 1);
+  }
+  refreshCategoryUI(editingContext.catName);
+  closeTaskModal();
 });
 </script>
 </body>
